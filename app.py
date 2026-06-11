@@ -1,62 +1,77 @@
 import streamlit as st
+import os
 
-# إعداد الصفحة لتكون واسعة وتدعم العربية
+# إعداد الصفحة
 st.set_page_config(page_title="منصة قصتي دراستي", layout="wide")
 
-# CSS لجعل الأزرار مربعة وواضحة (بنفس ألوان الشكل الذي طلبته)
+# CSS المخصص (الألوان، الشعار، الأزرار)
 st.markdown("""
 <style>
-    body { direction: rtl; text-align: right; }
-    .stButton > button {
+    /* لون الخلفية */
+    .stApp { background-color: #f9fdf9; }
+    
+    /* تصميم الأزرار المربعة الملونة */
+    .btn-card {
         width: 100%;
-        height: 120px;
-        border-radius: 20px;
-        font-weight: bold;
-        font-size: 18px;
+        height: 140px !important;
+        border-radius: 25px !important;
+        border: 3px solid #2E7D32 !important;
         background-color: white !important;
-        border: 2px solid #2e7d32 !important;
-        color: #2e7d32 !important;
-        box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+        font-weight: 900 !important;
+        font-size: 20px !important;
+        color: #2E7D32 !important;
+        transition: 0.3s !important;
     }
-    .stButton > button:hover {
-        background-color: #2e7d32 !important;
+    .btn-card:hover {
+        background-color: #2E7D32 !important;
         color: white !important;
+        transform: scale(1.05);
     }
 </style>
 """, unsafe_allow_html=True)
 
-# إدارة الصفحات
-if 'page' not in st.session_state:
-    st.session_state.page = 'الرئيسية'
+# إدارة الحالة
+if 'page' not in st.session_state: st.session_state.page = 'home'
 
-def go_to(page_name):
-    st.session_state.page = page_name
-    st.rerun()
+# --- الصفحة الرئيسية ---
+if st.session_state.page == 'home':
+    # منطقة الشعار
+    col_l, col_c, col_r = st.columns([1, 2, 1])
+    with col_c:
+        if os.path.exists("logo.png"):
+            st.image("logo.png", width=200)
+        else:
+            st.markdown("<h2 style='text-align:center;'> شعار منصتي </h2>", unsafe_allow_html=True)
+    
+    st.markdown("<h1 style='text-align: center; color: #2E7D32;'>قصتي دراستي - رحلة النجاح</h1>", unsafe_allow_html=True)
+    st.write("---")
+    
+    # الأزرار الأربعة
+    c1, c2, c3, c4 = st.columns(4)
+    
+    with c1:
+        if st.button("📚 الدروس المرجعية", key="b1", help="المنهج الوطني"):
+            st.session_state.page = 'cours'
+            st.rerun()
+    with c2:
+        if st.button("📝 تمارين مرجعية", key="b2"):
+            st.session_state.page = 'exercices'
+            st.rerun()
+    with c3:
+        if st.button("📑 الامتحانات", key="b3"):
+            st.session_state.page = 'examens'
+            st.rerun()
+    with c4:
+        if st.button("✅ التقييمات", key="b4"):
+            st.session_state.page = 'evaluations'
+            st.rerun()
 
-# --- الواجهة الرئيسية ---
-if st.session_state.page == 'الرئيسية':
-    st.markdown("<h1 style='text-align: center;'>قصتي دراستي</h1>", unsafe_allow_html=True)
-    st.markdown("<h3 style='text-align: center;'>رحلة النجاح تبدأ هنا</h3>", unsafe_allow_html=True)
-    
-    col1, col2, col3, col4 = st.columns(4)
-    
-    with col1:
-        if st.button("📚 الدروس المرجعية"): go_to('الدروس')
-    with col2:
-        if st.button("📝 تمارين مرجعية"): go_to('التمارين')
-    with col3:
-        if st.button("📑 الامتحانات"): go_to('الامتحانات')
-    with col4:
-        if st.button("✅ التقييمات"): go_to('التقييمات')
-
-# --- منطق الصفحات الفرعية ---
-elif st.session_state.page in ['الدروس', 'التمارين', 'الامتحانات', 'التقييمات']:
-    st.title(f"قسم {st.session_state.page}")
-    
-    # اختيار السنة من 1 إلى 5
-    annee = st.selectbox("اختر السنة الدراسية:", [1, 2, 3, 4, 5])
-    
-    st.write(f"أنت الآن تتصفح محتوى السنة {annee} وفقاً للبرنامج الوطني لوزارة التربية.")
+# --- صفحات المحتوى ---
+else:
+    st.title(f"صفحة: {st.session_state.page}")
+    annee = st.selectbox("اختر السنة الدراسية (1-5):", [1, 2, 3, 4, 5])
+    st.info(f"عرض محتوى {st.session_state.page} للسنة {annee}")
     
     if st.button("⬅ العودة للرئيسية"):
-        go_to('الرئيسية')
+        st.session_state.page = 'home'
+        st.rerun()
