@@ -1,5 +1,6 @@
 import streamlit as st
 import random
+import os
 
 # Configuration de la page de l'application
 st.set_page_config(
@@ -47,15 +48,24 @@ st.markdown("""
 # Initialisation des variables d'état (Session State)
 if "page" not in st.session_state:
     st.session_state.page = "menu"
-if "score" not in st.session_state:
-    st.session_state.score = 0
+
+# Fonction utilitaire pour afficher uniquement le logo principal
+def afficher_logo_unique():
+    if os.path.exists("logo.jpeg"):
+        col_logo_1, col_logo_2, col_logo_3 = st.columns([1, 2, 1])
+        with col_logo_2:
+            st.image("logo.jpeg", use_column_width=True)
 
 # --- MENU PRINCIPAL ---
 if st.session_state.page == "menu":
+    # Affichage du Logo Unique en haut de la page d'accueil
+    afficher_logo_unique()
+
     st.markdown("<h1 style='text-align: center; color: #2C3E50;'>✨ قِصَّتِي دِرَاسَتِي ✨</h1>", unsafe_allow_html=True)
     st.markdown("<h3 style='text-align: center; color: #7F8C8D;'>مرحباً بك يا بطل! اختر مغامرتك اللغوية لليوم:</h3>", unsafe_allow_html=True)
     st.write("---")
 
+    # Boutons d'accès aux catégories d'âge
     col1, col2 = st.columns(2)
     with col1:
         if st.button("🧒 فئة 6 - 7 سنوات\n(مغامرة أقسام الكلمة 🏃‍♂️)", key="b1"):
@@ -73,6 +83,9 @@ if st.session_state.page == "menu":
 
 # --- CATÉGORIE 6-7 ANS : أقسام الكلمة ---
 elif st.session_state.page == "6-7":
+    # Affichage du Logo Unique également dans les sous-pages pour garder l'identité de l'application
+    afficher_logo_unique()
+    
     if st.button("⬅ العودة للقائمة الرئيسية"):
         st.session_state.page = "menu"
         st.rerun()
@@ -107,6 +120,8 @@ elif st.session_state.page == "6-7":
 
 # --- CATÉGORIE 8-9 ANS : الجملة الاسمية والفعلية ---
 elif st.session_state.page == "8-9":
+    afficher_logo_unique()
+    
     if st.button("⬅ العودة للقائمة الرئيسية"):
         st.session_state.page = "menu"
         st.rerun()
@@ -139,6 +154,8 @@ elif st.session_state.page == "8-9":
 
 # --- CATÉGORIE 10-11 ANS : المفعول به والمنصوبات ---
 elif st.session_state.page == "10-11":
+    afficher_logo_unique()
+    
     if st.button("⬅ العودة للقائمة الرئيسية"):
         st.session_state.page = "menu"
         st.rerun()
@@ -155,7 +172,7 @@ elif st.session_state.page == "10-11":
     </div>
     """, unsafe_allow_html=True)
     
-    st.markdown("### 🎮 اختبر مهاراتك الإعرابية مع المحقق:")
+    st.markdown("### 🎮 اختبر mهاراتك الإعرابية مع المحقق:")
     st.write("ابحث عن المفعول به المنصوب في الجملة التالية واقبض عليه:")
     
     phrase_adv = "قَرَأَ الطِّفْلُ قِصَّةً جَمِيلَةً"
