@@ -265,7 +265,7 @@ elif st.session_state.page == "lesson1":
     with c2:
         if st.button("فِعْل 🏃‍♂️", key="opt_2"):
             st.session_state.ans_lesson1 = "correct"
-            st.session_state.score_lesson1 = True  # Progression validée !
+            st.session_state.score_lesson1 = True
     with c3:
         if st.button("حَرْف 📦", key="opt_3"):
             st.session_state.ans_lesson1 = "wrong"
@@ -309,7 +309,7 @@ elif st.session_state.page == "lesson2":
     with col_b2:
         if st.button("جملة فعلية ⚔️", key="opt_p2"):
             st.session_state.ans_lesson2 = "correct"
-            st.session_state.score_lesson2 = True  # Progression validée !
+            st.session_state.score_lesson2 = True
             
     if st.session_state.ans_lesson2 == "correct":
         st.success("🎉 واو! الإجابة صحيحة لأن جملة 'تُمطِرُ السَّمَاءُ' تبدأ بفعل مضارع. انفتحت بوابة القلعة السحرية 🔑!")
@@ -353,115 +353,7 @@ elif st.session_state.page == "lesson3":
     with ca3:
         if st.button("قِصَّةً 📚", key="ca3"):
             st.session_state.ans_lesson3 = "m"
-            st.session_state.score_lesson3 = True  # Progression validée !
+            st.session_state.score_lesson3 = True
             
     if st.session_state.ans_lesson3 == "m":
-        st.success("🎯 قضية ناجحة! 'قِصَّةً' هي الإجابة عن سؤال (ماذا قرأ الطفل؟)، مفعول به منصوب بالفتحة!")
-    elif st.session_state.ans_lesson3 == "v":
-        st.warning("❌ لا يا سيادة المحقق! 'قَرَأَ' هو الفعل وعملية القراءة نفسها وليس الركن المنصوب.")
-    elif st.session_state.ans_lesson3 == "f":
-        st.warning("❌ ركز! 'الطِّفْلُ' هو الفاعل البطل الذي قرأ القصة وليس المفعول به.")
-
-
-# ------------------------------------------
-# E. LOVET AL INJAZAT (TABLEAU DES MÉDAILLES CALCULÉ DYNAMIQUE)
-# ------------------------------------------
-elif st.session_state.page == "لوحة_الإنجازات":
-    if st.button("⬅ العودة للمنزل", key="back_r"):
-        st.session_state.page = "menu"
-        st.rerun()
-
-    afficher_logo_haut()
-    st.markdown('<div class="board-title">🌿 لَوْحَةُ إِنْجَازَاتِ بَطَلِ العِلْمِ 🌿</div>', unsafe_allow_html=True)
-
-    col_badges, col_gauge = st.columns([3, 1])
-
-    # Colonne d'affichage des badges débloqués ou non
-    with col_badges:
-        b_col1, b_col2, b_col3 = st.columns(3)
-        
-        with b_col1:
-            # Badge 1 : Débloqué uniquement si la leçon 1 est réussie
-            if st.session_state.score_lesson1 == True:
-                st.markdown("""
-                <div class="badge-card" style="border-color: #FF4757; background-color: #FFF5F5;">
-                    <div class="badge-icon">🦁</div>
-                    <div class="badge-name" style="color: #FF4757;">وسام بطل الكلمات</div>
-                    <div class="badge-desc">مُنح لك لتعرفك على الاسم والفعل والحرف مع سمسم!</div>
-                </div>
-                """, unsafe_allow_html=True)
-            else:
-                st.markdown("""
-                <div class="badge-card" style="border-color: #CCCCCC; opacity: 0.5;">
-                    <div class="badge-icon">🔒</div>
-                    <div class="badge-name" style="color: #888888;">وسام الكلمات مغلق</div>
-                    <div class="badge-desc">أكمل مغامرة الأرنب سمسم لفتح هذا الوسام.</div>
-                </div>
-                """, unsafe_allow_html=True)
-                
-        with b_col2:
-            # Badge 2 : Débloqué uniquement si la leçon 2 est réussie
-            if st.session_state.score_lesson2 == True:
-                st.markdown("""
-                <div class="badge-card" style="border-color: #2E86DE; background-color: #F0F7FF;">
-                    <div class="badge-icon">🏰</div>
-                    <div class="badge-name" style="color: #2E86DE;">وسام حارس القلعة</div>
-                    <div class="badge-desc">مُنح لك لنجاحك في عبور بوابات الجملة الاسمية والفعلية!</div>
-                </div>
-                """, unsafe_allow_html=True)
-            else:
-                st.markdown("""
-                <div class="badge-card" style="border-color: #CCCCCC; opacity: 0.5;">
-                    <div class="badge-icon">🔒</div>
-                    <div class="badge-name" style="color: #888888;">وسام القلعة مغلق</div>
-                    <div class="badge-desc">افتح بوابات القلعة اللغوية لفتح هذا الوسام.</div>
-                </div>
-                """, unsafe_allow_html=True)
-                
-        with b_col3:
-            # Badge 3 : Débloqué uniquement si la leçon 3 est réussie
-            if st.session_state.score_lesson3 == True:
-                st.markdown("""
-                <div class="badge-card" style="border-color: #10AC84; background-color: #F0FDF4;">
-                    <div class="badge-icon">🕵️‍♂️</div>
-                    <div class="badge-name" style="color: #10AC84;">وسام المحقق الذكي</div>
-                    <div class="badge-desc">مُنح لك لمساعدتك المحقق كانمون في حل لغز المفعول به!</div>
-                </div>
-                """, unsafe_allow_html=True)
-            else:
-                st.markdown("""
-                <div class="badge-card" style="border-color: #CCCCCC; opacity: 0.5;">
-                    <div class="badge-icon">🔒</div>
-                    <div class="badge-name" style="color: #888888;">وسام المحقق مغلق</div>
-                    <div class="badge-desc">حل قضية الكلمة المنصوبة لفتح هذا الوسام.</div>
-                </div>
-                """, unsafe_allow_html=True)
-
-    # Colonne de la jauge dynamique calculée
-    with col_gauge:
-        st.markdown(f"""
-        <div class="gauge-container">
-            <div style="color: #2F3542; font-size: 16px; font-weight: 900; text-align:center;">شجرة نمو<br>المعرفة</div>
-            <div style="margin: 20px 0; font-size: 26px; text-align:center; line-height:1.4;">🍁<br>🍂<br>🍃<br>🌿</div>
-            <div style="background-color: #2ED573; border-radius: 15px; padding: 10px; font-weight: 900; color: white; font-size: 24px; text-align: center; box-shadow: 0px 4px 0px #26AF5F;">
-                {pourcentage_connaissance}%
-            </div>
-            <div style="color: #57606F; font-size: 13px; font-weight: bold; margin-top: 10px; text-align: center;">
-                نجحت في {nombre_de_lecons_reussies} من 3
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-
-    # Bannière dynamique finale et déclenchement des ballons
-    st.markdown("""
-    <div class="welcome-banner">
-        <p style="color: #2C3E50; font-size: 20px; font-weight: 900; margin: 0; text-align: center;">
-            🦉 أهلاً بك يا <b>أحمد</b>، صديقك بَهِيّ يتابع نمو شجرة معرفتك الذكية خطوة بخطوة!
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    # Célébration si l'étudiant réussit tout !
-    if pourcentage_connaissance == 100:
-        st.balloons()
-        st.success("🏆 أشرقت شجرة معرفتك بالكامل يا بطل القواعد المستقبلي! أنت مذهل!")
+        st.success("🎯 قضية ناجحة! 'قِصَّةً' هي الإجابة عن سؤال (ماذا قرأ الطفل؟)، مفعول به منصوب
