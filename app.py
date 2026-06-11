@@ -29,7 +29,7 @@ st.markdown("""
         direction: RTL;
     }
     </style>
-""", unsafe_index=True)
+""", unsafe_allow_html=True)
 
 # Initialisation des variables d'état (Session State) pour garder les scores et les questions
 if "page" not in st.session_state:
@@ -50,7 +50,7 @@ if "culture" not in st.session_state:
         {"q": "ما هي عاصمة الجزائر؟", "r": "الجزائر"},
         {"q": "ما هو أكبر محيط في العالم؟", "r": "الهادي"},
         {"q": "كم عدد كواكب المجموعة الشمسية؟", "r": "8"},
-        {"q": "ما هو الحيوان الذي يلقب بسفينة الصحراء؟", "r": "الجمل"}
+        {"q": "ما هو الحيوان الذي يلقب بسفينة الصحراء？", "r": "الجمل"}
     ]
     st.session_state.culture = random.choice(questions)
 
@@ -71,7 +71,7 @@ def generer_nouveau_mot():
 def generer_nouvelle_culture():
     questions = [
         {"q": "ما هي عاصمة الجزائر؟", "r": "الجزائر"},
-        {"q": "ما هو أكبر محيط في العالم؟", "r": "الهادي"},
+        {"q": "ما هو أكبر محيط في العالم？", "r": "الهادي"},
         {"q": "كم عدد كواكب المجموعة الشمسية؟", "r": "8"},
         {"q": "ما هو الحيوان الذي يلقب بسفينة الصحراء؟", "r": "الجمل"}
     ]
