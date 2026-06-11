@@ -2,7 +2,7 @@ import streamlit as st
 import os
 
 # ==========================================
-# 1. CONFIGURATION DE LA PAGE
+# 1. تهيئة وإعدادات الصفحة العامة
 # ==========================================
 st.set_page_config(
     page_title="قصتي دراستي - عالم القواعد السحري",
@@ -11,25 +11,25 @@ st.set_page_config(
 )
 
 # ==========================================
-# 2. DESIGN CSS "SUPER COLORÉ" ET INTERACTIF
+# 2. تصميم الـ CSS الخارجي لمنع التداخل اللغوي
 # ==========================================
 css_style = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght=400;700;900&display=swap');
 
-/* Configuration globale RTL / Arabe */
+/* تنسيق اتجاه النصوص للغة العربية */
 html, body, [data-testid="stMarkdownContainer"], h1, h2, h3, h4, p, span, label {
     font-family: 'Cairo', sans-serif !important;
     direction: RTL;
     text-align: right;
 }
 
-/* Fond dégradé magique et joyeux */
+/* خلفية التطبيق الكرتونية الملونة */
 .stApp {
     background: linear-gradient(135deg, #FFF9E6 0%, #E3F2FD 50%, #E8F5E9 100%);
 }
 
-/* Boutons de navigation et de choix */
+/* تنسيق أزرار التنقل والاختيارات */
 .stButton>button {
     width: 100% !important;
     border-radius: 20px !important;
@@ -49,7 +49,7 @@ html, body, [data-testid="stMarkdownContainer"], h1, h2, h3, h4, p, span, label 
     box-shadow: 0px 8px 0px rgba(0,0,0,0.15) !important;
 }
 
-/* Boîtes de style BD pour les histoires */
+/* صناديق عرض القصص الحكواتية */
 .cartoon-box {
     background-color: #FFFFFF;
     border: 4px solid #FFCC80;
@@ -74,7 +74,7 @@ html, body, [data-testid="stMarkdownContainer"], h1, h2, h3, h4, p, span, label 
     font-weight: 700;
 }
 
-/* Tableau d'honneur (Tableau des médailles) */
+/* تنسيق عناوين لوحات الشرف والأوسمة */
 .board-title {
     text-align: center;
     color: #FF6B6B;
@@ -114,7 +114,7 @@ html, body, [data-testid="stMarkdownContainer"], h1, h2, h3, h4, p, span, label 
     text-align: center; 
 }
 
-/* Jauge de progression personnalisée pour l'arbre */
+/* حاوية شجرة نمو المعرفة الذكية */
 .gauge-container {
     background: linear-gradient(180deg, #FFFFFF, #E8F5E9);
     border: 3px solid #10AC84;
@@ -123,7 +123,7 @@ html, body, [data-testid="stMarkdownContainer"], h1, h2, h3, h4, p, span, label 
     text-align: center;
 }
 
-/* Grande bannière d'accueil */
+/* لافتة الترحيب السفلية */
 .welcome-banner {
     background: linear-gradient(135deg, #FFF9E6, #FFF2CC);
     border: 3px solid #FFA801;
@@ -137,12 +137,12 @@ st.markdown(css_style, unsafe_allow_html=True)
 
 
 # ==========================================
-# 3. GESTION DE L'ÉTAT ET DES COMPÉTENCES (Session State)
+# 3. إدارة الجلسة وحفظ الإنجازات (Session State)
 # ==========================================
 if "page" not in st.session_state:
     st.session_state.page = "menu"
 
-# Variables de réponses (correct / wrong / None)
+# حفظ إجابات الطالب الحالية
 if "ans_lesson1" not in st.session_state:
     st.session_state.ans_lesson1 = None
 if "ans_lesson2" not in st.session_state:
@@ -150,7 +150,7 @@ if "ans_lesson2" not in st.session_state:
 if "ans_lesson3" not in st.session_state:
     st.session_state.ans_lesson3 = None
 
-# Validation définitive des compétences (True / False) pour le calcul du score
+# التوثيق والاعتماد الدائم للمهارة بعد الإجابة الصحيحة
 if "score_lesson1" not in st.session_state:
     st.session_state.score_lesson1 = False
 if "score_lesson2" not in st.session_state:
@@ -160,7 +160,7 @@ if "score_lesson3" not in st.session_state:
 
 
 # ==========================================
-# 4. CALCUL DYNAMIQUE DU POURCENTAGE
+# 4. الحساب الديناميكي لنسبة تقدم المعرفة
 # ==========================================
 nombre_de_lecons_reussies = 0
 
@@ -173,7 +173,7 @@ if st.session_state.score_lesson2 == True:
 if st.session_state.score_lesson3 == True:
     nombre_de_lecons_reussies = nombre_de_lecons_reussies + 1
 
-# Formule du pourcentage général (3 leçons au total, chacune vaut 33.33%)
+# تحويل عدد المهام المنجزة إلى نسبة مئوية دقيقة لكل تمرين
 if nombre_de_lecons_reussies == 0:
     pourcentage_connaissance = 0
 elif nombre_de_lecons_reussies == 1:
@@ -185,7 +185,7 @@ elif nombre_de_lecons_reussies == 3:
 
 
 # ==========================================
-# 5. FONCTIONS UTILES (Affichage du logo)
+# 5. دوال مساعدة (عرض شعار المنصة علوياً)
 # ==========================================
 def afficher_logo_haut():
     if os.path.exists("logo.jpeg"):
@@ -195,11 +195,11 @@ def afficher_logo_haut():
 
 
 # ==========================================
-# 6. PAGES DU SYSTÈME ET LOGIQUE TARIFAIRE
+# 6. بناء الصفحات البرمجية للنظام التفاعلي
 # ==========================================
 
 # ------------------------------------------
-# A. MENU PRINCIPAL INTERACTIF
+# أ. القائمة الرئيسية للمغامرات اللغوية
 # ------------------------------------------
 if st.session_state.page == "menu":
     afficher_logo_haut()
@@ -232,7 +232,7 @@ if st.session_state.page == "menu":
 
 
 # ------------------------------------------
-# B. MISSION 1 : أقسام الكلمة
+# ب. المغامرة الأولى : أقسام الكلمة
 # ------------------------------------------
 elif st.session_state.page == "lesson1":
     afficher_logo_haut()
@@ -242,7 +242,7 @@ elif st.session_state.page == "lesson1":
         
     st.markdown("<h2 style='color: #FF4757; text-align: center; font-weight: 900;'>🎬 قصة متحركة: الأرنب السريع سمسم</h2>", unsafe_allow_html=True)
     
-    st.markdown("""
+    html_story_1 = """
     <div class="cartoon-box">
         <div class="story-title">📦 صندوق الكلمات السحري</div>
         <p class="story-text">
@@ -253,7 +253,8 @@ elif st.session_state.page == "lesson1":
         📦 <b>3. الحرف:</b> كلمة صغيرة لا نفهم معناها إلا مع غيرها (مثل: فِي، إِلَى، عَلَى).
         </p>
     </div>
-    """, unsafe_allow_html=True)
+    """
+    st.markdown(html_story_1, unsafe_allow_html=True)
     
     st.write("### 🎮 اضغط على نوع الكلمة الصحيح لتطعم سمسم:")
     st.markdown("<h2 style='text-align: center; color: white; background: #FF4757; padding: 15px; border-radius: 20px;'>الكلمة هي: « يَقْفِزُ »</h2>", unsafe_allow_html=True)
@@ -278,7 +279,7 @@ elif st.session_state.page == "lesson1":
 
 
 # ------------------------------------------
-# C. MISSION 2 : الجملة الاسمية والفعلية
+# ج. المغامرة الثانية : الجملة الاسمية والفعلية
 # ------------------------------------------
 elif st.session_state.page == "lesson2":
     afficher_logo_haut()
@@ -288,7 +289,7 @@ elif st.session_state.page == "lesson2":
         
     st.markdown("<h2 style='color: #2E86DE; text-align: center; font-weight: 900;'>🎬 قصة متحركة: حراس قلعة الجمل</h2>", unsafe_allow_html=True)
     
-    st.markdown("""
+    html_story_2 = """
     <div class="cartoon-box">
         <div class="story-title" style="color: #2E86DE;">🏰 بوابات الحصن اللغوي</div>
         <p class="story-text">
@@ -297,48 +298,7 @@ elif st.session_state.page == "lesson2":
         ⚔️ <b>الحارس الثاني (الجملة الفعلية):</b> يلوح بسيفه ويقول: أنا أبدأ دائماً بـ <b>فعل</b> قوي يدل على حركة ونشاط (مثل: <i>تُمطِرُ السَّمَاءُ</i>).
         </p>
     </div>
-    """, unsafe_allow_html=True)
+    """
+    st.markdown(html_story_2, unsafe_allow_html=True)
     
-    st.write("### 🎮 تحدى حارس البوابة لفتح القلعة:")
-    st.markdown("<h2 style='text-align: center; color: white; background: #2E86DE; padding: 15px; border-radius: 20px;'>الجملة هي: « تُمطِرُ السَّمَاءُ »</h2>", unsafe_allow_html=True)
-    st.write("")
-
-    col_b1, col_b2 = st.columns(2)
-    with col_b1:
-        if st.button("جملة اسمية 👑", key="opt_p1"):
-            st.session_state.ans_lesson2 = "wrong"
-    with col_b2:
-        if st.button("جملة فعلية ⚔️", key="opt_p2"):
-            st.session_state.ans_lesson2 = "correct"
-            st.session_state.score_lesson2 = True
-            
-    if st.session_state.ans_lesson2 == "correct":
-        st.success("🎉 واو! الإجابة صحيحة لأن جملة 'تُمطِرُ السَّمَاءُ' تبدأ بفعل مضارع. انفتحت بوابة القلعة السحرية 🔑!")
-    elif st.session_state.ans_lesson2 == "wrong":
-        st.warning("❌ الحارس يرفض العبور! انظر للكلمة الأولى 'تُمطِرُ'.. هل هي اسم أم شيء يحدث الآن (فعل)؟")
-
-
-# ------------------------------------------
-# D. MISSION 3 : المفعول به والمنصوبات
-# ------------------------------------------
-elif st.session_state.page == "lesson3":
-    afficher_logo_haut()
-    if st.button("⬅ العودة للمنزل", key="back_3"):
-        st.session_state.page = "menu"
-        st.rerun()
-        
-    st.markdown("<h2 style='color: #10AC84; text-align: center; font-weight: 900;'>🎬 قصة متحركة: قضية المحقق كَانَمُون</h2>", unsafe_allow_html=True)
-    
-    st.markdown("""
-    <div class="cartoon-box">
-        <div class="story-title" style="color: #10AC84;">🔍 لغز الكلمة المفقودة</div>
-        <p class="story-text">
-        🕵️‍♂️ المحقق الذكي <b>كَانَمُون</b> يمسك بعدسته ويبحث عن سر اختفاء كلمة وقع عليها الفعل المذكور!<br>
-        قال: لدينا الفعل (قَرَأَ) والفاعل الذي قام بالعمل وهو (الطِّفْلُ).. لكن ماذا قرأ الطفل؟! <br><br>
-        🎯 وفجأة ظهر <b>المَفْعُولُ بِهِ</b> وهو يضحك ويقول: أنا الاسم المنصوب بالفتحة، وأنا الذي وقع عليّ فعل الفاعل! لمعرفتي دائماً اسأل الفاعل بـ: <b>مَاذَا؟</b> (مثل: قَرَأَ الطِّفْلُ <u>قِصَّةً</u>).
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    st.write("### 🎮 ساعد المحقق في حل القضية واقبض على المفعول به:")
-    st.markdown("<h2 style='text-align: center; color: white; background: #10AC84; padding: 15px; border-radius: 20px;'>الجملة هي: « قَرَأَ الطِّفْلُ قِصَّةً جَمِيل
+    st.write("### 🎮 تحدى حارس البوابة ل
