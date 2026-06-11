@@ -1,4 +1,4 @@
-mport streamlit as st
+import streamlit as st
 import os
 
 # تأكد من أن ملف الشعار موجود في نفس مجلد ملف الكود (app.py)
