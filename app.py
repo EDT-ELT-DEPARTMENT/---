@@ -1,87 +1,115 @@
 import streamlit as st
 import os
 
-# تأكد من أن ملف الشعار موجود في نفس مجلد ملف الكود (app.py)
-# يمكنك تغيير 'logo.png' إلى اسم ملفك الحقيقي (مثلاً logo.jpg أو logo.jpeg)
-
-def عرض_الشعار():
-    # إنشاء أعمدة لتوسيط الشعار
-    col1, col2, col3 = st.columns([1, 2, 1])
-    
-    with col2:
-        if os.path.exists("logo.png"):
-            st.image("logo.png", width=250, use_column_width=False)
-        else:
-            # رسالة تنبيه إذا لم يتم العثور على الملف
-            st.warning("⚠️ يرجى التأكد من وضع ملف الشعار باسم 'logo.png' في المجلد")
-
-# استدعاء الدالة لعرض الشعار
-عرض_الشعار()
-import streamlit as st
-import os
-
 # 1. إعداد الصفحة
-st.set_page_config(page_title="قصتي دراستي", layout="wide")
+st.set_page_config(
+    page_title="قصتي دراستي - عالم القواعد السحري",
+    layout="wide"
+)
 
-# 2. تصميم CSS (الأزرق والبرتقالي)
+# 2. تصميم CSS المخصص (الأزرار والبطاقات المربعة)
 st.markdown("""
 <style>
-    body { direction: rtl; text-align: right; font-family: 'Cairo', sans-serif; }
-    .stApp { background-color: #F0F4F8; }
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
     
-    .btn-card { 
-        height: 140px !important; border-radius: 20px !important; 
-        font-weight: 900 !important; font-size: 20px !important;
-        border: none !important; box-shadow: 0 4px 6px rgba(0,0,0,0.1) !important;
+    html, body, [data-testid="stMarkdownContainer"], h1, h2, h3, h4, p, span, label, button {
+        font-family: 'Cairo', sans-serif !important;
+        direction: RTL;
+        text-align: right;
     }
-    .blue-btn { background-color: #2980B9 !important; color: white !important; }
-    .orange-btn { background-color: #E67E22 !important; color: white !important; }
     
-    .content-box { 
-        background: white; padding: 30px; border-radius: 25px; 
-        border-right: 8px solid #2980B9; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    .stApp {
+        background: linear-gradient(135deg, #FFF9E6 0%, #E3F2FD 50%, #E8F5E9 100%);
+    }
+    
+    .card-button {
+        width: 100% !important;
+        height: 150px !important;
+        border-radius: 20px !important;
+        background-color: white !important;
+        border: 2px solid #e0e0e0 !important;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1) !important;
+        font-weight: 900 !important;
+        color: #333 !important;
+        margin-bottom: 20px !important;
+    }
+    
+    .card-button:hover {
+        border-color: #2E7D32 !important;
+        color: #2E7D32 !important;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# 3. إدارة التنقل
-if 'page' not in st.session_state: st.session_state.page = 'الرئيسية'
+# 3. إدارة الجلسة
+if "الصفحة_الحالية" not in st.session_state:
+    st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
 
-# 4. الواجهة الرئيسية
-if st.session_state.page == 'الرئيسية':
-    # عرض الشعار
-    col_l, col_c, col_r = st.columns([1, 2, 1])
-    with col_c:
-        if os.path.exists("logo.png"):
-            st.image("logo.png", width=250)
-        else:
-            st.markdown("<h1 style='text-align:center; color:#2980B9;'>قصتي دراستي</h1>", unsafe_allow_html=True)
+# 4. دالة عرض الشعار
+def عرض_الشعار():
+    if os.path.exists("logo.jpeg"):
+        col1, col2, col3 = st.columns([1, 1, 1])
+        with col2:
+            st.image("logo.jpeg", use_column_width=True)
 
-    st.markdown("<h2 style='text-align: center; color: #34495E;'>رحلة النجاح تبدأ هنا</h2>", unsafe_allow_html=True)
-    st.write("<br><br>", unsafe_allow_html=True)
-
-    c1, c2, c3, c4 = st.columns(4)
-    with c1:
-        if st.button("📚 الدروس المرجعية", key="b1"): st.session_state.page = 'الدروس'; st.rerun()
-    with c2:
-        if st.button("📝 تمارين مرجعية", key="b2"): st.session_state.page = 'التمارين'; st.rerun()
-    with c3:
-        if st.button("📑 الامتحانات", key="b3"): st.session_state.page = 'الامتحانات'; st.rerun()
-    with c4:
-        if st.button("✅ التقييمات", key="b4"): st.session_state.page = 'التقييمات'; st.rerun()
-
-# 5. صفحات المحتوى
-else:
-    st.markdown("<div class='content-box'>", unsafe_allow_html=True)
-    st.title(f"قسم: {st.session_state.page}")
+# 5. الهيكل الرئيسي للتنقل
+if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
+    st.markdown("<h1 style='text-align: center;'>قصتي دراستي</h1>", unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center;'>رحلة النجاح تبدأ هنا</h3>", unsafe_allow_html=True)
     
-    سنة = st.selectbox("اختر السنة الدراسية:", ["السنة 1", "السنة 2", "السنة 3", "السنة 4", "السنة 5"])
+    col_left, col_mid, col_right = st.columns([1, 1, 1])
     
-    st.write(f"### 📖 محتوى {st.session_state.page} لـ {سنة}")
-    st.info("💡 الدرس الأول: مفاهيم أساسية في البرنامج الوطني")
-    st.info("💡 الدرس الثاني: تطبيقات وتدريبات عملية")
-    st.info("💡 الدرس الثالث: مراجعة شاملة")
-    
-    st.write("<br>", unsafe_allow_html=True)
-    if st.button("⬅ العودة للرئيسية"): st.session_state.page = 'الرئيسية'; st.rerun()
-    st.markdown("</div>", unsafe_allow_html=True)
+    with col_left:
+        if st.button("الدروس\nالمنهجية القمة", key="b1"):
+            st.session_state.الصفحة_الحالية = "الدرس_الأول"
+            st.rerun()
+        if st.button("الدروس اليومية\nمسارات كل طالب من الدروس", key="b2"):
+            st.session_state.الصفحة_الحالية = "الدرس_الثاني"
+            st.rerun()
+            
+    with col_mid:
+        عرض_الشعار()
+        st.write("")
+        if st.button("الذهاب للبرنامج الوطني", key="b_nat"):
+            st.session_state.الصفحة_الحالية = "البرنامج_الوطني"
+            st.rerun()
+            
+    with col_right:
+        if st.button("الدروس اليومية\nالمحاضرة من ثانوية", key="b3"):
+            st.session_state.الصفحة_الحالية = "الدرس_الثالث"
+            st.rerun()
+        if st.button("التقدم الأكاديمي\nمن سمات المنصات الأكاديمية", key="b4"):
+            st.session_state.الصفحة_الحالية = "لوحة_الإنجازات"
+            st.rerun()
+
+elif st.session_state.الصفحة_الحالية == "البرنامج_الوطني":
+    st.markdown("## 📚 البرنامج الوطني")
+    y = st.selectbox("اختر السنة الدراسية:", [1, 2, 3, 4, 5, 6])
+    st.info(f"تمارين مقترحة للسنة {y}")
+    if st.button("العودة للقائمة الرئيسية"):
+        st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
+        st.rerun()
+
+elif st.session_state.الصفحة_الحالية == "الدرس_الأول":
+    st.write("محتوى الدرس الأول...")
+    if st.button("العودة"):
+        st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
+        st.rerun()
+
+elif st.session_state.الصفحة_الحالية == "الدرس_الثاني":
+    st.write("محتوى الدرس الثاني...")
+    if st.button("العودة"):
+        st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
+        st.rerun()
+
+elif st.session_state.الصفحة_الحالية == "الدرس_الثالث":
+    st.write("محتوى الدرس الثالث...")
+    if st.button("العودة"):
+        st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
+        st.rerun()
+
+elif st.session_state.الصفحة_الحالية == "لوحة_الإنجازات":
+    st.markdown("## 🏆 لوحة الإنجازات")
+    if st.button("العودة"):
+        st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
+        st.rerun()
