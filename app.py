@@ -1,187 +1,195 @@
 import streamlit as st
-import random
 import os
 
 # Configuration de la page de l'application
 st.set_page_config(
-    page_title="قصتي دراستي - منصة تعليمية",
-    page_icon="✨",
+    page_title="قصتي دراستي - لوحة الإنجازات",
+    page_icon="🏆",
     layout="centered"
 )
 
-# Injection de style CSS pour forcer l'affichage de droite à gauche (RTL) et personnaliser le design
+# Injection de style CSS personnalisé pour correspondre aux couleurs chaleureuses de l'image (Thème Crème / Pastel)
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
-    html, body, [data-testid="stMarkdownContainer"], h1, h2, h3, h4, p, button {
+    
+    /* Configuration globale en Arabe / RTL */
+    html, body, [data-testid="stMarkdownContainer"], h1, h2, h3, h4, p, span {
         font-family: 'Cairo', sans-serif !important;
         direction: RTL;
         text-align: right;
     }
-    .stButton>button {
-        width: 100%;
-        border-radius: 12px;
-        font-size: 18px !important;
+    
+    /* Fond de l'application reprenant les tons de l'image */
+    .stApp {
+        background-color: #FDF6EC;
+    }
+    
+    /* Titre principal stylisé avec des feuilles végétales décoratives */
+    .board-title {
+        text-align: center;
+        color: #5D4037;
+        font-size: 36px;
         font-weight: bold;
-        padding: 15px;
-        transition: 0.3s;
+        margin-top: 10px;
+        margin-bottom: 30px;
     }
-    div[data-testid="stBlock"] {
-        direction: RTL;
-    }
-    .cartoon-box {
-        background-color: #FFF9E6;
-        border: 3px dashed #FFAAA6;
+    
+    /* Cadre de style "Dessin Animé" pour les badges */
+    .badge-card {
+        background-color: #FFFFFF;
+        border: 2px solid #FFE0B2;
+        border-radius: 20px;
         padding: 20px;
-        border-radius: 15px;
+        text-align: center;
+        box-shadow: 0px 4px 10px rgba(93, 64, 55, 0.05);
         margin-bottom: 20px;
-        box-shadow: 2px 2px 10px rgba(0,0,0,0.05);
+        min-height: 280px;
     }
-    .story-text {
-        font-size: 18px;
-        line-height: 1.8;
+    
+    .badge-icon {
+        font-size: 60px;
+        margin-bottom: 10px;
+    }
+    
+    .badge-name {
+        color: #E65100;
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 8px;
+        text-align: center;
+    }
+    
+    .badge-desc {
+        color: #795548;
+        font-size: 14px;
+        line-height: 1.6;
+        text-align: center;
+    }
+    
+    /* Jauge verticale de croissance (Arbre de la connaissance) */
+    .gauge-container {
+        background-color: #FFFFFF;
+        border: 2px solid #FFE0B2;
+        border-radius: 20px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0px 4px 10px rgba(93, 64, 55, 0.05);
+        height: 100%;
+    }
+    
+    .gauge-title {
+        color: #5D4037;
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+    
+    /* Message d'accueil en bas de l'écran */
+    .welcome-banner {
+        background-color: #FFFFFF;
+        border: 2px solid #FFCC80;
+        border-radius: 30px;
+        padding: 12px 30px;
+        margin-top: 30px;
+        box-shadow: 0px 4px 15px rgba(0,0,0,0.05);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .welcome-text {
         color: #2C3E50;
+        font-size: 18px;
+        font-weight: bold;
+        margin: 0;
+        text-align: center;
+        width: 100%;
+    }
+    
+    /* Bouton de retour en haut à gauche */
+    .stButton>button {
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        font-size: 20px !important;
+        background-color: #FFFFFF;
+        border: 2px solid #FFE0B2;
+        color: #5D4037;
+        font-weight: bold;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# Initialisation des variables d'état (Session State)
-if "page" not in st.session_state:
-    st.session_state.page = "menu"
+# --- BOUTON DE RETOUR (En haut à gauche comme sur la photo) ---
+col_back_1, col_back_2 = st.columns([1, 10])
+with col_back_1:
+    if st.button("❯", key="back_btn"):
+        st.write("العودة...") # Redirection vers le menu principal si nécessaire
 
-# Fonction utilitaire pour afficher uniquement le logo principal
-def afficher_logo_unique():
-    if os.path.exists("logo.jpeg"):
-        col_logo_1, col_logo_2, col_logo_3 = st.columns([1, 2, 1])
-        with col_logo_2:
-            st.image("logo.jpeg", use_column_width=True)
+# --- TITRE PRINCIPAL ---
+st.markdown('<div class="board-title">🌿 لَوْحَةُ إِنْجَازَاتِ بَطَلِ العِلْمِ 🌿</div>', unsafe_allow_html=True)
 
-# --- MENU PRINCIPAL ---
-if st.session_state.page == "menu":
-    # Affichage du Logo Unique en haut de la page d'accueil
-    afficher_logo_unique()
+# --- ZONE CENTRALE : BADGES & JAUGE D'AVANCEMENT ---
+# Division en colonnes : 3 colonnes pour les badges (à gauche) et 1 colonne large pour la jauge (à droite)
+col_badges, col_gauge = st.columns([3, 1])
 
-    st.markdown("<h1 style='text-align: center; color: #2C3E50;'>✨ قِصَّتِي دِرَاسَتِي ✨</h1>", unsafe_allow_html=True)
-    st.markdown("<h3 style='text-align: center; color: #7F8C8D;'>مرحباً بك يا بطل! اختر مغامرتك اللغوية لليوم:</h3>", unsafe_allow_html=True)
-    st.write("---")
-
-    # Boutons d'accès aux catégories d'âge
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("🧒 فئة 6 - 7 سنوات\n(مغامرة أقسام الكلمة 🏃‍♂️)", key="b1"):
-            st.session_state.page = "6-7"
-            st.rerun()
-    with col2:
-        if st.button("👦 فئة 8 - 9 سنوات\n(مملكة الجملة الاسمية والفعلية 🏰)", key="b2"):
-            st.session_state.page = "8-9"
-            st.rerun()
-            
-    st.write("")
-    if st.button("🧑 فئة 10 - 11 سنة\n(محقق القواعد: الصياد والمنصوبات 🕵️‍♂️)", key="b3"):
-        st.session_state.page = "10-11"
-        st.rerun()
-
-# --- CATÉGORIE 6-7 ANS : أقسام الكلمة ---
-elif st.session_state.page == "6-7":
-    # Affichage du Logo Unique également dans les sous-pages pour garder l'identité de l'application
-    afficher_logo_unique()
+with col_badges:
+    # Sous-colonnes pour aligner horizontalement les 3 médailles
+    b_col1, b_col2, b_col3 = st.columns(3)
     
-    if st.button("⬅ العودة للقائمة الرئيسية"):
-        st.session_state.page = "menu"
-        st.rerun()
+    with b_col1:
+        st.markdown("""
+        <div class="badge-card">
+            <div class="badge-icon">☀️</div>
+            <div class="badge-name">وسام الإشراق</div>
+            <div class="badge-desc">لتسجيل الدخول 5 أيام متتالية</div>
+        </div>
+        """, unsafe_allow_html=True)
         
-    st.markdown("<h2 style='color: #FF7675;'>🎬 رسوم متحركة: مغامرة الأرنب سمسم</h2>", unsafe_allow_html=True)
-    
+    with b_col2:
+        st.markdown("""
+        <div class="badge-card">
+            <div class="badge-icon">🦉</div>
+            <div class="badge-name">وسام الحكيم الصغير</div>
+            <div class="badge-desc">لقراءة 10 قصص تعليمية</div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+    with b_col3:
+        st.markdown("""
+        <div class="badge-card">
+            <div class="badge-icon">🍃</div>
+            <div class="badge-name">وسام الثمرة الأولى</div>
+            <div class="badge-desc">لإنهاء أول وحدة دراسية بنجاح</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+with col_gauge:
+    # Construction de la jauge de croissance à 75%
     st.markdown("""
-    <div class="cartoon-box">
-        <p class="story-text">
-        🏃‍♂️ كـان الأرنب الذكي <b>سَمسَم</b> يقفز في الغابة السحرية، وفجأة وجد صندوقاً كبيراً تتطاير منه الكلمات! <br>
-        قال له الحكيم سُلحوف: يا سمسم، الكلمات في لغتنا العربية ثلاثة أنواع لا رابع لها:<br>
-        🦁 <b>الاسم:</b> ما نسمي به الإنسان، الحيوان، أو الأشياء (مثل: أرنب، شجرة).<br>
-        🏃‍♂️ <b>الفعل:</b> حركة نقوم بها في زمن معين (مثل: يقفز، أكلَ).<br>
-        📦 <b>الحرف:</b> كلمة صغيرة لا نفهم معناها إلا مع غيرها (مثل: في، إلى، على).
-        </p>
+    <div class="gauge-container">
+        <div class="gauge-title">شجرة نمو<br>المعرفة</div>
+        <div style="margin: 20px 0;">
+            🍁<br>🍂<br>🍃<br>🌿
+        </div>
+        <div style="background-color: #FFF3E0; border-radius: 15px; padding: 10px; font-weight: bold; color: #E65100; font-size: 18px; text-align: center;">
+            75%
+        </div>
+        <div class="badge-desc" style="margin-top: 15px; font-size: 12px;">الشجرة تكبر بمعرفتك!</div>
     </div>
     """, unsafe_allow_html=True)
-    
-    st.markdown("### 🎮 العب وتحدّ سمسم:")
-    st.write("ساعد سمسم في تصنيف الكلمة التالية ليحصل على الجَزرة 🥕")
-    
-    mot_test = "يَقْفِزُ"
-    st.markdown(f"<h2 style='text-align: center; color: #E84393;'>الكلمة هي: {mot_test}</h2>", unsafe_allow_html=True)
-    
-    choix = st.radio("ما هو نوع هذه الكلمة؟", ["اسْم", "فِعْل", "حَرْف"], index=None, key="rad_6_7")
-    
-    if st.button("إرسال الإجابة 🥕"):
-        if choix == "فِعْل":
-            st.success("🎉 إجابة رائعة! يَقْفِزُ هي حركة، إذن هي فعل! لقد أكل سمسم الجزرة!")
-        else:
-            st.error("🧐 ركّز جيداً يا بطل! يَقْفِزُ تدل على حركة ونشاط، إذن هي فِعْل وليست اسماً أو حرفاً.")
 
-# --- CATÉGORIE 8-9 ANS : الجملة الاسمية والفعلية ---
-elif st.session_state.page == "8-9":
-    afficher_logo_unique()
-    
-    if st.button("⬅ العودة للقائمة الرئيسية"):
-        st.session_state.page = "menu"
-        st.rerun()
-        
-    st.markdown("<h2 style='color: #74B9FF;'>🎬 رسوم متحركة: قلعة الجمل السحرية</h2>", unsafe_allow_html=True)
-    
-    st.markdown("""
-    <div class="cartoon-box">
-        <p class="story-text">
-        🏰 وصلنا إلى قلعة القواعد! هناك حارسان على باب القلعة:<br>
-        👑 <b>الحارس الأول (الجملة الاسمية):</b> يصرخ ويقول: أنا تبدأ دائماً بـ <b>اسم</b>، وعندي ركنان هما المبتدأ والخبر (مثل: <i>العِلْمُ نُورٌ</i>).<br>
-        ⚔️ <b>الحارس الثاني (الجملة الفعلية):</b> يلوح بسيفه ويقول: أنا أبدأ دائماً بـ <b>فعل</b>، وعندي فعل وفاعل (مثل: <i>جَاءَ البَطَلُ</i>).
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    st.markdown("### 🎮 تحدي حراس القلعة:")
-    st.write("الحراس يمنعونك من الدخول حتى تحدد نوع هذه الجملة:")
-    
-    phrase_test = "تُمطِرُ السَّمَاءُ"
-    st.markdown(f"<h2 style='text-align: center; color: #0984E3;'>الجملة هي: « {phrase_test} »</h2>", unsafe_allow_html=True)
-    
-    choix_phrase = st.radio("ما نوع هذه الجملة؟", ["جملة اسمية", "جملة فعلية"], index=None, key="rad_8_9")
-    
-    if st.button("فتح باب القلعة 🔑"):
-        if choix_phrase == "جملة فعلية":
-            st.success("🎉 مذهل! الجملة تبدأ بكلمة 'تُمطِرُ' وهي فعل، إذن هي جملة فعلية! تفضل بالدخول للقلعة.")
-        else:
-            st.error("❌ الحارس يرفض إجابتك! انظر إلى الكلمة الأولى 'تُمطِرُ'، هل هي اسم أم فعل؟ إنها فعل، إذن الجملة فعلية.")
+# --- BANNIÈRE DE BIENVENUE (MESSAGE EN BAS) ---
+st.markdown("""
+<div class="welcome-banner">
+    <p class="welcome-text">
+        🦉 أهلاً بك يا <b>أحمد</b>، صديقك بَهِيّ ينتظرك لنكمل قصة اليوم!
+    </p>
+</div>
+""", unsafe_allow_html=True)
 
-# --- CATÉGORIE 10-11 ANS : المفعول به والمنصوبات ---
-elif st.session_state.page == "10-11":
-    afficher_logo_unique()
-    
-    if st.button("⬅ العودة للقائمة الرئيسية"):
-        st.session_state.page = "menu"
-        st.rerun()
-        
-    st.markdown("<h2 style='color: #55E6C1;'>🎬 رسوم متحركة: المحقق كـانَمون ومصيدة المفعول به</h2>", unsafe_allow_html=True)
-    
-    st.markdown("""
-    <div class="cartoon-box">
-        <p class="story-text">
-        🕵️‍♂️ المحقق الشهير <b>كَانَمُون</b> يبحث عن ركن مفقود في مسرح الجريمة اللغوية! <br>
-        قال المحقق: لدينا فعل (كَتَبَ) ولدينا فاعل قام بالحركة (التِّلْمِيذُ).. لكن ماذا كتب؟! <br>
-        🎯 وفجأة ظهر <b>المَفْعُولُ بِهِ</b> ضاحكاً وقال: أنا الاسم المنصوب بالفتحة الذي وقع عليّ فعل الفاعل! (مثل: كَتَبَ التِّلْمِيذُ <u>الدَّرْسَ</u>). أنا دائماً أجيب عن سؤال: <b>مَاذَا؟</b>
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    st.markdown("### 🎮 اختبر mهاراتك الإعرابية مع المحقق:")
-    st.write("ابحث عن المفعول به المنصوب في الجملة التالية واقبض عليه:")
-    
-    phrase_adv = "قَرَأَ الطِّفْلُ قِصَّةً جَمِيلَةً"
-    st.markdown(f"<h2 style='text-align: center; color: #27AE60;'>الجملة هي: « {phrase_adv} »</h2>", unsafe_allow_html=True)
-    
-    reponse_inv = st.text_input("اكتب الكلمة التي تمثل المفعول به هنا:", key="input_10_11").strip()
-    
-    if st.button("تقديم التقرير للمحقق 🕵️‍♂️"):
-        if reponse_inv == "قصة" or reponse_inv == "قِصَّةً" or reponse_inv == "قصةً":
-            st.success("🎯 أحسنت يا سيادة المحقق! 'قصةً' هي الإجابة عن سؤال: ماذا قرأ الطفل؟ وهي مفعول به منصوب وعلامة نصبه الفتحة!")
-        else:
-            st.error("❌ المحقق يقول: الإجابة غير دقيقة. اسأل نفسك: ماذا قرأ الطفل؟ الطفل قرأ 'قِصَّةً'. إذن 'قصةً' هي المفعول به!")
+# Lancement d'un effet festif discret de ballons pour célébrer les réussites de l'élève
+st.balloons()
