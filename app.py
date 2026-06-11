@@ -46,7 +46,7 @@ def عرض_محتوى_الدرس(اسم_الدرس):
 
 # 4. بناء الصفحات
 if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
-    st.markdown("<h1 style='text-align: center; color: #FF6B6B;'>🎈 عَالَمُ قِصَّتِي دِرَاسَتِي 🎈</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center; color: #FF6B6B;'>🎈 المنصة التعليمية قِصَّتِي دِرَاسَتِي 🎈</h1>", unsafe_allow_html=True)
     
     if st.button("🌟 دروس مرجعية"):
         st.session_state.الصفحة_الحالية = "الدرس_الأول"
