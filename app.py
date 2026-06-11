@@ -1,73 +1,74 @@
 import streamlit as st
 
-# Configuration de la page
+# إعداد الصفحة لملء العرض بالكامل
 st.set_page_config(page_title="قصتي دراستي", layout="wide")
 
-# CSS pour obtenir le design exact de l'image
+# CSS المخصص للمطابقة التامة مع الشكل
 st.markdown("""
 <style>
-    /* Centrage global */
-    .block-container { max-width: 1200px; padding-top: 2rem; }
+    /* تنسيق الحاويات لتكون متناسقة */
+    .block-container { padding: 1rem; }
     
-    /* Style des boutons rectangulaires blancs avec ombre */
-    .stButton > button {
+    /* تصميم الأزرار المربعة (البطاقات) */
+    div.stButton > button {
         width: 100%;
-        height: 120px;
-        border-radius: 15px;
-        background-color: white !important;
-        border: 1px solid #e0e0e0 !important;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        color: #333 !important;
+        height: 110px;
+        border-radius: 20px;
+        background-color: #ffffff;
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        font-family: 'Cairo', sans-serif;
         font-weight: bold;
-        transition: 0.3s;
-    }
-    .stButton > button:hover {
-        border-color: #2e7d32 !important;
-        transform: translateY(-5px);
+        color: #333;
+        text-align: right;
+        padding-right: 20px;
+        display: block;
     }
     
-    /* Style des boutons supérieurs (المصادر/الصفوف) */
-    .top-buttons .stButton > button {
+    /* تصميم الأزرار العلوية الصغيرة */
+    .top-btns div.stButton > button {
         height: 40px;
         border-radius: 50px;
-        background-color: #2e7d32 !important;
-        color: white !important;
+        background-color: #2e7d32;
+        color: white;
+        text-align: center;
+        padding: 0;
     }
-    
-    .center-content { text-align: center; margin-top: 20px; }
 </style>
 """, unsafe_allow_html=True)
 
-# 1. En-tête : Boutons supérieurs
-c1, c2, c3, c4 = st.columns([2, 1, 1, 2])
-with c2: st.markdown('<div class="top-buttons">', unsafe_allow_html=True); st.button("الصفوف ⚙️"); st.markdown('</div>', unsafe_allow_html=True)
-with c3: st.markdown('<div class="top-buttons">', unsafe_allow_html=True); st.button("الصفوف ⊞"); st.markdown('</div>', unsafe_allow_html=True)
+# 1. الصف العلوي (المصادر والصفوف)
+col_top1, col_top2, col_top3, col_top4 = st.columns([2, 1, 1, 2])
+with col_top2:
+    st.markdown('<div class="top-btns">', unsafe_allow_html=True)
+    st.button("الصفوف ⚙️")
+    st.markdown('</div>', unsafe_allow_html=True)
+with col_top3:
+    st.markdown('<div class="top-btns">', unsafe_allow_html=True)
+    st.button("الصفوف ⊞")
+    st.markdown('</div>', unsafe_allow_html=True)
 
-# 2. Centre : Titre et Logo
-st.markdown('<div class="center-content">', unsafe_allow_html=True)
-st.title("قصتي دراستي")
-st.subheader("رحلة النجاح تبدأ هنا")
-# Remplacer par votre logo
-st.image("https://via.placeholder.com/200x150?text=LOGO", width=200)
-st.markdown('</div>', unsafe_allow_html=True)
+# 2. الوسط (الشعار والعنوان)
+st.markdown("<h1 style='text-align: center;'>قصتي دراستي</h1>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align: center;'>رحلة النجاح تبدأ هنا</h3>", unsafe_allow_html=True)
 
-# 3. Grille des boutons latéraux (2 à gauche, 2 à droite)
-col1, col2, col3 = st.columns([1, 1, 1])
+# 3. توزيع 3 أعمدة (الأزرار على الجوانب، والوسط للشعار والطريق)
+main_col1, main_col2, main_col3 = st.columns([1, 1, 1])
 
-with col1:
+with main_col1:
     st.button("الدروس\nالمنهجية القمة")
-    st.write("")
-    st.button("الدروس اليومية\nمسارات كل طالب")
+    st.write("<br>", unsafe_allow_html=True)
+    st.button("الدروس اليومية\nمسارات كل طالب من الدروس")
 
-with col2:
-    # Espace vide central pour le logo/chemin
-    st.write("")
+with main_col2:
+    # هنا يتم وضع الشعار وصورة الطفل في الطريق
+    st.image("https://via.placeholder.com/200x250?text=LOGO+CENTER", use_column_width=False)
 
-with col3:
+with main_col3:
     st.button("الدروس اليومية\nالمحاضرة من ثانوية")
-    st.write("")
-    st.button("التقدم الأكاديمي\nمن سمات المنصات")
+    st.write("<br>", unsafe_allow_html=True)
+    st.button("التقدم الأكاديمي\nمن سمات المنصات الأكاديمية")
 
-# 4. Pied de page
-st.markdown("---")
+# 4. الجزء السفلي
+st.markdown("<br><hr>", unsafe_allow_html=True)
 st.markdown("### أرحلة النجاح")
