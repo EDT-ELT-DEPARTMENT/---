@@ -187,11 +187,10 @@ elif nombre_de_lecons_reussies == 3:
 
 
 # ==========================================
-# 5. دوال مساعدة (تم تكبير حجم الشعار هنا عبر تعديل الأبعاد)
+# 5. دوال مساعدة (عرض شعار المنصة علوياً)
 # ==========================================
 def afficher_logo_haut():
     if os.path.exists("logo.jpeg"):
-        # تم تغيير الأبعاد من [1, 1.2, 1] إلى [0.5, 2, 0.5] ليعطيه مساحة عرض أكبر بكثير في المنتصف
         col_l1, col_l2, col_l3 = st.columns([0.5, 2, 0.5])
         with col_l2:
             st.image("logo.jpeg", use_column_width=True)
@@ -254,7 +253,7 @@ elif st.session_state.page == "lesson1":
     <div class="cartoon-box">
         <div class="story-title">📦 صندوق الكلمات السحري</div>
         <p class="story-text">
-        🏃‍♂️ كـان الأرنب الذكي <b>سَمسَم</b> يقفز في الغابة، وفجأة وجد صندوقاً ذهبياً تتطاير منه الكلمات الملونة in الهواء! <br>
+        🏃‍♂️ كـان الأرنب الذكي <b>سَمسَم</b> يقفز في الغابة، وفجأة وجد صندوقاً ذهبياً تتطاير منه الكلمات الملونة في الهواء! <br>
         أسرع الحكيم سُلحوف وقال له: يا سمسم، كل كلمات اللغة العربية تنقسم إلى ثلاثة أنواع رائعة:<br><br>
         🦁 <b>1. الاسم:</b> ما نسمي به الإنسان، الحيوان، أو الشيء (مثل: أرنب، شجرة، أحمد).<br>
         🏃‍♂️ <b>2. الفعل:</b> حركة ونشاط نقوم به في زمن معين (مثل: يَقْفِزُ، يَأْكُلُ).<br>
@@ -280,10 +279,14 @@ elif st.session_state.page == "lesson1":
         if st.button("حَرْف 📦", key="opt_3"):
             st.session_state.ans_lesson1 = "wrong"
             
+    # عزل مخرجات النصوص لحل مشاكل علامات الاقتباس نهائياً
+    txt_success_l1 = "🎉 ممتاز يا بطل! (يَقْفِزُ) حركة ونشاط، إذن هي فعل! سمسم سعيد بالجزرة الآن 🥕!"
+    txt_wrong_l1 = "🧐 ركز جيداً! الأرنب يقوم بحركة ممتعة (القفز)، إذن الكلمة تعبر عن حركة وفعل!"
+
     if st.session_state.ans_lesson1 == "correct":
-        st.success("🎉 ممتاز يا بطل! (يَقْفِزُ) حركة ونشاط، إذن هي فعل! سمسم سعيد بالجزرة الآن 🥕!")
+        st.success(txt_success_l1)
     elif st.session_state.ans_lesson1 == "wrong":
-        st.warning("🧐 ركز جيداً! الأرنب يقوم بحركة ممتعة (القفز)، إذن الكلمة تعبر عن حركة وفعل!")
+        st.warning(txt_wrong_l1)
 
 
 # ------------------------------------------
@@ -322,14 +325,17 @@ elif st.session_state.page == "lesson2":
             st.session_state.ans_lesson2 = "correct"
             st.session_state.score_lesson2 = True
             
+    txt_success_l2 = "🎉 واو! الإجابة صحيحة لأن جملة 'تُمطِرُ السَّمَاءُ' تبدأ بفعل مضارع. انفتحت بوابة القلعة السحرية 🔑!"
+    txt_wrong_l2 = "❌ الحارس يرفض العبور! انظر للكلمة الأولى 'تُمطِرُ'.. هل هي اسم أم شيء يحدث الآن (فعل)؟"
+
     if st.session_state.ans_lesson2 == "correct":
-        st.success("🎉 واو! الإجابة صحيحة لأن جملة 'تُمطِرُ السَّمَاءُ' تبدأ بفعل مضارع. انفتحت بوابة القلعة السحرية 🔑!")
+        st.success(txt_success_l2)
     elif st.session_state.ans_lesson2 == "wrong":
-        st.warning("❌ الحارس يرفض العبور! انظر للكلمة الأولى 'تُمطِرُ'.. هل هي اسم أم شيء يحدث الآن (فعل)؟")
+        st.warning(txt_wrong_l2)
 
 
 # ------------------------------------------
-# د. المغامرة الثالثة : لغز المفعول به
+# د. المغامرة الثالثة : لغز المفعول به (تم إصلاح وعزل التنبيهات هنا بالكامل)
 # ------------------------------------------
 elif st.session_state.page == "lesson3":
     afficher_logo_haut()
@@ -369,12 +375,17 @@ elif st.session_state.page == "lesson3":
             st.session_state.ans_lesson3 = "m"
             st.session_state.score_lesson3 = True
             
+    # الحل الجذري والنهائي هنا: عزل نصوص التنبيهات بالكامل في متغيرات منفصلة
+    txt_success_l3 = "🎯 قضية ناجحة! 'قِصَّةً' هي الإجابة عن سؤال (ماذا قرأ الطفل؟)، مفعول به منصوب بالفتحة!"
+    txt_wrong_verb_l3 = "❌ لا يا سيادة المحقق! 'قَرَأَ' هو الفعل وعملية القراءة نفسها وليس الركن المنصوب."
+    txt_wrong_subj_l3 = "❌ ركز! 'الطِّفْلُ' هو الفاعل البطل الذي قرأ القصة وليس المفعول به."
+
     if st.session_state.ans_lesson3 == "m":
-        st.success("🎯 قضية ناجحة! 'قِصَّةً' هي الإجابة عن سؤال (ماذا قرأ الطفل؟)، مفعول به منصوب بالفتحة!")
+        st.success(txt_success_l3)
     elif st.session_state.ans_lesson3 == "v":
-        st.warning("❌ لا يا سيادة المحقق! 'قَرَأَ' هو الفعل وعملية القراءة نفسها وليس الركن المنصوب.")
+        st.warning(txt_wrong_verb_l3)
     elif st.session_state.ans_lesson3 == "f":
-        st.warning("❌ ركز! 'الطِّفْلُ' هو الفاعل البطل الذي قرأ القصة وليس المفعول به.")
+        st.warning(txt_wrong_subj_l3)
 
 
 # ------------------------------------------
@@ -411,7 +422,7 @@ elif st.session_state.page == "البرنامج_الوطني":
         y = st.session_state.selected_year
         
         if y == 1:
-            st.markdown("<h3 style='color: #FF4757; text-align: center;'>🎯 دروس السنة الأولى: عوالم الحروف والكلمات الأولى</h3>", unsafe_allow_html=True)
+            st.markdown("<h3 style='color: #FF4757; text-align: center;'>🎯 دروس السنة الأولى: عוالم الحروف والكلمات الأولى</h3>", unsafe_allow_html=True)
             st.markdown("""
             <div class="cartoon-box" style="border-color: #FF7675;">
                 <p class="story-text">
@@ -538,57 +549,4 @@ elif st.session_state.page == "لوحة_الإنجازات":
             else:
                 badge_2_lock = """
                 <div class="badge-card" style="border-color: #CCCCCC; opacity: 0.5;">
-                    <div class="badge-icon">🔒</div>
-                    <div class="badge-name" style="color: #888888;">وسام القلعة مغلق</div>
-                    <div class="badge-desc">افتح بوابات القلعة اللغوية لفتح هذا الوسام.</div>
-                </div>
-                """
-                st.markdown(badge_2_lock, unsafe_allow_html=True)
-                
-        with b_col3:
-            if st.session_state.score_lesson3 == True:
-                badge_3_html = """
-                <div class="badge-card" style="border-color: #10AC84; background-color: #F0FDF4;">
-                    <div class="badge-icon">🕵️‍♂️</div>
-                    <div class="badge-name" style="color: #10AC84;">وسام المحقق الذكي</div>
-                    <div class="badge-desc">مُنح لك لمساعدتك المحقق كانمون في حل لغز المفعول به!</div>
-                </div>
-                """
-                st.markdown(badge_3_html, unsafe_allow_html=True)
-            else:
-                badge_3_lock = """
-                <div class="badge-card" style="border-color: #CCCCCC; opacity: 0.5;">
-                    <div class="badge-icon">🔒</div>
-                    <div class="badge-name" style="color: #888888;">وسام المحقق مغلق</div>
-                    <div class="badge-desc">حل قضية الكلمة المنصوبة لفتح هذا الوسام.</div>
-                </div>
-                """
-                st.markdown(badge_3_lock, unsafe_allow_html=True)
-
-    with col_gauge:
-        gauge_html = f"""
-        <div class="gauge-container">
-            <div style="color: #2F3542; font-size: 16px; font-weight: 900; text-align:center;">شجرة نمو<br>المعرفة</div>
-            <div style="margin: 20px 0; font-size: 26px; text-align:center; line-height:1.4;">🍁<br>🍂<br>🍃<br>🌿</div>
-            <div style="background-color: #2ED573; border-radius: 15px; padding: 10px; font-weight: 900; color: white; font-size: 24px; text-align: center; box-shadow: 0px 4px 0px #26AF5F;">
-                {pourcentage_connaissance}%
-            </div>
-            <div style="color: #57606F; font-size: 13px; font-weight: bold; margin-top: 10px; text-align: center;">
-                نجحت في {nombre_de_lecons_reussies} من 3
-            </div>
-        </div>
-        """
-        st.markdown(gauge_html, unsafe_allow_html=True)
-
-    welcome_banner_html = """
-    <div class="welcome-banner">
-        <p style="color: #2C3E50; font-size: 20px; font-weight: 900; margin: 0; text-align: center;">
-            🦉 أهلاً بك يا <b>أحمد</b>، صديقك بَهِيّ يتابع نمو شجرة معرفتك الذكية خطوة بخطوة!
-        </p>
-    </div>
-    """
-    st.markdown(welcome_banner_html, unsafe_allow_html=True)
-    
-    if pourcentage_connaissance == 100:
-        st.balloons()
-        st.success("🏆 أشرقت شجرة معرفتك بالكامل يا بطل القواعد المستقبلي! أنت مذهل!")
+                    <div class="badge-
