@@ -11,7 +11,7 @@ st.set_page_config(
 # Injection de style CSS personnalisé pour correspondre aux couleurs chaleureuses de l'image (Thème Crème / Pastel)
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght=400;700&display=swap');
     
     /* Configuration globale en Arabe / RTL */
     html, body, [data-testid="stMarkdownContainer"], h1, h2, h3, h4, p, span {
@@ -127,17 +127,23 @@ st.markdown("""
 col_back_1, col_back_2 = st.columns([1, 10])
 with col_back_1:
     if st.button("❯", key="back_btn"):
-        st.write("العودة...") # Redirection vers le menu principal si nécessaire
+        st.write("العودة إلى القائمة الرئيسية...")
+
+# --- AFFICHAGE DE VOTRE PREMIER LOGO (logo.jpeg) ---
+# Le logo est centré automatiquement en haut de la page
+if os.path.exists("logo.jpeg"):
+    col_logo_1, col_logo_2, col_logo_3 = st.columns([1, 1.5, 1])
+    with col_logo_2:
+        st.image("logo.jpeg", use_column_width=True)
 
 # --- TITRE PRINCIPAL ---
 st.markdown('<div class="board-title">🌿 لَوْحَةُ إِنْجَازَاتِ بَطَلِ العِلْمِ 🌿</div>', unsafe_allow_html=True)
 
 # --- ZONE CENTRALE : BADGES & JAUGE D'AVANCEMENT ---
-# Division en colonnes : 3 colonnes pour les badges (à gauche) et 1 colonne large pour la jauge (à droite)
 col_badges, col_gauge = st.columns([3, 1])
 
 with col_badges:
-    # Sous-colonnes pour aligner horizontalement les 3 médailles
+    # Alignement horizontal des 3 médailles
     b_col1, b_col2, b_col3 = st.columns(3)
     
     with b_col1:
@@ -168,11 +174,11 @@ with col_badges:
         """, unsafe_allow_html=True)
 
 with col_gauge:
-    # Construction de la jauge de croissance à 75%
+    # Construction de la jauge verticale de croissance à 75%
     st.markdown("""
     <div class="gauge-container">
         <div class="gauge-title">شجرة نمو<br>المعرفة</div>
-        <div style="margin: 20px 0;">
+        <div style="margin: 20px 0; font-size: 24px;">
             🍁<br>🍂<br>🍃<br>🌿
         </div>
         <div style="background-color: #FFF3E0; border-radius: 15px; padding: 10px; font-weight: bold; color: #E65100; font-size: 18px; text-align: center;">
@@ -191,5 +197,5 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# Lancement d'un effet festif discret de ballons pour célébrer les réussites de l'élève
+# Effet festif automatique de ballons
 st.balloons()
