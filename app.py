@@ -187,11 +187,12 @@ elif nombre_de_lecons_reussies == 3:
 
 
 # ==========================================
-# 5. دوال مساعدة (عرض شعار المنصة علوياً)
+# 5. دوال مساعدة (تم تكبير حجم الشعار هنا عبر تعديل الأبعاد)
 # ==========================================
 def afficher_logo_haut():
     if os.path.exists("logo.jpeg"):
-        col_l1, col_l2, col_l3 = st.columns([1, 1.2, 1])
+        # تم تغيير الأبعاد من [1, 1.2, 1] إلى [0.5, 2, 0.5] ليعطيه مساحة عرض أكبر بكثير في المنتصف
+        col_l1, col_l2, col_l3 = st.columns([0.5, 2, 0.5])
         with col_l2:
             st.image("logo.jpeg", use_column_width=True)
 
@@ -201,7 +202,7 @@ def afficher_logo_haut():
 # ==========================================
 
 # ------------------------------------------
-# أ. القائمة الرئيسية للمغامرات اللغوية (تبدأ بـ if الأساسية)
+# أ. القائمة الرئيسية للمغامرات اللغوية
 # ------------------------------------------
 if st.session_state.page == "menu":
     afficher_logo_haut()
@@ -233,7 +234,6 @@ if st.session_state.page == "menu":
             st.rerun()
             
     st.write("")
-    # إضافة زر الانتقال للبرنامج الوطني في الواجهة الرئيسية أسفل الأزرار السابقة
     if st.button("📚 استكشف البرنامج الوطني حسب السنوات الدراسية (من 1 إلى 6)", key="btn_national_prog"):
         st.session_state.page = "البرنامج_الوطني"
         st.rerun()
@@ -254,9 +254,9 @@ elif st.session_state.page == "lesson1":
     <div class="cartoon-box">
         <div class="story-title">📦 صندوق الكلمات السحري</div>
         <p class="story-text">
-        🏃‍♂️ كـان الأرنب الذكي <b>سَمسَم</b> يقفز في الغابة، وفجأة وجد صندوقاً ذهبياً تتطاير منه الكلمات الملونة في الهواء! <br>
+        🏃‍♂️ كـان الأرنب الذكي <b>سَمسَم</b> يقفز في الغابة، وفجأة وجد صندوقاً ذهبياً تتطاير منه الكلمات الملونة in الهواء! <br>
         أسرع الحكيم سُلحوف وقال له: يا سمسم، كل كلمات اللغة العربية تنقسم إلى ثلاثة أنواع رائعة:<br><br>
-        🦁 <b>1. الاسم:</b> ما نسمي به الإنسان، الحيوان، أو الشيء (مثل: أرنب, شجرة، أحمد).<br>
+        🦁 <b>1. الاسم:</b> ما نسمي به الإنسان، الحيوان، أو الشيء (مثل: أرنب، شجرة، أحمد).<br>
         🏃‍♂️ <b>2. الفعل:</b> حركة ونشاط نقوم به في زمن معين (مثل: يَقْفِزُ، يَأْكُلُ).<br>
         📦 <b>3. الحرف:</b> كلمة صغيرة لا نفهم معناها إلا مع غيرها (مثل: فِي، إِلَى، عَلَى).
         </p>
@@ -372,223 +372,4 @@ elif st.session_state.page == "lesson3":
     if st.session_state.ans_lesson3 == "m":
         st.success("🎯 قضية ناجحة! 'قِصَّةً' هي الإجابة عن سؤال (ماذا قرأ الطفل؟)، مفعول به منصوب بالفتحة!")
     elif st.session_state.ans_lesson3 == "v":
-        st.warning("❌ لا يا سيادة المحقق! 'قَرَأَ' هو الفعل وعملية القراءة نفسها وليس الركن المنصوب.")
-    elif st.session_state.ans_lesson3 == "f":
-        st.warning("❌ ركز! 'الطِّفْلُ' هو الفاعل البطل الذي قرأ القصة وليس المفعول به.")
-
-
-# ------------------------------------------
-# هـ. قسم البرنامج الوطني والسنوات الدراسية (مدمج بشكل صحيح تحت الـ if والـ elif)
-# ------------------------------------------
-elif st.session_state.page == "البرنامج_الوطني":
-    if st.button("⬅ العودة للمنزل", key="back_program"):
-        st.session_state.page = "menu"
-        st.rerun()
-
-    afficher_logo_haut()
-    st.markdown('<div class="board-title">📚 رِحْلَةُ القَوَاعِدِ حَسَبَ السَّنَواتِ 📚</div>', unsafe_allow_html=True)
-    st.markdown("<h4 style='text-align: center; color: #57606F; font-weight: bold;'>اختر سنتك الدراسية واستكشف مغامرات القواعد المقررة لك:</h4>", unsafe_allow_html=True)
-    st.write("")
-
-    col_y1, col_y2, col_y3 = st.columns(3)
-    col_y4, col_y5, col_y6 = st.columns(3)
-
-    with col_y1:
-        if st.button("🌱 السنة الأولى ابتدائي", key="y1"): st.session_state.selected_year = 1
-    with col_y2:
-        if st.button("🌿 السنة الثانية ابتدائي", key="y2"): st.session_state.selected_year = 2
-    with col_y3:
-        if st.button("🍀 السنة الثالثة ابتدائي", key="y3"): st.session_state.selected_year = 3
-    with col_y4:
-        if st.button("🌳 السنة الرابعة ابتدائي", key="y4"): st.session_state.selected_year = 4
-    with col_y5:
-        if st.button("🌴 السنة الخامسة ابتدائي", key="y5"): st.session_state.selected_year = 5
-    with col_y6:
-        if st.button("👑 السنة السادسة ابتدائي", key="y6"): st.session_state.selected_year = 6
-
-    if st.session_state.selected_year is not None:
-        st.write("---")
-        y = st.session_state.selected_year
-        
-        if y == 1:
-            st.markdown("<h3 style='color: #FF4757; text-align: center;'>🎯 دروس السنة الأولى: عوالم الحروف والكلمات الأولى</h3>", unsafe_allow_html=True)
-            st.markdown("""
-            <div class="cartoon-box" style="border-color: #FF7675;">
-                <p class="story-text">
-                • <b>اكتشاف الحروف والكلمات:</b> التعرف على شكل الحرف وصوته.<br>
-                • <b>الضمائر المنفصلة البسيطة:</b> أنا، أنتَ، أنتِ.<br>
-                • <b>أسماء الإشارة للقريب:</b> هَذَا، هَذِهِ.<br>
-                • <b>التراكيب الأساسية:</b> تركيب جمل قصيرة جداً (مثل: هَذَا كِتَابٌ).
-                </p>
-            </div>
-            """, unsafe_allow_html=True)
-
-        elif y == 2:
-            st.markdown("<h3 style='color: #2E86DE; text-align: center;'>🎯 دروس السنة الثانية: بناء الجملة البسيطة</h3>", unsafe_allow_html=True)
-            st.markdown("""
-            <div class="cartoon-box" style="border-color: #54A0FF;">
-                <p class="story-text">
-                • <b>ضمائر المتكلم والمخاطب والغائب:</b> (نحن، أنتم، هو، هي...).<br>
-                • <b>أسماء الإشارة المتقدمة:</b> هَذَا، هَذِهِ، هَؤُلَاءِ.<br>
-                • <b>أدوات الاستفهام المشهورة:</b> مَاذَا، مَنْ، كَيْفَ، أَيْنَ.<br>
-                • <b>التحويل الصرفي البسيط:</b> تحويل الفعل مع ضمائر المفرد والجمع في الماضي.
-                </p>
-            </div>
-            """, unsafe_allow_html=True)
-
-        elif y == 3:
-            st.markdown("<h3 style='color: #10AC84; text-align: center;'>🎯 دروس السنة الثالثة: مغامرة أقسام الكلمة</h3>", unsafe_allow_html=True)
-            st.markdown("""
-            <div class="cartoon-box" style="border-color: #1DD1A1;">
-                <p class="story-text">
-                • <b>أقسام الكلمة بالتفصيل:</b> الاسم، الفعل، الحرف.<br>
-                • <b>أنواع الفعل:</b> الماضي، المضارع، الأمر.<br>
-                • <b>الجملة وعناصرها:</b> الجملة الاسمية والجملة الفعلية.<br>
-                • <b>حروف الجر وحروف العطف:</b> (في، إلى، على / و، ف، ثم).
-                </p>
-            </div>
-            """, unsafe_allow_html=True)
-
-        elif y == 4:
-            st.markdown("<h3 style='color: #FF9F43; text-align: center;'>🎯 دروس السنة الرابعة: حصن المرفوعات والمنصوبات</h3>", unsafe_allow_html=True)
-            st.markdown("""
-            <div class="cartoon-box" style="border-color: #FECA57;">
-                <p class="story-text">
-                • <b>أركان الجملة الفِعلية:</b> الفعل والفاعل والمفعول به وعلامات الإعراب.<br>
-                • <b>أركان الجملة الاسْمية:</b> المبتدأ والخبر وعلامة الرفع بالضمة.<br>
-                • <b>الصفة والموصوف:</b> كيف تتبع الصفة الموصوف في التذكير والتأنيث.<br>
-                • <b>المضاف والمضاف إليه:</b> التعرف على الاسم المجرور المضاف.
-                </p>
-            </div>
-            """, unsafe_allow_html=True)
-
-        elif y == 5:
-            st.markdown("<h3 style='color: #9B59B6; text-align: center;'>🎯 دروس السنة الخامسة: أسرار النواسخ والمثنى والجمع</h3>", unsafe_allow_html=True)
-            st.markdown("""
-            <div class="cartoon-box" style="border-color: #8E44AD;">
-                <p class="story-text">
-                • <b>النواسخ الفِعلية والحرفية:</b> كَانَ وأخواتها، إِنَّ وأخواتها وتأثيرها على الجمل.<br>
-                • <b>علامات الإعراب الفرعية:</b> المثنى (الألف والياء)، وجمع المذكر السالم (الواو والياء).<br>
-                • <b>الأسماء الخمسة:</b> (أبو، أخو...) وعلامات إعرابها الخاصة.<br>
-                • <b>المفاعيل:</b> المفعول المطلق، والمفعول لأجله.
-                </p>
-            </div>
-            """, unsafe_allow_html=True)
-
-        elif y == 6:
-            st.markdown("<h3 style='color: #D35400; text-align: center;'>🎯 دروس السنة السادسة: إتقان التراكيب والصرف المتقدم</h3>", unsafe_allow_html=True)
-            st.markdown("""
-            <div class="cartoon-box" style="border-color: #E67E22;">
-                <p class="story-text">
-                • <b>إعراب الفعل المضارع:</b> رفعه، جَزمه (أدوات الجزم)، ونصبه (أدوات النصب).<br>
-                • <b>الأفعال الخمسة:</b> ثبوت النون وحذفها.<br>
-                • <b>المجرد والمزيد من الأفعال:</b> ميزان الصرف الاستكشافي.<br>
-                • <b>المنصوبات المتقدمة:</b> الحال والجملة الحالية، والتمييز (الملفوظ والملحوظ).
-                </p>
-            </div>
-            """, unsafe_allow_html=True)
-
-
-# ------------------------------------------
-# و. لوحة إنجازات بطل العلم (لوحة الأوسمة)
-# ------------------------------------------
-elif st.session_state.page == "لوحة_الإنجازات":
-    if st.button("⬅ العودة للمنزل", key="back_r"):
-        st.session_state.page = "menu"
-        st.rerun()
-
-    afficher_logo_haut()
-    st.markdown('<div class="board-title">🌿 لَوْحَةُ إِنْجَازَاتِ بَطَلِ العِلْمِ 🌿</div>', unsafe_allow_html=True)
-
-    col_badges, col_gauge = st.columns([3, 1])
-
-    with col_badges:
-        b_col1, b_col2, b_col3 = st.columns(3)
-        
-        with b_col1:
-            if st.session_state.score_lesson1 == True:
-                badge_1_html = """
-                <div class="badge-card" style="border-color: #FF4757; background-color: #FFF5F5;">
-                    <div class="badge-icon">🦁</div>
-                    <div class="badge-name" style="color: #FF4757;">وسام بطل الكلمات</div>
-                    <div class="badge-desc">مُنح لك لتعرفك على الاسم والفعل والحرف مع سمسم!</div>
-                </div>
-                """
-                st.markdown(badge_1_html, unsafe_allow_html=True)
-            else:
-                badge_1_lock = """
-                <div class="badge-card" style="border-color: #CCCCCC; opacity: 0.5;">
-                    <div class="badge-icon">🔒</div>
-                    <div class="badge-name" style="color: #888888;">وسام الكلمات مغلق</div>
-                    <div class="badge-desc">أكمل مغامرة الأرنب سمسم لفتح هذا الوسام.</div>
-                </div>
-                """
-                st.markdown(badge_1_lock, unsafe_allow_html=True)
-                
-        with b_col2:
-            if st.session_state.score_lesson2 == True:
-                badge_2_html = """
-                <div class="badge-card" style="border-color: #2E86DE; background-color: #F0F7FF;">
-                    <div class="badge-icon">🏰</div>
-                    <div class="badge-name" style="color: #2E86DE;">وسام حارس القلعة</div>
-                    <div class="badge-desc">مُنح لك لنجاحك في عبور بوابات الجملة الاسمية والفعلية!</div>
-                </div>
-                """
-                st.markdown(badge_2_html, unsafe_allow_html=True)
-            else:
-                badge_2_lock = """
-                <div class="badge-card" style="border-color: #CCCCCC; opacity: 0.5;">
-                    <div class="badge-icon">🔒</div>
-                    <div class="badge-name" style="color: #888888;">وسام القلعة مغلق</div>
-                    <div class="badge-desc">افتح بوابات القلعة اللغوية لفتح هذا الوسام.</div>
-                </div>
-                """
-                st.markdown(badge_2_lock, unsafe_allow_html=True)
-                
-        with b_col3:
-            if st.session_state.score_lesson3 == True:
-                badge_3_html = """
-                <div class="badge-card" style="border-color: #10AC84; background-color: #F0FDF4;">
-                    <div class="badge-icon">🕵️‍♂️</div>
-                    <div class="badge-name" style="color: #10AC84;">وسام المحقق الذكي</div>
-                    <div class="badge-desc">مُنح لك لمساعدتك المحقق كانمون في حل لغز المفعول به!</div>
-                </div>
-                """
-                st.markdown(badge_3_html, unsafe_allow_html=True)
-            else:
-                badge_3_lock = """
-                <div class="badge-card" style="border-color: #CCCCCC; opacity: 0.5;">
-                    <div class="badge-icon">🔒</div>
-                    <div class="badge-name" style="color: #888888;">وسام المحقق مغلق</div>
-                    <div class="badge-desc">حل قضية الكلمة المنصوبة لفتح هذا الوسام.</div>
-                </div>
-                """
-                st.markdown(badge_3_lock, unsafe_allow_html=True)
-
-    with col_gauge:
-        gauge_html = f"""
-        <div class="gauge-container">
-            <div style="color: #2F3542; font-size: 16px; font-weight: 900; text-align:center;">شجرة نمو<br>المعرفة</div>
-            <div style="margin: 20px 0; font-size: 26px; text-align:center; line-height:1.4;">🍁<br>🍂<br>🍃<br>🌿</div>
-            <div style="background-color: #2ED573; border-radius: 15px; padding: 10px; font-weight: 900; color: white; font-size: 24px; text-align: center; box-shadow: 0px 4px 0px #26AF5F;">
-                {pourcentage_connaissance}%
-            </div>
-            <div style="color: #57606F; font-size: 13px; font-weight: bold; margin-top: 10px; text-align: center;">
-                نجحت في {nombre_de_lecons_reussies} من 3
-            </div>
-        </div>
-        """
-        st.markdown(gauge_html, unsafe_allow_html=True)
-
-    welcome_banner_html = """
-    <div class="welcome-banner">
-        <p style="color: #2C3E50; font-size: 20px; font-weight: 900; margin: 0; text-align: center;">
-            🦉 أهلاً بك يا <b>أحمد</b>، صديقك بَهِيّ يتابع نمو شجرة معرفتك الذكية خطوة بخطوة!
-        </p>
-    </div>
-    """
-    st.markdown(welcome_banner_html, unsafe_allow_html=True)
-    
-    if pourcentage_connaissance == 100:
-        st.balloons()
-        st.success("🏆 أشرقت شجرة معرفتك بالكامل يا بطل القواعد المستقبلي! أنت مذهل!")
+        st.warning("❌ لا يا سيادة المحقق! 'قَرَأَ' هو
