@@ -28,130 +28,143 @@ st.markdown("""
     div[data-testid="stBlock"] {
         direction: RTL;
     }
+    .cartoon-box {
+        background-color: #FFF9E6;
+        border: 3px dashed #FFAAA6;
+        padding: 20px;
+        border-radius: 15px;
+        margin-bottom: 20px;
+        box-shadow: 2px 2px 10px rgba(0,0,0,0.05);
+    }
+    .story-text {
+        font-size: 18px;
+        line-height: 1.8;
+        color: #2C3E50;
+    }
     </style>
 """, unsafe_allow_html=True)
 
-# Initialisation des variables d'état (Session State) pour garder les scores et les questions
+# Initialisation des variables d'état (Session State)
 if "page" not in st.session_state:
     st.session_state.page = "menu"
 if "score" not in st.session_state:
     st.session_state.score = 0
-if "calcul" not in st.session_state:
-    n1, n2 = random.randint(1, 10), random.randint(1, 10)
-    op = random.choice(['+', '-'])
-    if op == '-' and n1 < n2: n1, n2 = n2, n1
-    st.session_state.calcul = {"n1": n1, "n2": n2, "op": op, "res": n1+n2 if op=='+' else n1-n2}
-if "mot" not in st.session_state:
-    mots = [("مدرسة", "د"), ("قلم", "ل"), ("كتاب", "ت"), ("تفاحة", "ف"), ("بيت", "ي")]
-    choisi, cache = random.choice(mots)
-    st.session_state.mot = {"affiche": choisi.replace(cache, " _ ", 1), "lettre": cache, "complet": choisi}
-if "culture" not in st.session_state:
-    questions = [
-        {"q": "ما هي عاصمة الجزائر؟", "r": "الجزائر"},
-        {"q": "ما هو أكبر محيط في العالم؟", "r": "الهادي"},
-        {"q": "كم عدد كواكب المجموعة الشمسية؟", "r": "8"},
-        {"q": "ما هو الحيوان الذي يلقب بسفينة الصحراء？", "r": "الجمل"}
-    ]
-    st.session_state.culture = random.choice(questions)
-
-def changer_page(nom_page):
-    st.session_state.page = nom_page
-
-def generer_nouveau_calcul():
-    n1, n2 = random.randint(1, 10), random.randint(1, 10)
-    op = random.choice(['+', '-'])
-    if op == '-' and n1 < n2: n1, n2 = n2, n1
-    st.session_state.calcul = {"n1": n1, "n2": n2, "op": op, "res": n1+n2 if op=='+' else n1-n2}
-
-def generer_nouveau_mot():
-    mots = [("مدرسة", "د"), ("قلم", "ل"), ("كتاب", "ت"), ("تفاحة", "ف"), ("بيت", "ي")]
-    choisi, cache = random.choice(mots)
-    st.session_state.mot = {"affiche": choisi.replace(cache, " _ ", 1), "lettre": cache, "complet": choisi}
-
-def generer_nouvelle_culture():
-    questions = [
-        {"q": "ما هي عاصمة الجزائر؟", "r": "الجزائر"},
-        {"q": "ما هو أكبر محيط في العالم？", "r": "الهادي"},
-        {"q": "كم عدد كواكب المجموعة الشمسية؟", "r": "8"},
-        {"q": "ما هو الحيوان الذي يلقب بسفينة الصحراء؟", "r": "الجمل"}
-    ]
-    st.session_state.culture = random.choice(questions)
 
 # --- MENU PRINCIPAL ---
 if st.session_state.page == "menu":
     st.markdown("<h1 style='text-align: center; color: #2C3E50;'>✨ قِصَّتِي دِرَاسَتِي ✨</h1>", unsafe_allow_html=True)
-    st.markdown("<h3 style='text-align: center; color: #7F8C8D;'>مرحباً بك يا بطل! اختر فئتك العمرية لنبدأ المغامرة:</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center; color: #7F8C8D;'>مرحباً بك يا بطل! اختر مغامرتك اللغوية لليوم:</h3>", unsafe_allow_html=True)
     st.write("---")
 
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("🧒 من 6 إلى 7 سنوات\n(حساب ومرح)", key="b1"):
-            changer_page("6-7")
+        if st.button("🧒 فئة 6 - 7 سنوات\n(مغامرة أقسام الكلمة 🏃‍♂️)", key="b1"):
+            st.session_state.page = "6-7"
             st.rerun()
     with col2:
-        if st.button("👦 من 8 إلى 9 سنوات\n(لغتي الجميلة)", key="b2"):
-            changer_page("8-9")
+        if st.button("👦 فئة 8 - 9 سنوات\n(مملكة الجملة الاسمية والفعلية 🏰)", key="b2"):
+            st.session_state.page = "8-9"
             st.rerun()
             
     st.write("")
-    if st.button("🧑 من 10 إلى 11 سنة\n(ذكاء وتحدي)", key="b3"):
-        changer_page("10-11")
+    if st.button("🧑 فئة 10 - 11 سنة\n(محقق القواعد: الصياد والمنصوبات 🕵️‍♂️)", key="b3"):
+        st.session_state.page = "10-11"
         st.rerun()
 
-# --- CATÉGORIE 6-7 ANS ---
+# --- CATÉGORIE 6-7 ANS : أقسام الكلمة ---
 elif st.session_state.page == "6-7":
     if st.button("⬅ العودة للقائمة الرئيسية"):
-        changer_page("menu")
+        st.session_state.page = "menu"
         st.rerun()
         
-    st.markdown("<h2 style='color: #FF7675;'>🧮 تحدي الحساب السريع</h2>", unsafe_allow_html=True)
-    c = st.session_state.calcul
-    st.write(f"### كم يساوي : {c['n1']} {c['op']} {c['n2']} ؟")
+    st.markdown("<h2 style='color: #FF7675;'>🎬 رسوم متحركة: مغامرة الأرنب سمسم</h2>", unsafe_allow_html=True)
     
-    reponse = st.text_input("أدخل إجابتك هنا :", key="input_6_7")
-    if st.button("تحقق من الإجابة ✔️"):
-        if reponse.strip() == str(c['res']):
-            st.success("ممتاز ! 🎉 إجابة صحيحة يا بطل ! واصل هكذا .")
-            generer_nouveau_calcul()
+    st.markdown("""
+    <div class="cartoon-box">
+        <p class="story-text">
+        🏃‍♂️ كـان الأرنب الذكي <b>سَمسَم</b> يقفز في الغابة السحرية، وفجأة وجد صندوقاً كبيراً تتطاير منه الكلمات! <br>
+        قال له الحكيم سُلحوف: يا سمسم، الكلمات في لغتنا العربية ثلاثة أنواع لا رابع لها:<br>
+        🦁 <b>الاسم:</b> ما نسمي به الإنسان، الحيوان، أو الأشياء (مثل: أرنب، شجرة).<br>
+        🏃‍♂️ <b>الفعل:</b> حركة نقوم بها في زمن معين (مثل: يقفز، أكلَ).<br>
+        📦 <b>الحرف:</b> كلمة صغيرة لا نفهم معناها إلا مع غيرها (مثل: في، إلى، على).
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("### 🎮 العب وتحدّ سمسم:")
+    st.write("ساعد سمسم في تصنيف الكلمة التالية ليحصل على الجَزرة 🥕")
+    
+    mot_test = "يَقْفِزُ"
+    st.markdown(f"<h2 style='text-align: center; color: #E84393;'>الكلمة هي: {mot_test}</h2>", unsafe_allow_html=True)
+    
+    choix = st.radio("ما هو نوع هذه الكلمة؟", ["اسْم", "فِعْل", "حَرْف"], index=None, key="rad_6_7")
+    
+    if st.button("إرسال الإجابة 🥕"):
+        if choix == "فِعْل":
+            st.success("🎉 إجابة رائعة! يَقْفِزُ هي حركة، إذن هي فعل! لقد أكل سمسم الجزرة!")
         else:
-            st.error(f"خطأ ❌ الإجابة الصحيحة هي : {c['res']}")
-            generer_nouveau_calcul()
+            st.error("🧐 ركّز جيداً يا بطل! يَقْفِزُ تدل على حركة ونشاط، إذن هي فِعْل وليست اسماً أو حرفاً.")
 
-# --- CATÉGORIE 8-9 ANS ---
+# --- CATÉGORIE 8-9 ANS : الجملة الاسمية والفعلية ---
 elif st.session_state.page == "8-9":
     if st.button("⬅ العودة للقائمة الرئيسية"):
-        changer_page("menu")
+        st.session_state.page = "menu"
         st.rerun()
         
-    st.markdown("<h2 style='color: #74B9FF;'>🔤 ابحث عن الحرف الناقص</h2>", unsafe_allow_html=True)
-    m = st.session_state.mot
-    st.write("### ما هو الحرف الناقص في الكلمة التالية :")
-    st.markdown(f"<h1 style='text-align:center; color:#2980B9;'>{m['affiche']}</h1>", unsafe_allow_html=True)
+    st.markdown("<h2 style='color: #74B9FF;'>🎬 رسوم متحركة: قلعة الجمل السحرية</h2>", unsafe_allow_html=True)
     
-    reponse = st.text_input("الحرف الناقص هو :", key="input_8_9")
-    if st.button("تأكيد الحرف"):
-        if reponse.strip() == m['lettre']:
-            st.success(f"رائع ! 🌟 صحيح ! الكلمة هي : {m['complet']}")
-            generer_nouveau_mot()
+    st.markdown("""
+    <div class="cartoon-box">
+        <p class="story-text">
+        🏰 وصلنا إلى قلعة القواعد! هناك حارسان على باب القلعة:<br>
+        👑 <b>الحارس الأول (الجملة الاسمية):</b> يصرخ ويقول: أنا تبدأ دائماً بـ <b>اسم</b>، وعندي ركنان هما المبتدأ والخبر (مثل: <i>العِلْمُ نُورٌ</i>).<br>
+        ⚔️ <b>الحارس الثاني (الجملة الفعلية):</b> يلوح بسيفه ويقول: أنا أبدأ دائماً بـ <b>فعل</b>، وعندي فعل وفاعل (مثل: <i>جَاءَ البَطَلُ</i>).
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("### 🎮 تحدي حراس القلعة:")
+    st.write("الحراس يمنعونك من الدخول حتى تحدد نوع هذه الجملة:")
+    
+    phrase_test = "تُمطِرُ السَّمَاءُ"
+    st.markdown(f"<h2 style='text-align: center; color: #0984E3;'>الجملة هي: « {phrase_test} »</h2>", unsafe_allow_html=True)
+    
+    choix_phrase = st.radio("ما نوع هذه الجملة؟", ["جملة اسمية", "جملة فعلية"], index=None, key="rad_8_9")
+    
+    if st.button("فتح باب القلعة 🔑"):
+        if choix_phrase == "جملة فعلية":
+            st.success("🎉 مذهل! الجملة تبدأ بكلمة 'تُمطِرُ' وهي فعل، إذن هي جملة فعلية! تفضل بالدخول للقلعة.")
         else:
-            st.error(f"حاول مجدداً 🧐 الكلمة الصحيحة هي : {m['complet']}")
-            generer_nouveau_mot()
+            st.error("❌ الحارس يرفض إجابتك! انظر إلى الكلمة الأولى 'تُمطِرُ'، هل هي اسم أم فعل؟ إنها فعل، إذن الجملة فعلية.")
 
-# --- CATÉGORIE 10-11 ANS ---
+# --- CATÉGORIE 10-11 ANS : المفعول به والمنصوبات ---
 elif st.session_state.page == "10-11":
     if st.button("⬅ العودة للقائمة الرئيسية"):
-        changer_page("menu")
+        st.session_state.page = "menu"
         st.rerun()
         
-    st.markdown("<h2 style='color: #55E6C1;'>🌍 بنك المعلومات والذكاء</h2>", unsafe_allow_html=True)
-    q = st.session_state.culture
-    st.write(f"### {q['q']}")
+    st.markdown("<h2 style='color: #55E6C1;'>🎬 رسوم متحركة: المحقق كـانَمون ومصيدة المفعول به</h2>", unsafe_allow_html=True)
     
-    reponse = st.text_input("إجابتك :", key="input_10_11")
-    if st.button("إرسال الإجابة"):
-        if reponse.strip() == q['r']:
-            st.success("عبقري ! 🧠 إجابتك صحيحة وممتازة !")
-            generer_nouvelle_culture()
+    st.markdown("""
+    <div class="cartoon-box">
+        <p class="story-text">
+        🕵️‍♂️ المحقق الشهير <b>كَانَمُون</b> يبحث عن ركن مفقود في مسرح الجريمة اللغوية! <br>
+        قال المحقق: لدينا فعل (كَتَبَ) ولدينا فاعل قام بالحركة (التِّلْمِيذُ).. لكن ماذا كتب؟! <br>
+        🎯 وفجأة ظهر <b>المَفْعُولُ بِهِ</b> ضاحكاً وقال: أنا الاسم المنصوب بالفتحة الذي وقع عليّ فعل الفاعل! (مثل: كَتَبَ التِّلْمِيذُ <u>الدَّرْسَ</u>). أنا دائماً أجيب عن سؤال: <b>مَاذَا؟</b>
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("### 🎮 اختبر مهاراتك الإعرابية مع المحقق:")
+    st.write("ابحث عن المفعول به المنصوب في الجملة التالية واقبض عليه:")
+    
+    phrase_adv = "قَرَأَ الطِّفْلُ قِصَّةً جَمِيلَةً"
+    st.markdown(f"<h2 style='text-align: center; color: #27AE60;'>الجملة هي: « {phrase_adv} »</h2>", unsafe_allow_html=True)
+    
+    reponse_inv = st.text_input("اكتب الكلمة التي تمثل المفعول به هنا:", key="input_10_11").strip()
+    
+    if st.button("تقديم التقرير للمحقق 🕵️‍♂️"):
+        if reponse_inv == "قصة" or reponse_inv == "قِصَّةً" or reponse_inv == "قصةً":
+            st.success("🎯 أحسنت يا سيادة المحقق! 'قصةً' هي الإجابة عن سؤال: ماذا قرأ الطفل؟ وهي مفعول به منصوب وعلامة نصبه الفتحة!")
         else:
-            st.error(f"للأسف إجابة خاطئة. الإجابة الصحيحة هي : {q['r']}")
-            generer_nouvelle_culture()
+            st.error("❌ المحقق يقول: الإجابة غير دقيقة. اسأل نفسك: ماذا قرأ الطفل؟ الطفل قرأ 'قِصَّةً'. إذن 'قصةً' هي المفعول به!")
