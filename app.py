@@ -13,126 +13,127 @@ st.set_page_config(
 # ==========================================
 # 2. DESIGN CSS "SUPER COLORÉ" ET INTERACTIF
 # ==========================================
-st.markdown("""
-    <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght=400;700;900&display=swap');
-    
-    /* Configuration globale RTL / Arabe */
-    html, body, [data-testid="stMarkdownContainer"], h1, h2, h3, h4, p, span, label {
-        font-family: 'Cairo', sans-serif !important;
-        direction: RTL;
-        text-align: right;
-    }
-    
-    /* Fond dégradé magique et joyeux */
-    .stApp {
-        background: linear-gradient(135deg, #FFF9E6 0%, #E3F2FD 50%, #E8F5E9 100%);
-    }
-    
-    /* Boutons de navigation et de choix */
-    .stButton>button {
-        width: 100% !important;
-        border-radius: 20px !important;
-        font-size: 20px !important;
-        font-weight: 900 !important;
-        padding: 15px !important;
-        background: linear-gradient(135deg, #FF7675, #FF4757) !important;
-        color: white !important;
-        border: none !important;
-        box-shadow: 0px 6px 0px rgba(0,0,0,0.1) !important;
-        margin-bottom: 10px;
-        transition: all 0.2s ease-in-out;
-    }
-    
-    .stButton>button:hover {
-        transform: translateY(-2px) !important;
-        box-shadow: 0px 8px 0px rgba(0,0,0,0.15) !important;
-    }
-    
-    /* Boîtes de style BD pour les histoires */
-    .cartoon-box {
-        background-color: #FFFFFF;
-        border: 4px solid #FFCC80;
-        padding: 25px;
-        border-radius: 25px;
-        margin-bottom: 25px;
-        box-shadow: 8px 8px 0px #FFE0B2;
-    }
-    
-    .story-title {
-        color: #FF6B6B;
-        font-weight: 900;
-        font-size: 24px;
-        text-align: center;
-        margin-bottom: 15px;
-    }
-    
-    .story-text {
-        font-size: 20px;
-        line-height: 1.9;
-        color: #2C3E50;
-        font-weight: 700;
-    }
+css_style = """
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght=400;700;900&display=swap');
 
-    /* Tableau d'honneur (Tableau des médailles) */
-    .board-title {
-        text-align: center;
-        color: #FF6B6B;
-        font-size: 36px;
-        font-weight: 900;
-        margin-bottom: 30px;
-    }
-    
-    .badge-card {
-        background: white;
-        border-radius: 25px;
-        padding: 20px;
-        text-align: center;
-        box-shadow: 0px 10px 20px rgba(0,0,0,0.05);
-        margin-bottom: 20px;
-        min-height: 270px;
-        border: 3px solid #FFD32A;
-    }
-    
-    .badge-icon { 
-        font-size: 65px; 
-        margin-bottom: 10px; 
-    }
-    
-    .badge-name { 
-        font-size: 22px; 
-        font-weight: 900; 
-        margin-bottom: 8px; 
-        text-align: center; 
-        color: #FF9F43; 
-    }
-    
-    .badge-desc { 
-        color: #57606F; 
-        font-size: 15px; 
-        font-weight: 700; 
-        text-align: center; 
-    }
-    
-    /* Jauge de progression personnalisée pour l'arbre */
-    .gauge-container {
-        background: linear-gradient(180deg, #FFFFFF, #E8F5E9);
-        border: 3px solid #10AC84;
-        border-radius: 25px;
-        padding: 20px;
-        text-align: center;
-    }
-    
-    /* Grande bannière d'accueil */
-    .welcome-banner {
-        background: linear-gradient(135deg, #FFF9E6, #FFF2CC);
-        border: 3px solid #FFA801;
-        border-radius: 35px;
-        padding: 15px 30px;
-        margin-top: 30px;
-    }
-    </style>
-""", unsafe_allow_html=True)
+/* Configuration globale RTL / Arabe */
+html, body, [data-testid="stMarkdownContainer"], h1, h2, h3, h4, p, span, label {
+    font-family: 'Cairo', sans-serif !important;
+    direction: RTL;
+    text-align: right;
+}
+
+/* Fond dégradé magique et joyeux */
+.stApp {
+    background: linear-gradient(135deg, #FFF9E6 0%, #E3F2FD 50%, #E8F5E9 100%);
+}
+
+/* Boutons de navigation et de choix */
+.stButton>button {
+    width: 100% !important;
+    border-radius: 20px !important;
+    font-size: 20px !important;
+    font-weight: 900 !important;
+    padding: 15px !important;
+    background: linear-gradient(135deg, #FF7675, #FF4757) !important;
+    color: white !important;
+    border: none !important;
+    box-shadow: 0px 6px 0px rgba(0,0,0,0.1) !important;
+    margin-bottom: 10px;
+    transition: all 0.2s ease-in-out;
+}
+
+.stButton>button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0px 8px 0px rgba(0,0,0,0.15) !important;
+}
+
+/* Boîtes de style BD pour les histoires */
+.cartoon-box {
+    background-color: #FFFFFF;
+    border: 4px solid #FFCC80;
+    padding: 25px;
+    border-radius: 25px;
+    margin-bottom: 25px;
+    box-shadow: 8px 8px 0px #FFE0B2;
+}
+
+.story-title {
+    color: #FF6B6B;
+    font-weight: 900;
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.story-text {
+    font-size: 20px;
+    line-height: 1.9;
+    color: #2C3E50;
+    font-weight: 700;
+}
+
+/* Tableau d'honneur (Tableau des médailles) */
+.board-title {
+    text-align: center;
+    color: #FF6B6B;
+    font-size: 36px;
+    font-weight: 900;
+    margin-bottom: 30px;
+}
+
+.badge-card {
+    background: white;
+    border-radius: 25px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0px 10px 20px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+    min-height: 270px;
+    border: 3px solid #FFD32A;
+}
+
+.badge-icon { 
+    font-size: 65px; 
+    margin-bottom: 10px; 
+}
+
+.badge-name { 
+    font-size: 22px; 
+    font-weight: 900; 
+    margin-bottom: 8px; 
+    text-align: center; 
+    color: #FF9F43; 
+}
+
+.badge-desc { 
+    color: #57606F; 
+    font-size: 15px; 
+    font-weight: 700; 
+    text-align: center; 
+}
+
+/* Jauge de progression personnalisée pour l'arbre */
+.gauge-container {
+    background: linear-gradient(180deg, #FFFFFF, #E8F5E9);
+    border: 3px solid #10AC84;
+    border-radius: 25px;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Grande bannière d'accueil */
+.welcome-banner {
+    background: linear-gradient(135deg, #FFF9E6, #FFF2CC);
+    border: 3px solid #FFA801;
+    border-radius: 35px;
+    padding: 15px 30px;
+    margin-top: 30px;
+}
+</style>
+"""
+st.markdown(css_style, unsafe_allow_html=True)
 
 
 # ==========================================
@@ -194,7 +195,7 @@ def afficher_logo_haut():
 
 
 # ==========================================
-# 6. PAGES DU SYSTÈME ET LOGIQUE REPOUSSÉE
+# 6. PAGES DU SYSTÈME ET LOGIQUE TARIFAIRE
 # ==========================================
 
 # ------------------------------------------
@@ -340,121 +341,4 @@ elif st.session_state.page == "lesson3":
     """, unsafe_allow_html=True)
     
     st.write("### 🎮 ساعد المحقق في حل القضية واقبض على المفعول به:")
-    st.markdown("<h2 style='text-align: center; color: white; background: #10AC84; padding: 15px; border-radius: 20px;'>الجملة هي: « قَرَأَ الطِّفْلُ قِصَّةً جَمِيلَةً »</h2>", unsafe_allow_html=True)
-    st.write("")
-
-    ca1, ca2, ca3 = st.columns(3)
-    with ca1:
-        if st.button("قَرَأَ 📖", key="ca1"):
-            st.session_state.ans_lesson3 = "v"
-    with ca2:
-        if st.button("الطِّفْلُ 🧒", key="ca2"):
-            st.session_state.ans_lesson3 = "f"
-    with ca3:
-        if st.button("قِصَّةً 📚", key="ca3"):
-            st.session_state.ans_lesson3 = "m"
-            st.session_state.score_lesson3 = True
-            
-    if st.session_state.ans_lesson3 == "m":
-        st.success("🎯 قضية ناجحة! 'قِصَّةً' هي الإجابة عن سؤال (ماذا قرأ الطفل؟)، مفعول به منصوب بالفتحة!")
-    elif st.session_state.ans_lesson3 == "v":
-        st.warning("❌ لا يا سيادة المحقق! 'قَرَأَ' هو الفعل وعملية القراءة نفسها وليس الركن المنصوب.")
-    elif st.session_state.ans_lesson3 == "f":
-        st.warning("❌ ركز! 'الطِّفْلُ' هو الفاعل البطل الذي قرأ القصة وليس المفعول به.")
-
-
-# ------------------------------------------
-# E. LOVET AL INJAZAT (TABLEAU DES MÉDAILLES INTERACTIF)
-# ------------------------------------------
-elif st.session_state.page == "لوحة_الإنجازات":
-    if st.button("⬅ العودة للمنزل", key="back_r"):
-        st.session_state.page = "menu"
-        st.rerun()
-
-    afficher_logo_haut()
-    st.markdown('<div class="board-title">🌿 لَوْحَةُ إِنْجَازَاتِ بَطَلِ العِلْمِ 🌿</div>', unsafe_allow_html=True)
-
-    col_badges, col_gauge = st.columns([3, 1])
-
-    with col_badges:
-        b_col1, b_col2, b_col3 = st.columns(3)
-        
-        with b_col1:
-            if st.session_state.score_lesson1 == True:
-                st.markdown("""
-                <div class="badge-card" style="border-color: #FF4757; background-color: #FFF5F5;">
-                    <div class="badge-icon">🦁</div>
-                    <div class="badge-name" style="color: #FF4757;">وسام بطل الكلمات</div>
-                    <div class="badge-desc">مُنح لك لتعرفك على الاسم والفعل والحرف مع سمسم!</div>
-                </div>
-                """, unsafe_allow_html=True)
-            else:
-                st.markdown("""
-                <div class="badge-card" style="border-color: #CCCCCC; opacity: 0.5;">
-                    <div class="badge-icon">🔒</div>
-                    <div class="badge-name" style="color: #888888;">وسام الكلمات مغلق</div>
-                    <div class="badge-desc">أكمل مغامرة الأرنب سمسم لفتح هذا الوسام.</div>
-                </div>
-                """, unsafe_allow_html=True)
-                
-        with b_col2:
-            if st.session_state.score_lesson2 == True:
-                st.markdown("""
-                <div class="badge-card" style="border-color: #2E86DE; background-color: #F0F7FF;">
-                    <div class="badge-icon">🏰</div>
-                    <div class="badge-name" style="color: #2E86DE;">وسام حارس القلعة</div>
-                    <div class="badge-desc">مُنح لك لنجاحك في عبور بوابات الجملة الاسمية والفعلية!</div>
-                </div>
-                """, unsafe_allow_html=True)
-            else:
-                st.markdown("""
-                <div class="badge-card" style="border-color: #CCCCCC; opacity: 0.5;">
-                    <div class="badge-icon">🔒</div>
-                    <div class="badge-name" style="color: #888888;">وسام القلعة مغلق</div>
-                    <div class="badge-desc">افتح بوابات القلعة اللغوية لفتح هذا الوسام.</div>
-                </div>
-                """, unsafe_allow_html=True)
-                
-        with b_col3:
-            if st.session_state.score_lesson3 == True:
-                st.markdown("""
-                <div class="badge-card" style="border-color: #10AC84; background-color: #F0FDF4;">
-                    <div class="badge-icon">🕵️‍♂️</div>
-                    <div class="badge-name" style="color: #10AC84;">وسام المحقق الذكي</div>
-                    <div class="badge-desc">مُنح لك لمساعدتك المحقق كانمون في حل لغز المفعول به!</div>
-                </div>
-                """, unsafe_allow_html=True)
-            else:
-                st.markdown("""
-                <div class="badge-card" style="border-color: #CCCCCC; opacity: 0.5;">
-                    <div class="badge-icon">🔒</div>
-                    <div class="badge-name" style="color: #888888;">وسام المحقق مغلق</div>
-                    <div class="badge-desc">حل قضية الكلمة المنصوبة لفتح this ونوع الوسام.</div>
-                </div>
-                """, unsafe_allow_html=True)
-
-    with col_gauge:
-        st.markdown(f"""
-        <div class="gauge-container">
-            <div style="color: #2F3542; font-size: 16px; font-weight: 900; text-align:center;">شجرة نمو<br>المعرفة</div>
-            <div style="margin: 20px 0; font-size: 26px; text-align:center; line-height:1.4;">🍁<br>🍂<br>🍃<br>🌿</div>
-            <div style="background-color: #2ED573; border-radius: 15px; padding: 10px; font-weight: 900; color: white; font-size: 24px; text-align: center; box-shadow: 0px 4px 0px #26AF5F;">
-                {pourcentage_connaissance}%
-            </div>
-            <div style="color: #57606F; font-size: 13px; font-weight: bold; margin-top: 10px; text-align: center;">
-                نجحت في {nombre_de_lecons_reussies} من 3
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-
-    st.markdown("""
-    <div class="welcome-banner">
-        <p style="color: #2C3E50; font-size: 20px; font-weight: 900; margin: 0; text-align: center;">
-            🦉 أهلاً بك يا <b>أحمد</b>، صديقك بَهِيّ يتابع نمو شجرة معرفتك الذكية خطوة بخطوة!
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    if pourcentage_connaissance == 100:
-        st.balloons()
-        st.success("🏆 أشرقت شجرة معرفتك بالكامل يا بطل القواعد المستقبلي! أنت مذهل!")
+    st.markdown("<h2 style='text-align: center; color: white; background: #10AC84; padding: 15px; border-radius: 20px;'>الجملة هي: « قَرَأَ الطِّفْلُ قِصَّةً جَمِيل
