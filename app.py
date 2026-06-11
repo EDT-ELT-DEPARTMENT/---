@@ -18,6 +18,25 @@ html, body, [data-testid="stMarkdownContainer"], h1, h2, h3, h4, p, span, label 
 </style>
 """
 st.markdown(css_style, unsafe_allow_html=True)
+import streamlit as st
+import os
+
+# --- Fonction pour afficher le logo ---
+def afficher_logo():
+    # Remplacez "logo.jpeg" par le nom exact de votre fichier (attention à l'extension .png ou .jpeg)
+    nom_fichier = "logo.jpeg" 
+    
+    if os.path.exists(nom_fichier):
+        # Création de 3 colonnes pour centrer le logo (la colonne du milieu est la plus large)
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            st.image(nom_fichier, use_column_width=True)
+    else:
+        # Message d'erreur si le fichier est introuvable
+        st.warning(f"Le fichier '{nom_fichier}' est introuvable dans le dossier.")
+
+# --- Appel de la fonction ---
+afficher_logo()
 
 # 2. إدارة الحالة
 if "الصفحة_الحالية" not in st.session_state:
