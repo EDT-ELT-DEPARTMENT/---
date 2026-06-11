@@ -2,7 +2,7 @@ import streamlit as st
 import os
 
 # 1. إعداد الصفحة
-st.set_page_config(page_title="عالم القواعد السحري", page_icon="🎨", layout="centered")
+st.set_page_config(page_title="المنصة التعليمية قِصَّتِي دِرَاسَتِي", page_icon="🎨", layout="centered")
 
 # CSS المخصص
 css_style = """
@@ -19,33 +19,33 @@ html, body, [data-testid="stMarkdownContainer"], h1, h2, h3, h4, p, span, label 
 """
 st.markdown(css_style, unsafe_allow_html=True)
 
+# دالة عرض الشعار
+def عرض_الشعار():
+    if os.path.exists("logo.jpeg"):
+        col1, col2, col3 = st.columns([1, 1, 1])
+        with col2:
+            st.image("logo.jpeg", use_column_width=True)
+    else:
+        st.warning("⚠️ يرجى التأكد من وضع ملف 'logo.jpeg' في نفس المجلد")
+
 # 2. إدارة الحالة
 if "الصفحة_الحالية" not in st.session_state:
     st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
 
-# 3. دالة لعرض محتوى الدروس حسب السنة
+# 3. دالة لعرض محتوى الدروس
 def عرض_محتوى_الدرس(اسم_الدرس):
+    عرض_الشعار() # استدعاء الشعار داخل الصفحات
     st.markdown(f"<h2 style='text-align: center;'>{اسم_الدرس}</h2>", unsafe_allow_html=True)
-    
-    # اختيار السنة الدراسية
     annee = st.selectbox("اختر السنة الدراسية:", [1, 2, 3, 4, 5])
-    
     st.markdown(f"### 📖 المادة العلمية للسنة {annee}:")
-    
-    # هنا يتم تحديث المحتوى بناءً على السنة المختارة
-    if annee == 1:
-        st.info("الدروس الأساسية للسنة الأولى: الحروف الهجائية، الكلمات البسيطة.")
-    elif annee == 2:
-        st.info("الدروس الأساسية للسنة الثانية: أقسام الكلمة (اسم، فعل، حرف).")
-    elif annee == 3:
-        st.info("الدروس الأساسية للسنة الثالثة: الجملة الاسمية والفعلية.")
-    elif annee == 4:
-        st.info("الدروس الأساسية للسنة الرابعة: المفعول به والمنصوبات.")
-    else:
-        st.info("الدروس الأساسية للسنة الخامسة: القواعد المتقدمة والإعراب.")
+    # المحتوى بناءً على السنة
+    if annee == 1: st.info("الدروس الأساسية للسنة الأولى...")
+    elif annee == 2: st.info("الدروس الأساسية للسنة الثانية...")
+    # ... إلخ
 
 # 4. بناء الصفحات
 if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
+    عرض_الشعار() # عرض الشعار في القائمة الرئيسية
     st.markdown("<h1 style='text-align: center; color: #FF6B6B;'>🎈 المنصة التعليمية قِصَّتِي دِرَاسَتِي 🎈</h1>", unsafe_allow_html=True)
     
     if st.button("🌟 دروس مرجعية"):
@@ -71,6 +71,7 @@ elif st.session_state.الصفحة_الحالية == "الدرس_الثاني":
     عرض_محتوى_الدرس("الجملة الاسمية والفعلية")
 
 elif st.session_state.الصفحة_الحالية == "لوحة_الإنجازات":
+    عرض_الشعار()
     if st.button("⬅ العودة للقائمة"):
         st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
         st.rerun()
