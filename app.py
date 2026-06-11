@@ -1,81 +1,62 @@
 import streamlit as st
-import os
 
-# 1. إعداد الصفحة
-st.set_page_config(layout="wide", page_title="قصتي دراستي")
+# إعداد الصفحة لتكون واسعة وتدعم العربية
+st.set_page_config(page_title="منصة قصتي دراستي", layout="wide")
 
-# 2. تصميم CSS قوي لضمان الألوان والوضوح
+# CSS لجعل الأزرار مربعة وواضحة (بنفس ألوان الشكل الذي طلبته)
 st.markdown("""
 <style>
-    .stApp { background-color: #fcfcfc; }
-    
-    /* تصميم البطاقات (الأزرار) */
-    .button-card {
-        background-color: #ffffff !important;
+    body { direction: rtl; text-align: right; }
+    .stButton > button {
+        width: 100%;
+        height: 120px;
+        border-radius: 20px;
+        font-weight: bold;
+        font-size: 18px;
+        background-color: white !important;
         border: 2px solid #2e7d32 !important;
-        border-radius: 20px !important;
-        padding: 20px !important;
-        text-align: center;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1) !important;
         color: #2e7d32 !important;
-        font-weight: 900 !important;
-        font-size: 18px !important;
-        cursor: pointer;
+        box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+    }
+    .stButton > button:hover {
+        background-color: #2e7d32 !important;
+        color: white !important;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# 3. نظام الحالة
+# إدارة الصفحات
 if 'page' not in st.session_state:
-    st.session_state.page = 'home'
+    st.session_state.page = 'الرئيسية'
 
-# 4. واجهة الصفحة الرئيسية
-if st.session_state.page == 'home':
-    # العنوان
-    st.markdown("<h1 style='text-align: center; color: #2e7d32;'>قصتي دراستي</h1>", unsafe_allow_html=True)
+def go_to(page_name):
+    st.session_state.page = page_name
+    st.rerun()
+
+# --- الواجهة الرئيسية ---
+if st.session_state.page == 'الرئيسية':
+    st.markdown("<h1 style='text-align: center;'>قصتي دراستي</h1>", unsafe_allow_html=True)
     st.markdown("<h3 style='text-align: center;'>رحلة النجاح تبدأ هنا</h3>", unsafe_allow_html=True)
     
-    # توزيع الأعمدة
-    col1, col2, col3 = st.columns([1, 1, 1])
+    col1, col2, col3, col4 = st.columns(4)
     
     with col1:
-        if st.button("الدروس - المنهجية القمة", key="d1"):
-            st.session_state.page = 'lessons'
-            st.rerun()
-        st.write("<br>", unsafe_allow_html=True)
-        if st.button("الدروس اليومية - مسارات", key="d2"):
-            st.session_state.page = 'daily'
-            st.rerun()
-            
+        if st.button("📚 الدروس المرجعية"): go_to('الدروس')
     with col2:
-        # هنا الشعار - إذا لم يوجد ملف باسم logo.jpeg سيظهر نص تنبيه
-        if os.path.exists("logo.jpeg"):
-            st.image("logo.jpeg", use_column_width=True)
-        else:
-            st.warning("⚠️ ضع صورة باسم 'logo.jpeg' في نفس المجلد")
-            
+        if st.button("📝 تمارين مرجعية"): go_to('التمارين')
     with col3:
-        if st.button("المحاضرات - ثانوية", key="d3"):
-            st.session_state.page = 'lectures'
-            st.rerun()
-        st.write("<br>", unsafe_allow_html=True)
-        if st.button("التقدم الأكاديمي", key="d4"):
-            st.session_state.page = 'progress'
-            st.rerun()
+        if st.button("📑 الامتحانات"): go_to('الامتحانات')
+    with col4:
+        if st.button("✅ التقييمات"): go_to('التقييمات')
 
-# 5. الصفحات الفرعية
-elif st.session_state.page == 'lessons':
-    st.title("📚 الدروس")
-    if st.button("🏠 العودة"): st.session_state.page = 'home'; st.rerun()
-
-elif st.session_state.page == 'daily':
-    st.title("🗓️ الدروس اليومية")
-    if st.button("🏠 العودة"): st.session_state.page = 'home'; st.rerun()
-
-elif st.session_state.page == 'lectures':
-    st.title("🎥 المحاضرات")
-    if st.button("🏠 العودة"): st.session_state.page = 'home'; st.rerun()
-
-elif st.session_state.page == 'progress':
-    st.title("📈 التقدم الأكاديمي")
-    if st.button("🏠 العودة"): st.session_state.page = 'home'; st.rerun()
+# --- منطق الصفحات الفرعية ---
+elif st.session_state.page in ['الدروس', 'التمارين', 'الامتحانات', 'التقييمات']:
+    st.title(f"قسم {st.session_state.page}")
+    
+    # اختيار السنة من 1 إلى 5
+    annee = st.selectbox("اختر السنة الدراسية:", [1, 2, 3, 4, 5])
+    
+    st.write(f"أنت الآن تتصفح محتوى السنة {annee} وفقاً للبرنامج الوطني لوزارة التربية.")
+    
+    if st.button("⬅ العودة للرئيسية"):
+        go_to('الرئيسية')
