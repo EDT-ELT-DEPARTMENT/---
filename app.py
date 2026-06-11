@@ -1,115 +1,73 @@
 import streamlit as st
-import os
 
-# 1. إعداد الصفحة
-st.set_page_config(
-    page_title="قصتي دراستي - عالم القواعد السحري",
-    layout="wide"
-)
+# Configuration de la page
+st.set_page_config(page_title="قصتي دراستي", layout="wide")
 
-# 2. تصميم CSS المخصص (الأزرار والبطاقات المربعة)
+# CSS pour obtenir le design exact de l'image
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
+    /* Centrage global */
+    .block-container { max-width: 1200px; padding-top: 2rem; }
     
-    html, body, [data-testid="stMarkdownContainer"], h1, h2, h3, h4, p, span, label, button {
-        font-family: 'Cairo', sans-serif !important;
-        direction: RTL;
-        text-align: right;
-    }
-    
-    .stApp {
-        background: linear-gradient(135deg, #FFF9E6 0%, #E3F2FD 50%, #E8F5E9 100%);
-    }
-    
-    .card-button {
-        width: 100% !important;
-        height: 150px !important;
-        border-radius: 20px !important;
+    /* Style des boutons rectangulaires blancs avec ombre */
+    .stButton > button {
+        width: 100%;
+        height: 120px;
+        border-radius: 15px;
         background-color: white !important;
-        border: 2px solid #e0e0e0 !important;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1) !important;
-        font-weight: 900 !important;
+        border: 1px solid #e0e0e0 !important;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         color: #333 !important;
-        margin-bottom: 20px !important;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+    .stButton > button:hover {
+        border-color: #2e7d32 !important;
+        transform: translateY(-5px);
     }
     
-    .card-button:hover {
-        border-color: #2E7D32 !important;
-        color: #2E7D32 !important;
+    /* Style des boutons supérieurs (المصادر/الصفوف) */
+    .top-buttons .stButton > button {
+        height: 40px;
+        border-radius: 50px;
+        background-color: #2e7d32 !important;
+        color: white !important;
     }
+    
+    .center-content { text-align: center; margin-top: 20px; }
 </style>
 """, unsafe_allow_html=True)
 
-# 3. إدارة الجلسة
-if "الصفحة_الحالية" not in st.session_state:
-    st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
+# 1. En-tête : Boutons supérieurs
+c1, c2, c3, c4 = st.columns([2, 1, 1, 2])
+with c2: st.markdown('<div class="top-buttons">', unsafe_allow_html=True); st.button("الصفوف ⚙️"); st.markdown('</div>', unsafe_allow_html=True)
+with c3: st.markdown('<div class="top-buttons">', unsafe_allow_html=True); st.button("الصفوف ⊞"); st.markdown('</div>', unsafe_allow_html=True)
 
-# 4. دالة عرض الشعار
-def عرض_الشعار():
-    if os.path.exists("logo.jpeg"):
-        col1, col2, col3 = st.columns([1, 1, 1])
-        with col2:
-            st.image("logo.jpeg", use_column_width=True)
+# 2. Centre : Titre et Logo
+st.markdown('<div class="center-content">', unsafe_allow_html=True)
+st.title("قصتي دراستي")
+st.subheader("رحلة النجاح تبدأ هنا")
+# Remplacer par votre logo
+st.image("https://via.placeholder.com/200x150?text=LOGO", width=200)
+st.markdown('</div>', unsafe_allow_html=True)
 
-# 5. الهيكل الرئيسي للتنقل
-if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
-    st.markdown("<h1 style='text-align: center;'>قصتي دراستي</h1>", unsafe_allow_html=True)
-    st.markdown("<h3 style='text-align: center;'>رحلة النجاح تبدأ هنا</h3>", unsafe_allow_html=True)
-    
-    col_left, col_mid, col_right = st.columns([1, 1, 1])
-    
-    with col_left:
-        if st.button("الدروس\nالمنهجية القمة", key="b1"):
-            st.session_state.الصفحة_الحالية = "الدرس_الأول"
-            st.rerun()
-        if st.button("الدروس اليومية\nمسارات كل طالب من الدروس", key="b2"):
-            st.session_state.الصفحة_الحالية = "الدرس_الثاني"
-            st.rerun()
-            
-    with col_mid:
-        عرض_الشعار()
-        st.write("")
-        if st.button("الذهاب للبرنامج الوطني", key="b_nat"):
-            st.session_state.الصفحة_الحالية = "البرنامج_الوطني"
-            st.rerun()
-            
-    with col_right:
-        if st.button("الدروس اليومية\nالمحاضرة من ثانوية", key="b3"):
-            st.session_state.الصفحة_الحالية = "الدرس_الثالث"
-            st.rerun()
-        if st.button("التقدم الأكاديمي\nمن سمات المنصات الأكاديمية", key="b4"):
-            st.session_state.الصفحة_الحالية = "لوحة_الإنجازات"
-            st.rerun()
+# 3. Grille des boutons latéraux (2 à gauche, 2 à droite)
+col1, col2, col3 = st.columns([1, 1, 1])
 
-elif st.session_state.الصفحة_الحالية == "البرنامج_الوطني":
-    st.markdown("## 📚 البرنامج الوطني")
-    y = st.selectbox("اختر السنة الدراسية:", [1, 2, 3, 4, 5, 6])
-    st.info(f"تمارين مقترحة للسنة {y}")
-    if st.button("العودة للقائمة الرئيسية"):
-        st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
-        st.rerun()
+with col1:
+    st.button("الدروس\nالمنهجية القمة")
+    st.write("")
+    st.button("الدروس اليومية\nمسارات كل طالب")
 
-elif st.session_state.الصفحة_الحالية == "الدرس_الأول":
-    st.write("محتوى الدرس الأول...")
-    if st.button("العودة"):
-        st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
-        st.rerun()
+with col2:
+    # Espace vide central pour le logo/chemin
+    st.write("")
 
-elif st.session_state.الصفحة_الحالية == "الدرس_الثاني":
-    st.write("محتوى الدرس الثاني...")
-    if st.button("العودة"):
-        st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
-        st.rerun()
+with col3:
+    st.button("الدروس اليومية\nالمحاضرة من ثانوية")
+    st.write("")
+    st.button("التقدم الأكاديمي\nمن سمات المنصات")
 
-elif st.session_state.الصفحة_الحالية == "الدرس_الثالث":
-    st.write("محتوى الدرس الثالث...")
-    if st.button("العودة"):
-        st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
-        st.rerun()
-
-elif st.session_state.الصفحة_الحالية == "لوحة_الإنجازات":
-    st.markdown("## 🏆 لوحة الإنجازات")
-    if st.button("العودة"):
-        st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
-        st.rerun()
+# 4. Pied de page
+st.markdown("---")
+st.markdown("### أرحلة النجاح")
