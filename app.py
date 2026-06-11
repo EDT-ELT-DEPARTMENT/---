@@ -1,74 +1,82 @@
 import streamlit as st
 
-# إعداد الصفحة لملء العرض بالكامل
+# 1. تهيئة الصفحة
 st.set_page_config(page_title="قصتي دراستي", layout="wide")
 
-# CSS المخصص للمطابقة التامة مع الشكل
+# 2. CSS للتصميم المماثل للصورة
 st.markdown("""
 <style>
-    /* تنسيق الحاويات لتكون متناسقة */
-    .block-container { padding: 1rem; }
-    
-    /* تصميم الأزرار المربعة (البطاقات) */
-    div.stButton > button {
-        width: 100%;
-        height: 110px;
-        border-radius: 20px;
-        background-color: #ffffff;
-        border: 1px solid #e0e0e0;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-        font-family: 'Cairo', sans-serif;
-        font-weight: bold;
-        color: #333;
-        text-align: right;
-        padding-right: 20px;
-        display: block;
-    }
-    
-    /* تصميم الأزرار العلوية الصغيرة */
-    .top-btns div.stButton > button {
-        height: 40px;
-        border-radius: 50px;
-        background-color: #2e7d32;
-        color: white;
-        text-align: center;
-        padding: 0;
-    }
+    .card-btn { width: 100%; height: 120px; border-radius: 20px !important; 
+                background: white !important; border: 1px solid #ddd !important;
+                box-shadow: 2px 2px 10px rgba(0,0,0,0.1); font-weight: bold; }
+    .top-btn { border-radius: 50px !important; background: #2e7d32 !important; color: white !important; }
 </style>
 """, unsafe_allow_html=True)
 
-# 1. الصف العلوي (المصادر والصفوف)
-col_top1, col_top2, col_top3, col_top4 = st.columns([2, 1, 1, 2])
-with col_top2:
-    st.markdown('<div class="top-btns">', unsafe_allow_html=True)
-    st.button("الصفوف ⚙️")
-    st.markdown('</div>', unsafe_allow_html=True)
-with col_top3:
-    st.markdown('<div class="top-btns">', unsafe_allow_html=True)
-    st.button("الصفوف ⊞")
-    st.markdown('</div>', unsafe_allow_html=True)
+# 3. إدارة التنقل (Session State)
+if "nav" not in st.session_state:
+    st.session_state.nav = "home"
 
-# 2. الوسط (الشعار والعنوان)
-st.markdown("<h1 style='text-align: center;'>قصتي دراستي</h1>", unsafe_allow_html=True)
-st.markdown("<h3 style='text-align: center;'>رحلة النجاح تبدأ هنا</h3>", unsafe_allow_html=True)
+# 4. واجهة الصفحة الرئيسية (التي تشبه صورتك)
+if st.session_state.nav == "home":
+    # الصف العلوي
+    c1, c2, c3, c4 = st.columns([2, 1, 1, 2])
+    with c2: st.button("الصفوف ⚙️", key="t1")
+    with c3: st.button("الصفوف ⊞", key="t2")
+    
+    # الوسط
+    st.markdown("<h1 style='text-align: center;'>قصتي دراستي</h1>", unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center;'>رحلة النجاح تبدأ هنا</h3>", unsafe_allow_html=True)
+    
+    # الأعمدة الجانبية للأزرار
+    col1, col2, col3 = st.columns([1, 1, 1])
+    
+    with col1:
+        if st.button("الدروس - المنهجية القمة", key="b1"):
+            st.session_state.nav = "lessons"
+            st.rerun()
+        st.write("")
+        if st.button("الدروس اليومية - مسارات الطالب", key="b2"):
+            st.session_state.nav = "daily"
+            st.rerun()
+            
+    with col2:
+        st.image("https://via.placeholder.com/200", caption="الشعار")
+        
+    with col3:
+        if st.button("الدروس اليومية - المحاضرات", key="b3"):
+            st.session_state.nav = "lectures"
+            st.rerun()
+        st.write("")
+        if st.button("التقدم الأكاديمي", key="b4"):
+            st.session_state.nav = "progress"
+            st.rerun()
 
-# 3. توزيع 3 أعمدة (الأزرار على الجوانب، والوسط للشعار والطريق)
-main_col1, main_col2, main_col3 = st.columns([1, 1, 1])
+# 5. صفحات المحتوى (هنا تضع الدروس)
+elif st.session_state.nav == "lessons":
+    st.title("📚 قسم الدروس")
+    st.write("هنا ستظهر قائمة الدروس والمواد الدراسية...")
+    if st.button("العودة للرئيسية"):
+        st.session_state.nav = "home"
+        st.rerun()
 
-with main_col1:
-    st.button("الدروس\nالمنهجية القمة")
-    st.write("<br>", unsafe_allow_html=True)
-    st.button("الدروس اليومية\nمسارات كل طالب من الدروس")
+elif st.session_state.nav == "daily":
+    st.title("🗓️ الدروس اليومية")
+    st.write("جدول الحصص اليومي هنا...")
+    if st.button("العودة للرئيسية"):
+        st.session_state.nav = "home"
+        st.rerun()
 
-with main_col2:
-    # هنا يتم وضع الشعار وصورة الطفل في الطريق
-    st.image("https://via.placeholder.com/200x250?text=LOGO+CENTER", use_column_width=False)
+elif st.session_state.nav == "lectures":
+    st.title("🎥 المحاضرات")
+    st.write("محتوى المحاضرات هنا...")
+    if st.button("العودة للرئيسية"):
+        st.session_state.nav = "home"
+        st.rerun()
 
-with main_col3:
-    st.button("الدروس اليومية\nالمحاضرة من ثانوية")
-    st.write("<br>", unsafe_allow_html=True)
-    st.button("التقدم الأكاديمي\nمن سمات المنصات الأكاديمية")
-
-# 4. الجزء السفلي
-st.markdown("<br><hr>", unsafe_allow_html=True)
-st.markdown("### أرحلة النجاح")
+elif st.session_state.nav == "progress":
+    st.title("📈 التقدم الأكاديمي")
+    st.write("رسوم بيانية لتقدمك الدراسي...")
+    if st.button("العودة للرئيسية"):
+        st.session_state.nav = "home"
+        st.rerun()
