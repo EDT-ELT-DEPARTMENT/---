@@ -1,82 +1,86 @@
 import streamlit as st
 
-# 1. تهيئة الصفحة
-st.set_page_config(page_title="قصتي دراستي", layout="wide")
+# 1. إعداد الصفحة لتكون واسعة (Wide)
+st.set_page_config(layout="wide", page_title="قصتي دراستي")
 
-# 2. CSS للتصميم المماثل للصورة
+# 2. كود CSS لجعل الأزرار مربعة، بيضاء، وذات ظل، وتظهر بشكل واضح
 st.markdown("""
 <style>
-    .card-btn { width: 100%; height: 120px; border-radius: 20px !important; 
-                background: white !important; border: 1px solid #ddd !important;
-                box-shadow: 2px 2px 10px rgba(0,0,0,0.1); font-weight: bold; }
-    .top-btn { border-radius: 50px !important; background: #2e7d32 !important; color: white !important; }
+    /* تنسيق الحاويات */
+    .stApp { background-color: #f8f9fa; }
+    
+    /* جعل الأزرار تبدو كبطاقات مربعة */
+    div.stButton > button {
+        width: 100%;
+        height: 150px !important;
+        border-radius: 20px !important;
+        background-color: white !important;
+        border: 2px solid #e1e1e1 !important;
+        box-shadow: 0px 4px 6px rgba(0,0,0,0.1) !important;
+        font-size: 18px !important;
+        font-weight: bold !important;
+        color: #2c3e50 !important;
+        transition: 0.3s;
+    }
+    
+    /* تأثير عند التحويم */
+    div.stButton > button:hover {
+        border-color: #28a745 !important;
+        color: #28a745 !important;
+        transform: translateY(-5px);
+    }
 </style>
 """, unsafe_allow_html=True)
 
-# 3. إدارة التنقل (Session State)
-if "nav" not in st.session_state:
-    st.session_state.nav = "home"
+# 3. إدارة التنقل بين الصفحات
+if 'current_page' not in st.session_state:
+    st.session_state.current_page = 'main'
 
-# 4. واجهة الصفحة الرئيسية (التي تشبه صورتك)
-if st.session_state.nav == "home":
-    # الصف العلوي
-    c1, c2, c3, c4 = st.columns([2, 1, 1, 2])
-    with c2: st.button("الصفوف ⚙️", key="t1")
-    with c3: st.button("الصفوف ⊞", key="t2")
-    
-    # الوسط
+def set_page(page_name):
+    st.session_state.current_page = page_name
+    st.rerun()
+
+# 4. واجهة الصفحة الرئيسية (Main Interface)
+if st.session_state.current_page == 'main':
+    # العنوان العلوي
     st.markdown("<h1 style='text-align: center;'>قصتي دراستي</h1>", unsafe_allow_html=True)
-    st.markdown("<h3 style='text-align: center;'>رحلة النجاح تبدأ هنا</h3>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; font-size: 20px;'>رحلة النجاح تبدأ هنا</p>", unsafe_allow_html=True)
     
-    # الأعمدة الجانبية للأزرار
+    # الأعمدة لتوزيع الأزرار
     col1, col2, col3 = st.columns([1, 1, 1])
     
     with col1:
-        if st.button("الدروس - المنهجية القمة", key="b1"):
-            st.session_state.nav = "lessons"
-            st.rerun()
-        st.write("")
-        if st.button("الدروس اليومية - مسارات الطالب", key="b2"):
-            st.session_state.nav = "daily"
-            st.rerun()
-            
-    with col2:
-        st.image("https://via.placeholder.com/200", caption="الشعار")
+        if st.button("الدروس\nالمنهجية القمة"): set_page('lessons')
+        st.write("") # فراغ
+        if st.button("الدروس اليومية\nمسارات كل طالب"): set_page('daily')
         
+    with col2:
+        # هنا مكان الشعار (ضع مسار صورتك)
+        st.image("https://via.placeholder.com/200", use_column_width=False)
+        st.markdown("<br>", unsafe_allow_html=True)
+    
     with col3:
-        if st.button("الدروس اليومية - المحاضرات", key="b3"):
-            st.session_state.nav = "lectures"
-            st.rerun()
-        st.write("")
-        if st.button("التقدم الأكاديمي", key="b4"):
-            st.session_state.nav = "progress"
-            st.rerun()
+        if st.button("المحاضرات\nمن ثانوية"): set_page('lectures')
+        st.write("") # فراغ
+        if st.button("التقدم الأكاديمي\nمن سمات المنصات"): set_page('progress')
 
-# 5. صفحات المحتوى (هنا تضع الدروس)
-elif st.session_state.nav == "lessons":
-    st.title("📚 قسم الدروس")
-    st.write("هنا ستظهر قائمة الدروس والمواد الدراسية...")
-    if st.button("العودة للرئيسية"):
-        st.session_state.nav = "home"
-        st.rerun()
+# 5. صفحات المحتوى (يتم عرضها عند الضغط على الأزرار)
+elif st.session_state.current_page == 'lessons':
+    st.title("📚 صفحة الدروس")
+    st.write("هنا ستجد المادة العلمية الكاملة لكل سنة.")
+    if st.button("العودة للرئيسية"): set_page('main')
 
-elif st.session_state.nav == "daily":
+elif st.session_state.current_page == 'daily':
     st.title("🗓️ الدروس اليومية")
-    st.write("جدول الحصص اليومي هنا...")
-    if st.button("العودة للرئيسية"):
-        st.session_state.nav = "home"
-        st.rerun()
+    st.write("متابعة المسارات اليومية للطلاب.")
+    if st.button("العودة للرئيسية"): set_page('main')
 
-elif st.session_state.nav == "lectures":
+elif st.session_state.current_page == 'lectures':
     st.title("🎥 المحاضرات")
-    st.write("محتوى المحاضرات هنا...")
-    if st.button("العودة للرئيسية"):
-        st.session_state.nav = "home"
-        st.rerun()
+    st.write("شرح الفيديو والمحاضرات المسجلة.")
+    if st.button("العودة للرئيسية"): set_page('main')
 
-elif st.session_state.nav == "progress":
+elif st.session_state.current_page == 'progress':
     st.title("📈 التقدم الأكاديمي")
-    st.write("رسوم بيانية لتقدمك الدراسي...")
-    if st.button("العودة للرئيسية"):
-        st.session_state.nav = "home"
-        st.rerun()
+    st.write("عرض الإحصائيات والأوسمة.")
+    if st.button("العودة للرئيسية"): set_page('main')
