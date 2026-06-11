@@ -1,3 +1,22 @@
+mport streamlit as st
+import os
+
+# تأكد من أن ملف الشعار موجود في نفس مجلد ملف الكود (app.py)
+# يمكنك تغيير 'logo.png' إلى اسم ملفك الحقيقي (مثلاً logo.jpg أو logo.jpeg)
+
+def عرض_الشعار():
+    # إنشاء أعمدة لتوسيط الشعار
+    col1, col2, col3 = st.columns([1, 2, 1])
+    
+    with col2:
+        if os.path.exists("logo.png"):
+            st.image("logo.png", width=250, use_column_width=False)
+        else:
+            # رسالة تنبيه إذا لم يتم العثور على الملف
+            st.warning("⚠️ يرجى التأكد من وضع ملف الشعار باسم 'logo.png' في المجلد")
+
+# استدعاء الدالة لعرض الشعار
+عرض_الشعار()
 import streamlit as st
 import os
 
