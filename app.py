@@ -143,19 +143,20 @@ if st.session_state.الصفحة_الحالية == "القائمة_الرئيس�
     عرض_الشعار_الكبير()
     st.title("🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈")
     st.markdown("<p style='text-align: center; color: #FFD700; font-size: 20px; font-weight: bold;'>جميع هذه الدروس مطابقة تماماً للمناهج التعليمية الوطنية الجزائرية</p>", unsafe_allow_html=True)
-    
-    c1, c2, c3, c4 = st.columns(4)
+    c1, c2, c3, c4, c5 = st.columns(5) 
     if c1.button("🌟 دروس", key="b1"): st.session_state.الصفحة_الحالية = "الدرس_الأول"; st.rerun()
     if c2.button("🏰 حصن", key="b2"): st.session_state.الصفحة_الحالية = "الدرس_الثاني"; st.rerun()
     if c3.button("📜 قصة", key="b4"): st.session_state.الصفحة_الحالية = "Fiche_Vocabulaire"; st.rerun()
-    if c4.button("🏆 لوحة", key="b3"): st.session_state.الصفحة_الحالية = "لوحة_الإنجازات"; st.rerun()
+    if c4.button("🎬 سينما", key="b5"): st.session_state.الصفحة_الحالية = "Cinema_Grammaire"; st.rerun()
+    if c5.button("🏆 لوحة", key="b3"): st.session_state.الصفحة_الحالية = "لوحة_الإنجازات"; st.rerun()
 
 elif st.session_state.الصفحة_الحالية == "الدرس_الأول":
     عرض_محتوى_الدرس("أقسام الكلمة")
 
 elif st.session_state.الصفحة_الحالية == "الدرس_الثاني":
     عرض_محتوى_الدرس("الجملة الاسمية والفعلية")
-
+elif st.session_state.الصفحة_الحالية == "Cinema_Grammaire":
+    عرض_سينما_القواعد()
 elif st.session_state.الصفحة_الحالية == "Fiche_Vocabulaire":
     afficher_fiche_interactive()
 
