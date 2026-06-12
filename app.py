@@ -107,22 +107,29 @@ def عرض_سينما_القواعد():
 # 5. التنسيق
 css_style = """
 <style>
+    /* التأكد من اتجاه الصفحة لليمين */
     html, body, [data-testid="stAppViewContainer"] { 
         direction: rtl !important; 
-        text-align: right !important; 
     }
+    
+    /* تنسيق البطاقة وتبرير النصوص */
     .content-card { 
         background-color: rgba(255,255,255,0.95); 
         padding: 40px; 
         border-radius: 30px; 
         color: #333; 
+        text-align: justify !important; /* هذا هو التعديل الأهم لتبرير النص */
     }
-    h1, h2, h3, h4, p, div { 
+    
+    /* تنسيق عام للعناصر لضمان عدم وجود خلل في المحاذاة */
+    h1, h2, h3, h4, p, li, div, .stButton { 
         text-align: right !important; 
     }
-    /* إضافة لتكبير حجم الخط كما طلبت سابقاً */
-    .stMarkdown, p, li, div { 
+    
+    /* تكبير حجم الخط ووضوح النصوص */
+    p, li, .stMarkdown { 
         font-size: 22px !important; 
+        line-height: 1.6 !important; /* مسافة مريحة بين الأسطر */
     }
 </style>
 """
