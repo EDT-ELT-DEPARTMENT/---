@@ -1,5 +1,37 @@
 import streamlit as st
+import random
 import os
+
+# 1. Configuration de la page
+st.set_page_config(page_title="المنصة التعليمية - دخول", layout="wide")
+
+# 2. Gestion de la session (Login)
+if "connecte" not in st.session_state:
+    st.session_state.connecte = False
+
+# Fonction de login
+def afficher_login():
+    st.markdown("<h2 style='text-align: center;'>🔐 تسجيل الدخول للمنصة</h2>", unsafe_allow_html=True)
+    with st.container():
+        nom = st.text_input("الاسم:")
+        prenom = st.text_input("اللقب:")
+        age = st.number_input("العمر:", min_value=5, max_value=15)
+        annee = st.selectbox("السنة الدراسية:", [1, 2, 3, 4, 5])
+        code = st.text_input("أدخل كود الدخول:", type="password")
+        
+        if st.button("دخول"):
+            # Ici, vous définissez votre code secret (ex: 1234)
+            if code == "1234":
+                st.session_state.connecte = True
+                st.session_state.nom_eleve = f"{nom} {prenom}"
+                st.rerun()
+            else:
+                st.error("كود الدخول خاطئ!")
+
+# 3. Vérification de la connexion
+if not st.session_state.connecte:
+    afficher_login()
+else:
 
 # 1. إعداد الصفحة
 st.set_page_config(page_title="المنصة التعليمية قِصَّتِي دِرَاسَتِي", layout="wide")
