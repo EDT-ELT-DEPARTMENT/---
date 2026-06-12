@@ -161,66 +161,45 @@ css_style = """
 st.markdown(css_style, unsafe_allow_html=True)
 
 # 9. المنطق الرئيسي (بوابة الوصول)
-if not st.session_state.connecte:
-    afficher_login()
-else:
-    if st.session_state.is_admin:
-        admin_panel()
-    else:
-        if "email_user" in st.session_state:
-            conn = get_db_connection()
-            c = conn.cursor()
-            c.execute('SELECT paye FROM users WHERE email = ?', (st.session_state.email_user,))
-            result = c.fetchone()
-            conn.close()
-            # بوابة الدفع: التحقق من قيمة paye (يجب أن تكون 1)
-            if result and result[0] == 1:
-                # الجزء الخاص بالمشتركين
-                col_header, col_logout = st.columns([6, 1])
-                with col_header:
-                    st.markdown("<h1 style='text-align: center; color: white;'>🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈</h1>", unsafe_allow_html=True)
-                with col_logout:
-                    if st.button("🚪 تسجيل الخروج"):
-                        st.session_state.connecte = False
-                        st.session_state.nom_eleve = ""
-                        if "email_user" in st.session_state:
-                            del st.session_state.email_user
-                        st.rerun()
-
-                st.write(f"### أهلاً بك يا بطل/بطلة: {st.session_state.nom_eleve}")
-                
-                # هنا يبدأ محتوى المنصة الذي كان يختفي
-                if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
-                    عرض_الشعار_الكبير()
-                    c1, c2, c3, c4, c5 = st.columns(5)
-                    if c1.button("🌟 دروس", key="b1"): 
-                        st.session_state.الصفحة_الحالية = "الدرس_الأول"; st.rerun()
-                    if c2.button("🏰 حصن", key="b2"): 
-                        st.session_state.الصفحة_الحالية = "الدرس_الثاني"; st.rerun()
-                    if c3.button("✍️ قواعدي في قصتي", key="b4"): 
-                        st.session_state.الصفحة_الحالية = "Page_Hamza"; st.rerun()
-                    if c4.button("🎬 سينما", key="b5"): 
-                        st.session_state.الصفحة_الحالية = "Cinema_Grammaire"; st.rerun()
-                    if c5.button("🏆 لوحة", key="b3"): 
-                        st.session_state.الصفحة_الحالية = "لوحة_الإنجازات"; st.rerun()
-
-                elif st.session_state.الصفحة_الحالية == "الدرس_الأول": 
-                    عرض_محتوى_الدرس("أقسام الكلمة")
-                elif st.session_state.الصفحة_الحالية == "الدرس_الثاني": 
-                    عرض_محتوى_الدرس("الجملة الاسمية والفعلية")
-                elif st.session_state.الصفحة_الحالية == "Page_Hamza": 
-                    afficher_page_hamza()
-                elif st.session_state.الصفحة_الحالية == "Cinema_Grammaire": 
-                    عرض_سينما_القواعد()
-                elif st.session_state.الصفحة_الحالية == "لوحة_الإنجازات":
-                    st.markdown("<div class='content-card'>", unsafe_allow_html=True)
-                    st.markdown("<h2>🏆 لوحة الإنجازات</h2>", unsafe_allow_html=True)
-                    for annee, score in st.session_state.نقاط.items():
-                        badge = "🌟" if score > 0 else "⏳"
-                        st.write(f"### السنة {annee}: {score} نقطة {badge}")
-                    if st.button("⬅ العودة", key="back_final"): 
-                        st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"; st.rerun()
-                    st.markdown("</div>", unsafe_allow_html=True)
+def afficher_page_hamza():
+    st.markdown("<div class='content-card'>", unsafe_allow_html=True)
+    head_col1, head_col2 = st.columns([4, 1])
+    with head_col1:
+        st.markdown("<h2 style='margin-top: 50px;'>✍️ قواعدي في قصتي (الهمزة)</h2>", unsafe_allow_html=True)
+    with head_col2:
+        st.markdown("<div style='font-size: 70px; text-align: center;'>📝</div>", unsafe_allow_html=True)
+    
+    tab1, tab2 = st.tabs(["📖 قصة صراع الحركات", "✍️ قواعد الهمزة"])
+    with tab1:
+        st.markdown("<h3 style='text-align: center;'>📖 قصة: صراع الحركات في مدينة الهمزة</h3>", unsafe_allow_html=True)
+        st.write("في مدينةِ الحروف، كانت الهمزةُ المتوسطة تعيشُ في حيرةٍ من أمرها، فهي لا تعرفُ أين تجلس! قررَت الحركاتُ أن تقيمَ مسابقةً لتعرفَ من هي الأقوى لتفوز بكرسي الهمزة.")
+        st.markdown("### 💡 سلم قوة الحركات (نظام الفوز):")
+        st.write("🥇 **الكسرة:** تجلس على النبرة (ئـ)")
+        st.write("🥈 **الضمة:** تجلس على الواو (ؤ)")
+        st.write("🥉 **الفتحة:** تجلس على الألف (أ)")
+        st.write("🏅 **السكون:** تجلس على السطر (ء)")
+        st.markdown("---")
+        st.write("### 🥊 ابدأ الصراع بنفسك!")
+        col_a, col_b = st.columns(2)
+        with col_a:
+            if st.button("الكسرة ضد الضمة"):
+                st.success("الكسرة (ئـ) تهزم الضمة!")
+                st.balloons()
+        with col_b:
+            if st.button("الفتحة ضد السكون"):
+                st.success("الفتحة (أ) تهزم السكون!")
+                st.snow()
+    with tab2:
+        st.markdown("<h3 style='text-align: center;'>✍️ قواعد الهمزة للسنة الرابعة</h3>", unsafe_allow_html=True)
+        st.write("✅ **1. الهمزة في أول الكلمة:** وصل (ا) أو قطع (أ).")
+        st.write("✅ **2. الهمزة المتوسطة:** حسب قوة الحركات.")
+        st.write("✅ **3. الهمزة المتطرفة:** حسب حركة ما قبلها.")
+    
+    st.markdown("---")
+    if st.button("⬅ العودة للقائمة", key="back_hamza_btn"):
+        st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
+        st.rerun()
+    st.markdown("</div>", unsafe_allow_html=True)
 
             else:
                 # شاشة التفعيل للمستخدم الذي لم يدفع
