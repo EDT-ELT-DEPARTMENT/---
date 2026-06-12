@@ -83,9 +83,6 @@ def afficher_page_hamza():
         st.write("🥉 **الفتحة:** تجلس على الألف (أ)")
         st.write("🏅 **السكون:** تجلس على السطر (ء)")
         
-        # يمكنك أيضاً إضافة مخطط توضيحي يسهل الفهم
-        
-        
     with tab2:
         st.markdown("<h3 style='text-align: center;'>✍️ قواعد الهمزة للسنة الرابعة</h3>", unsafe_allow_html=True)
         st.write("✅ **1. الهمزة في أول الكلمة:** وصل (ا) أو قطع (أ).")
