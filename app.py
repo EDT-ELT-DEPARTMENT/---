@@ -5,22 +5,29 @@ import hashlib
 import pandas as pd
 
 # 1. إعداد قاعدة البيانات
+# 1. إعداد قاعدة البيانات
 def get_db_connection():
     conn = sqlite3.connect('users.db')
     return conn
 
-# تهيئة الجدول عند بداية التشغيل
+# تهيئة الجدول وتحديثه
 conn = get_db_connection()
 c = conn.cursor()
 c.execute('CREATE TABLE IF NOT EXISTS users (email TEXT PRIMARY KEY, password TEXT, nom TEXT, prenom TEXT, paye INTEGER, montant REAL)')
+
+# التحقق من وجود الأعمدة وإضافتها إذا كانت مفقودة
 try:
     c.execute('ALTER TABLE users ADD COLUMN paye INTEGER DEFAULT 0')
-    c.execute('ALTER TABLE users ADD COLUMN montant REAL DEFAULT 0')
-    conn.commit()
-except sqlite3.OperationalError:
+except:
     pass
-conn.close()
 
+try:
+    c.execute('ALTER TABLE users ADD COLUMN montant REAL DEFAULT 0')
+except:
+    pass
+
+conn.commit()
+conn.close()
 # وظائف تشفير كلمة المرور
 def make_hashes(password):
     return hashlib.sha256(str.encode(password)).hexdigest()
