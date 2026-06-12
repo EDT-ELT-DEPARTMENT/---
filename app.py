@@ -10,23 +10,6 @@ if "الصفحة_الحالية" not in st.session_state:
 if "نقاط" not in st.session_state: 
     st.session_state.نقاط = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
 
-# 3. قاعدة بيانات التحديات
-محتوى_الألعاب = {
-    "أقسام الكلمة": {
-        1: {"سؤال": "ما هو نوع كلمة 'قلم'؟", "خيارات": ["فعل", "اسم", "حرف"], "إجابة": "اسم"},
-        2: {"سؤال": "ما هو نوع كلمة 'يذهب'؟", "خيارات": ["فعل", "اسم", "حرف"], "إجابة": "فعل"}
-    },
-    "الجملة الاسمية والفعلية": {
-        1: {"سؤال": "بماذا تبدأ الجملة الاسمية؟", "خيارات": ["اسم", "فعل", "حرف"], "إجابة": "اسم"}
-    }
-}
-
-# 4. الدوال الأساسية (بعد التهيئة)
-def عرض_الشعار_الكبير():
-    if os.path.exists("logo.jpeg"):
-        col1, col2, col3 = st.columns([1, 10, 1])
-        with col2:
-            st.image("logo.jpeg", width=1000)
 
 def تشغيل_لعبة_الدرس(اسم_الدرس, مستوى_السنة):
     data = محتوى_الألعاب.get(اسم_الدرس, {}).get(مستوى_السنة)
@@ -116,7 +99,7 @@ if "نقاط" not in st.session_state:
 if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
     عرض_الشعار_الكبير()
     st.markdown("<h1 style='text-align: center; color: white;'>🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈</h1>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center; color: #FFD700; font-size: 20px; font-weight: bold;'>جميع هذه الدروس مطابقة تماماً للمناهج التعليمية الوطنية الجزائرية</p>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; color: #FFD700; font-size: 20px; font-weight: bold;'></p>", unsafe_allow_html=True)
     st.markdown("<br>", unsafe_allow_html=True)
     
     c1, c2, c3 = st.columns(3)
