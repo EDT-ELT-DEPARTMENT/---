@@ -80,23 +80,9 @@ def afficher_fiche_interactive():
     st.markdown("<div class='content-card'>", unsafe_allow_html=True)
     
     # استخدام التبويبات للدمج بين القصة والهمزة
-    tab1, tab2 = st.tabs(["📖 رحلة القلم الصغير", "✍️ قواعد الهمزة"])
+    tab1 = st.tabs(["✍️ قواعد الهمزة"])
     
     with tab1:
-        st.markdown("<h2 style='text-align: center; color: #6a11cb;'>📖 رحلة القلم الصغير في مدينة الكلمات</h2>", unsafe_allow_html=True)
-        st.write("""
-        في **"مدينة الكلمات"**، يعيش ثلاثة أنواع من المواطنين:
-        1. **الاسم:** كائن ثابت لا يرتبط بزمن.
-        2. **الفعل:** كائن حركي يرتبط بزمن.
-        3. **الحرف:** جسر للربط بين الكلمات.
-        """)
-        st.markdown("### 🛠️ قاعدة ذهبية للتعلم:")
-        col1, col2, col3 = st.columns(3)
-        col1.info("**الاسم:** إنسان، حيوان، نبات، جماد.")
-        col2.info("**الفعل:** حدث مقترن بزمن.")
-        col3.info("**الحرف:** يربط بين الكلمات.")
-
-    with tab2:
         st.markdown("<h2 style='text-align: center; color: #2c3e50;'>✍️ قواعد الهمزة للسنة الرابعة</h2>", unsafe_allow_html=True)
         st.write("""
         - **الهمزة في أول الكلمة:** همزة وصل (ا) لا تُنطق وسط الكلام، وهمزة قطع (أ/إ) تُنطق دائماً.
