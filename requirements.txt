@@ -1,2 +1,5 @@
 streamlit-lottie
 requests
+pandas
+openpyxl
+streamlit
