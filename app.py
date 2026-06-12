@@ -61,6 +61,44 @@ def عرض_محتوى_الدرس(اسم_الدرس):
 
 def afficher_page_hamza():
     st.markdown("<div class='content-card'>", unsafe_allow_html=True)
+    
+    # رأس الصفحة مع إيموجي كبير وجذاب
+    head_col1, head_col2 = st.columns([4, 1])
+    with head_col1:
+        st.markdown("<h2 style='margin-top: 50px;'>✍️ قواعدي في قصتي (الهمزة)</h2>", unsafe_allow_html=True)
+    with head_col2:
+        # إيموجي القلم والورقة للتعبير عن الكتابة
+        st.markdown("<div style='font-size: 70px; text-align: center;'>📝</div>", unsafe_allow_html=True)
+    
+    tab1, tab2 = st.tabs(["📖 قصة صراع الحركات", "✍️ قواعد الهمزة"])
+    
+    with tab1:
+        st.markdown("<h3 style='text-align: center;'>📖 قصة: صراع الحركات في مدينة الهمزة</h3>", unsafe_allow_html=True)
+        st.write("في مدينةِ الحروف، كانت الهمزةُ المتوسطة تعيشُ في حيرةٍ من أمرها، فهي لا تعرفُ أين تجلس! قررَت الحركاتُ أن تقيمَ مسابقةً لتعرفَ من هي الأقوى لتفوز بكرسي الهمزة.")
+        
+        st.markdown("### 💡 سلم قوة الحركات (نظام الفوز):")
+        # استخدام إيموجي لتمثيل الكراسي (المواضع)
+        st.write("🥇 **الكسرة:** تجلس على النبرة (ئـ)")
+        st.write("🥈 **الضمة:** تجلس على الواو (ؤ)")
+        st.write("🥉 **الفتحة:** تجلس على الألف (أ)")
+        st.write("🏅 **السكون:** تجلس على السطر (ء)")
+        
+        # يمكنك أيضاً إضافة مخطط توضيحي يسهل الفهم
+        
+        
+    with tab2:
+        st.markdown("<h3 style='text-align: center;'>✍️ قواعد الهمزة للسنة الرابعة</h3>", unsafe_allow_html=True)
+        st.write("✅ **1. الهمزة في أول الكلمة:** وصل (ا) أو قطع (أ).")
+        st.write("✅ **2. الهمزة المتوسطة:** حسب قوة الحركات.")
+        st.write("✅ **3. الهمزة المتطرفة:** حسب حركة ما قبلها.")
+    
+    st.markdown("---")
+    if st.button("⬅ العودة للقائمة", key="back_hamza_btn"):
+        st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
+        st.rerun()
+    st.markdown("</div>", unsafe_allow_html=True)
+def afficher_page_hamza():
+    st.markdown("<div class='content-card'>", unsafe_allow_html=True)
     head_col1, head_col2 = st.columns([4, 1])
     with head_col1:
         st.markdown("<h2 style='margin-top: 50px;'>✍️ قواعدي في قصتي (الهمزة)</h2>", unsafe_allow_html=True)
