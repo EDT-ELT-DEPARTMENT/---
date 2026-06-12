@@ -1,10 +1,24 @@
 import streamlit as st
 import os
+import requests
+from streamlit_lottie import st_lottie
 
 # 1. إعداد الصفحة
 st.set_page_config(page_title="المنصة التعليمية قِصَّتِي دِرَاسَتِي", layout="wide")
+
+# دالة تحميل الرسوم المتحركة (Lottie) من الرابط
+def load_lottieurl(url: str):
+    r = requests.get(url)
+    if r.status_code != 200:
+        return None
+    return r.json()
+
+# تحميل أنميشن القلم (رابط تفاعلي)
+lottie_pen = load_lottieurl("https://lottie.host/802b545d-7a0e-436d-8a4a-1010376d5402/A8Dq5Jp6E0.json")
+
+# الهيدر الرئيسي للمنصة
 st.markdown("<h1 style='text-align: center; color: white;'>🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: #FFD700; font-size: 20px; font-weight: bold;'>جميع هذه الدروس مطابقة تماماً للمناهج التعليمية الوطنية الجزائرية</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #FFD700; font-size: 24px; font-weight: bold;'>جميع هذه الدروس مطابقة تماماً للمناهج التعليمية الوطنية الجزائرية</p>", unsafe_allow_html=True)
 st.markdown("<br>", unsafe_allow_html=True)
 
 # 2. تهيئة الحالة (Session State)
@@ -60,29 +74,37 @@ def عرض_محتوى_الدرس(اسم_الدرس):
 def afficher_page_hamza():
     st.markdown("<div class='content-card'>", unsafe_allow_html=True)
     
+    # عرض العنوان مع أنميشن القلم بجانبه
+    head_col1, head_col2 = st.columns([4, 1])
+    with head_col1:
+        st.markdown("<h2 style='margin-top: 50px;'>✍️ قواعدي في قصتي (الهمزة)</h2>", unsafe_allow_html=True)
+    with head_col2:
+        if lottie_pen:
+            st_lottie(lottie_pen, height=150, key="pen_animation")
+    
     # التبويبات للدمج بين القصة والقاعدة
     tab1, tab2 = st.tabs(["📖 قصة صراع الحركات", "✍️ قواعد الهمزة"])
     
     with tab1:
-        st.markdown("<h2 style='text-align: center;'>📖 قصة: صراع الحركات في مدينة الهمزة</h2>", unsafe_allow_html=True)
+        st.markdown("<h3 style='text-align: center;'>📖 قصة: صراع الحركات في مدينة الهمزة</h3>", unsafe_allow_html=True)
         st.write("""
         في مدينةِ الحروف، كانت **"الهمزةُ المتوسطة"** تعيشُ في حيرةٍ من أمرها، فهي لا تعرفُ أين تجلس! 
-        قررَت الحركاتُ أن تقيمَ مسابقةً لتعرفَ من هي "الأقوى".
-        - **الكسرةُ:** دخلت بقوةٍ لتجلس الهمزة على 'النبرة' (ئـ).
-        - **الضمةُ:** قالت إذا كنتُ موجودةً، سأجعلُ الهمزةَ تجلسُ على 'الواو' (ؤ).
-        - **الفتحةُ:** قالت سأجعلُ الهمزةَ تجلسُ على 'الألف' (أ).
-        **القاعدةُ:** الهمزةُ المتوسطةُ لا تجلسُ إلا في مكانِ الحركةِ الأقوى: (الكسرة تليها الضمة ثم الفتحة).
+        قررَت الحركاتُ أن تقيمَ مسابقةً لتعرفَ من هي "الأقوى" لتفوز بكرسي الهمزة.
+        - **الكسرةُ:** دخلت بقوةٍ كبيرة، فهي الملكة والأقوى دائماً، وتناسبها 'النبرة' (ئـ).
+        - **الضمةُ:** هي بطلة قوية أيضاً، وتناسبها 'الواو' (ؤ).
+        - **الفتحةُ:** حركة رقيقة، وتناسبها 'الألف' (أ).
+        **القاعدةُ الذهبية:** الهمزةُ المتوسطةُ لا تجلسُ إلا في مكانِ الحركةِ الأقوى: (الكسرة تليها الضمة ثم الفتحة ثم السكون).
         """)
         
     with tab2:
-        st.markdown("<h2 style='text-align: center;'>✍️ قواعد الهمزة للسنة الرابعة</h2>", unsafe_allow_html=True)
+        st.markdown("<h3 style='text-align: center;'>✍️ قواعد الهمزة للسنة الرابعة</h3>", unsafe_allow_html=True)
         st.write("### 1. الهمزة في أول الكلمة:")
-        st.write("- **همزة الوصل (ا):** تظهر في بداية الكلمة ولا تُنطق في وسط الكلام مثل: (اِسْتَغْفَرَ، اِبْن، اِسْم، القلم).")
-        st.write("- **همزة القطع (أ / إ):** همزة تُكتب وتُنطق بوضوح مثل: (أَحْمَدَ، إِسْلام، أُسْتَاذ).")
+        st.write("- **همزة الوصل (ا):** تظهر في بداية الكلمة ولا تُنطق في وسط الكلام مثل: (اِسْتَغْفَرَ، اِبْن، القلم).")
+        st.write("- **همزة القطع (أ / إ):** تُكتب وتُنطق بوضوح دائماً مثل: (أَحْمَدَ، إِسْلام، أُسْتَاذ).")
         st.write("### 2. الهمزة المتوسطة:")
-        st.write("تعتمد كتابة الهمزة المتوسطة على **أقوى الحركات**.")
+        st.write("تعتمد كتابتها على **أقوى الحركات** (نقارن بين حركة الهمزة وحركة الحرف الذي قبلها).")
         st.write("### 3. الهمزة المتطرفة:")
-        st.write("تكتب الهمزة المتطرفة حسب حركة الحرف الذي **قبلها فقط**.")
+        st.write("تكتب في آخر الكلمة حسب حركة الحرف الذي **قبلها فقط**.")
     
     st.markdown("---")
     c1, c2 = st.columns(2)
@@ -98,38 +120,47 @@ def عرض_سينما_القواعد():
     st.markdown("<div class='content-card'>", unsafe_allow_html=True)
     st.markdown("<h2 style='text-align: center; color: #FF4B4B;'>🎬 سينما القواعد: حارس غابة الكلمات</h2>", unsafe_allow_html=True)
     st.video("https://www.youtube.com/watch?v=9_6A_M542u8")
-    if st.button("⬅ العودة", key="back_cinema"):
+    if st.button("⬅ العودة للقائمة", key="back_cinema"):
         st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
 
-# 5. التنسيق
-# 5. التنسيق
+# 5. التنسيق (CSS المحسن والمصحح)
 css_style = """
 <style>
-    /* التأكد من اتجاه الصفحة لليمين */
+    /* 1. ضبط اتجاه الصفحة لليمين */
     html, body, [data-testid="stAppViewContainer"] { 
         direction: rtl !important; 
     }
     
-    /* تنسيق البطاقة وتبرير النصوص */
+    /* 2. تنسيق البطاقة وتبرير النصوص Justify */
     .content-card { 
         background-color: rgba(255,255,255,0.95); 
         padding: 40px; 
         border-radius: 30px; 
         color: #333; 
-        text-align: justify !important; /* هذا هو التعديل الأهم لتبرير النص */
+        text-align: justify !important; 
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
     
-    /* تنسيق عام للعناصر لضمان عدم وجود خلل في المحاذاة */
-    h1, h2, h3, h4, p, li, div, .stButton { 
+    /* 3. ضمان محاذاة العناوين والأزرار لليمين */
+    h1, h2, h3, h4, .stButton, label { 
         text-align: right !important; 
     }
     
-    /* تكبير حجم الخط ووضوح النصوص */
-    p, li, .stMarkdown { 
+    /* 4. تكبير حجم الخط (22px) وضبط المسافات */
+    p, li, div, span, .stMarkdown { 
         font-size: 22px !important; 
-        line-height: 1.6 !important; /* مسافة مريحة بين الأسطر */
+        line-height: 1.6 !important; 
+    }
+
+    /* 5. تنسيق خاص للتبويبات Tabs */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 20px;
+    }
+    .stTabs [data-baseweb="tab"] {
+        font-size: 20px !important;
+        font-weight: bold !important;
     }
 </style>
 """
@@ -145,13 +176,20 @@ if st.session_state.الصفحة_الحالية == "القائمة_الرئيس�
     if c4.button("🎬 سينما", key="b5"): st.session_state.الصفحة_الحالية = "Cinema_Grammaire"; st.rerun()
     if c5.button("🏆 لوحة", key="b3"): st.session_state.الصفحة_الحالية = "لوحة_الإنجازات"; st.rerun()
 
-elif st.session_state.الصفحة_الحالية == "الدرس_الأول": عرض_محتوى_الدرس("أقسام الكلمة")
-elif st.session_state.الصفحة_الحالية == "الدرس_الثاني": عرض_محتوى_الدرس("الجملة الاسمية والفعلية")
-elif st.session_state.الصفحة_الحالية == "Page_Hamza": afficher_page_hamza()
-elif st.session_state.الصفحة_الحالية == "Cinema_Grammaire": عرض_سينما_القواعد()
+elif st.session_state.الصفحة_الحالية == "الدرس_الأول": 
+    عرض_محتوى_الدرس("أقسام الكلمة")
+elif st.session_state.الصفحة_الحالية == "الدرس_الثاني": 
+    عرض_محتوى_الدرس("الجملة الاسمية والفعلية")
+elif st.session_state.الصفحة_الحالية == "Page_Hamza": 
+    afficher_page_hamza()
+elif st.session_state.الصفحة_الحالية == "Cinema_Grammaire": 
+    عرض_سينما_القواعد()
 elif st.session_state.الصفحة_الحالية == "لوحة_الإنجازات":
     st.markdown("<div class='content-card'>", unsafe_allow_html=True)
     st.markdown("<h2>🏆 لوحة الإنجازات</h2>", unsafe_allow_html=True)
-    for annee, score in st.session_state.نقاط.items(): st.write(f"### السنة {annee}: {score} نقطة")
-    if st.button("⬅ العودة", key="back_final"): st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"; st.rerun()
+    for annee, score in st.session_state.نقاط.items(): 
+        st.write(f"### السنة {annee}: {score} نقطة")
+    if st.button("⬅ العودة", key="back_final"): 
+        st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
+        st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
