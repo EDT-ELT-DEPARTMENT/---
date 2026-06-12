@@ -104,11 +104,26 @@ def عرض_سينما_القواعد():
     st.markdown("</div>", unsafe_allow_html=True)
 
 # 5. التنسيق
+# 5. التنسيق
 css_style = """
 <style>
-    html, body, [data-testid="stAppViewContainer"] { direction: rtl !important; text-align: right !important; }
-    .content-card { background-color: rgba(255,255,255,0.95); padding: 40px; border-radius: 30px; color: #333; }
-    h1, h2, h3, h4, p, div { text-align: right !important; }
+    html, body, [data-testid="stAppViewContainer"] { 
+        direction: rtl !important; 
+        text-align: right !important; 
+    }
+    .content-card { 
+        background-color: rgba(255,255,255,0.95); 
+        padding: 40px; 
+        border-radius: 30px; 
+        color: #333; 
+    }
+    h1, h2, h3, h4, p, div { 
+        text-align: right !important; 
+    }
+    /* إضافة لتكبير حجم الخط كما طلبت سابقاً */
+    .stMarkdown, p, li, div { 
+        font-size: 22px !important; 
+    }
 </style>
 """
 st.markdown(css_style, unsafe_allow_html=True)
