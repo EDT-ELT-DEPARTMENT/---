@@ -76,35 +76,28 @@ def عرض_محتوى_الدرس(اسم_الدرس):
         
     st.markdown("</div>", unsafe_allow_html=True)
 
-# 6. التنقل
+# 6. التنقل - قم بتغيير هذا الجزء في كودك كاملاً
 if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
+    عرض_الشعار_الكبير()
     st.markdown("<h1 style='text-align: center; color: white;'>🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈</h1>", unsafe_allow_html=True)
-    col1, col2, col3 = st.columns(3)
-    if col1.button("🌟 دروس مرجعية"): st.session_state.الصفحة_الحالية = "الدرس_الأول"; st.rerun()
-    if col2.button("🏰 حصن الجملة"): st.session_state.الصفحة_الحالية = "الدرس_الثاني"; st.rerun()
-    if col3.button("🏆 لوحة الإنجازات"): st.session_state.الصفحة_الحالية = "لوحة_الإنجازات"; st.rerun()
-elif st.session_state.الصفحة_الحالية == "الدرس_الأول": عرض_محتوى_الدرس("أقسام الكلمة")
-elif st.session_state.الصفحة_الحالية == "الدرس_الثاني": عرض_محتوى_الدرس("الجملة الاسمية والفعلية")
-elif st.session_state.الصفحة_الحالية == "لوحة_الإنجازات":
-    st.markdown(f"<div class='content-card'><h2>مجموع نقاطك: {st.session_state.نقاط} 🏆</h2></div>", unsafe_allow_html=True)
-    if st.button("⬅ العودة للقائمة"): st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"; st.rerun()
-# 4. دالة اللعبة (المحدثة)
-def تشغيل_لعبة_الدرس(اسم_الدرس, مستوى_السنة):
-    # محاولة الحصول على اللعبة من القاموس
-    data = محتوى_الألعاب.get(اسم_الدرس, {}).get(مستوى_السنة)
+    st.markdown("<p style='text-align: center; color: #FFD700; font-size: 20px; font-weight: bold;'>جميع هذه الدروس مطابقة تماماً للمناهج التعليمية الوطنية الجزائرية</p>", unsafe_allow_html=True)
     
-    if data:
-        st.markdown(f"### 🎮 تحدي: {data['سؤال']}")
-        choix = st.radio("اختر الإجابة الصحيحة:", data['خيارات'])
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    c1, c2, c3 = st.columns(3)
+    
+    # إضافة key فريد لكل زر لمنع خطأ StreamlitDuplicateElementId
+    if c1.button("🌟 دروس مرجعية", key="btn_dourous_marjaia"):
+        st.session_state.الصفحة_الحالية = "الدرس_الأول"
+        st.rerun()
         
-        if st.button("تحقق من إجابتي!"):
-            if choix == data['إجابة']:
-                st.success("🎉 إجابة صحيحة! أحسنت يا بطل.")
-                st.balloons()
-            else:
-                st.error("❌ إجابة خاطئة. حاول مجدداً!")
-    else:
-        st.warning("⚠️ اللعبة لهذا المستوى قيد التطوير...")
+    if c2.button("🏰 حصن الجملة", key="btn_hisn_jumla"):
+        st.session_state.الصفحة_الحالية = "الدرس_الثاني"
+        st.rerun()
+        
+    if c3.button("🏆 لوحة الإنجازات", key="btn_lohat_injazat"):
+        st.session_state.الصفحة_الحالية = "لوحة_الإنجازات"
+        st.rerun()
 
 # 5. دالة عرض محتوى الدرس المحدثة
 def عرض_محتوى_الدرس(اسم_الدرس):
