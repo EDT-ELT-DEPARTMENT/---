@@ -6,7 +6,8 @@ import hashlib
 # 1. إعداد قاعدة البيانات
 conn = sqlite3.connect('users.db')
 c = conn.cursor()
-c.execute('CREATE TABLE IF NOT EXISTS users (email TEXT PRIMARY KEY, password TEXT, nom TEXT, prenom TEXT)')
+# إضافة عمود 'paye' (0 = غير مدفوع، 1 = مدفوع)
+c.execute('CREATE TABLE IF NOT EXISTS users (email TEXT PRIMARY KEY, password TEXT, nom TEXT, prenom TEXT, paye INTEGER)')
 conn.commit()
 
 # وظائف تشفير كلمة المرور
