@@ -59,7 +59,7 @@ def عرض_محتوى_الدرس(اسم_الدرس):
     تشغيل_لعبة_الدرس(اسم_الدرس, annee)
     st.markdown("</div>", unsafe_allow_html=True)
 
-def afficher_page_hamza():
+def ():
     st.markdown("<div class='content-card'>", unsafe_allow_html=True)
     
     # القلم المتحرك عبر HTML مباشر (لا يحتاج مكتبات)
@@ -146,14 +146,17 @@ elif st.session_state.الصفحة_الحالية == "الدرس_الثاني":
     عرض_محتوى_الدرس("الجملة الاسمية والفعلية")
 elif st.session_state.الصفحة_الحالية == "Page_Hamza": 
     afficher_page_hamza()
-elif st.session_state.الصفحة_الحالية == "Cinema_Grammaire": 
-    عرض_سينما_القواعد()
 elif st.session_state.الصفحة_الحالية == "لوحة_الإنجازات":
     st.markdown("<div class='content-card'>", unsafe_allow_html=True)
     st.markdown("<h2>🏆 لوحة الإنجازات</h2>", unsafe_allow_html=True)
-    for annee, score in st.session_state.نقاط.items(): 
-        st.write(f"### السنة {annee}: {score} نقطة")
-    if st.button("⬅ العودة", key="back_final"): 
+    
+    # تحسين عرض النقاط مع إضافة رمز تشجيعي
+    for annee, score in st.session_state.نقاط.items():
+        badge = "🌟" if score > 0 else "⏳"
+        st.write(f"### السنة {annee}: {score} نقطة {badge}")
+        
+    st.markdown("---")
+    if st.button("⬅ العودة للقائمة الرئيسية", key="back_final"): 
         st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
