@@ -126,41 +126,32 @@ def عرض_سينما_القواعد():
     st.markdown("</div>", unsafe_allow_html=True)
 
 # 5. التنسيق (CSS المحسن والمصحح)
+# 5. التنسيق
 css_style = """
 <style>
-    /* 1. ضبط اتجاه الصفحة لليمين */
+    /* التأكد من اتجاه الصفحة لليمين */
     html, body, [data-testid="stAppViewContainer"] { 
         direction: rtl !important; 
     }
     
-    /* 2. تنسيق البطاقة وتبرير النصوص Justify */
+    /* تنسيق البطاقة وتبرير النصوص */
     .content-card { 
         background-color: rgba(255,255,255,0.95); 
         padding: 40px; 
         border-radius: 30px; 
         color: #333; 
-        text-align: justify !important; 
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        text-align: justify !important; /* هذا هو التعديل الأهم لتبرير النص */
     }
     
-    /* 3. ضمان محاذاة العناوين والأزرار لليمين */
-    h1, h2, h3, h4, .stButton, label { 
+    /* تنسيق عام للعناصر لضمان عدم وجود خلل في المحاذاة */
+    h1, h2, h3, h4, p, li, div, .stButton { 
         text-align: right !important; 
     }
     
-    /* 4. تكبير حجم الخط (22px) وضبط المسافات */
-    p, li, div, span, .stMarkdown { 
+    /* تكبير حجم الخط ووضوح النصوص */
+    p, li, .stMarkdown { 
         font-size: 22px !important; 
-        line-height: 1.6 !important; 
-    }
-
-    /* 5. تنسيق خاص للتبويبات Tabs */
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 20px;
-    }
-    .stTabs [data-baseweb="tab"] {
-        font-size: 20px !important;
-        font-weight: bold !important;
+        line-height: 1.6 !important; /* مسافة مريحة بين الأسطر */
     }
 </style>
 """
