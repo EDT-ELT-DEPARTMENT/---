@@ -91,6 +91,24 @@ def afficher_fiche_interactive():
         st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
+def عرض_سينما_القواعد():
+   st.markdown("<div class='content-card'>", unsafe_allow_html=True)
+   st.markdown("<h2 style='text-align: center; color: #FF4B4B;'>🎬 سينما القواعد: حارس غابة الكلمات</h2>", unsafe_allow_html=True)
+    
+   # القصة الجذابة
+   st.write("""
+   ### 🌲 مغامرة في غابة الكلمات:
+   في قديم الزمان، كانت الكلمات تعيش في غابة سحرية. لكن فجأة، اختلطت الأسماء بالأفعال!
+   بطلنا **'قلم'** هو الحارس الشجاع، انطلق في رحلته ليعيد النظام بمساعدة **'الفيديو السحري'** أدناه.
+   """)
+    
+   # إضافة الفيديو (يمكنك استبدال الرابط برابط فيديو يوتيوب تعليمي)
+   st.video("https://www.youtube.com/watch?v=9_6A_M542u8") # مثال لفيديو أقسام الكلمة
+    
+   if st.button("⬅ العودة للقائمة", key="back_cinema"):
+       st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
+       st.rerun()
+   st.markdown("</div>", unsafe_allow_html=True)   
 # 5. التنسيق (هذا الجزء يحل مشكلة اليمين إلى اليسار)
 css_style = """
 <style>
