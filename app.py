@@ -1,37 +1,66 @@
 import streamlit as st
 import os
+import smtplib
+import random
+from email.message import EmailMessage
 
-# 1. إعداد الصفحة الأساسي
+# 1. إعداد البريد الإلكتروني (يجب ملء هذه البيانات)
+EMAIL_ADDRESS = "chef.department.elt.fge@gmail.com"
+EMAIL_PASSWORD = "gkzs pdza yodb icvd"
+
+# 2. إعداد الصفحة الأساسي
 st.set_page_config(page_title="المنصة التعليمية قِصَّتِي دِرَاسَتِي", layout="wide")
 
-# 2. تهيئة الحالة (Session State)
+# 3. تهيئة الحالة (Session State)
 if "connecte" not in st.session_state:
     st.session_state.connecte = False
+if "code_envoye" not in st.session_state:
+    st.session_state.code_envoye = None
 if "الصفحة_الحالية" not in st.session_state:
     st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
 if "نقاط" not in st.session_state:
     st.session_state.نقاط = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
 
-# 3. وظيفة تسجيل الدخول
+# 4. وظيفة إرسال الإيميل
+def envoyer_code(destinataire, code):
+    msg = EmailMessage()
+    msg['Subject'] = 'كود الدخول لمنصتك التعليمية'
+    msg['From'] = EMAIL_ADDRESS
+    msg['To'] = destinataire
+    msg.set_content(f"مرحباً، كود الدخول الخاص بك هو: {code}")
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+        smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+        smtp.send_message(msg)
+
+# 5. وظيفة تسجيل الدخول
 def afficher_login():
     st.markdown("<h2 style='text-align: center;'>🔐 تسجيل الدخول للمنصة التعليمية</h2>", unsafe_allow_html=True)
     with st.container():
         nom = st.text_input("الاسم:")
         prenom = st.text_input("اللقب:")
+        email = st.text_input("البريد الإلكتروني:")
         age = st.number_input("العمر:", min_value=5, max_value=15)
         annee = st.selectbox("السنة الدراسية:", [1, 2, 3, 4, 5])
-        code = st.text_input("أدخل كود الدخول:", type="password")
         
+        if st.button("إرسال كود الدخول"):
+            code = str(random.randint(1000, 9999))
+            st.session_state.code_envoye = code
+            try:
+                envoyer_code(email, code)
+                st.success("تم إرسال الكود إلى إيميلك!")
+            except Exception as e:
+                st.error("خطأ في إرسال الإيميل.")
+
+        code_input = st.text_input("أدخل الكود المستلم:", type="password")
         if st.button("دخول"):
-            # كود الدخول الافتراضي هو 1234
-            if code == "1234":
+            if code_input == st.session_state.code_envoye and st.session_state.code_envoye is not None:
                 st.session_state.connecte = True
                 st.session_state.nom_eleve = f"{nom} {prenom}"
                 st.rerun()
             else:
                 st.error("كود الدخول خاطئ!")
 
-# 4. قاموس الألعاب
+# 6. قاموس الألعاب
 محتوى_الألعاب = {
     "أقسام الكلمة": {
         1: {"سؤال": "ما هو نوع كلمة 'قلم'؟", "خيارات": ["فعل", "اسم", "حرف"], "إجابة": "اسم"},
@@ -43,7 +72,7 @@ def afficher_login():
     }
 }
 
-# 5. الدوال الوظيفية
+# 7. الدوال الوظيفية
 def عرض_الشعار_الكبير():
     if os.path.exists("logo.jpeg"):
         col1, col2, col3 = st.columns([1, 10, 1])
@@ -124,7 +153,7 @@ def عرض_سينما_القواعد():
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
 
-# 6. تنسيق CSS
+# 8. تنسيق CSS
 css_style = """
 <style>
     html, body, [data-testid="stAppViewContainer"] { direction: rtl !important; }
@@ -135,11 +164,10 @@ css_style = """
 """
 st.markdown(css_style, unsafe_allow_html=True)
 
-# 7. المنطق الرئيسي (التنقل بعد تسجيل الدخول)
+# 9. المنطق الرئيسي
 if not st.session_state.connecte:
     afficher_login()
 else:
-    # Header الرئيسي للمنصة (يظهر فقط بعد الدخول)
     st.markdown("<h1 style='text-align: center; color: white;'>🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈</h1>", unsafe_allow_html=True)
     st.write(f"### أهلاً بك يا بطل/بطلة: {st.session_state.nom_eleve}")
     
