@@ -28,23 +28,25 @@ css_style = """
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
 html, body, [data-testid="stMarkdownContainer"] { font-family: 'Cairo', sans-serif !important; direction: RTL; }
 .stApp { background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); color: white; }
-.stButton>button { width: 100% !important; height: 60px !important; border-radius: 30px !important; font-size: 18px !important; background: #FFD700 !important; color: #333 !important; font-weight: bold; }
-.content-card { background-color: white; padding: 30px; border-radius: 20px; color: #333; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+.stButton>button { width: 100% !important; height: 80px !important; border-radius: 50px !important; font-size: 20px !important; background: linear-gradient(45deg, #FF9A9E 0%, #FEC163 99%) !important; color: #333 !important; }
+.content-card { background-color: rgba(255, 255, 255, 0.95); padding: 40px; border-radius: 30px; color: #333; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
 </style>
 """
 st.markdown(css_style, unsafe_allow_html=True)
 
-# 4. تهيئة الحالة (Session State)
-if "الصفحة_الحالية" not in st.session_state: st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
-if "نقاط" not in st.session_state: st.session_state.نقاط = 0
+# 4. الدوال الأساسية
+def عرض_الشعار_الكبير():
+    if os.path.exists("logo.jpeg"):
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            st.image("logo.jpeg", width=400)
 
-# 5. دوال العرض
 def تشغيل_لعبة_الدرس(اسم_الدرس, مستوى_السنة):
     data = محتوى_الألعاب.get(اسم_الدرس, {}).get(مستوى_السنة)
     if data:
         st.markdown(f"### 🎮 تحدي: {data['سؤال']}")
-        choix = st.radio("اختر الإجابة:", data['خيارات'])
-        if st.button("تحقق من إجابتي!"):
+        choix = st.radio("اختر الإجابة:", data['خيارات'], key=f"radio_{اسم_الدرس}_{مستوى_السنة}")
+        if st.button("تحقق من إجابتي!", key=f"btn_check_{اسم_الدرس}_{مستوى_السنة}"):
             if choix == data['إجابة']:
                 st.session_state.نقاط += 10
                 st.success(f"🎉 إجابة صحيحة! نقاطك الآن: {st.session_state.نقاط}")
@@ -52,129 +54,36 @@ def تشغيل_لعبة_الدرس(اسم_الدرس, مستوى_السنة):
             else:
                 st.error("❌ إجابة خاطئة. حاول مرة أخرى!")
     else:
-        st.warning("⚠️ اللعبة قيد التطوير لهذا المستوى.")
+        st.warning("⚠️ اللعبة لهذا المستوى قيد التطوير.")
 
 def عرض_محتوى_الدرس(اسم_الدرس):
     st.markdown("<div class='content-card'>", unsafe_allow_html=True)
-    
-    # زر العودة مع مفتاح فريد
-    if st.button("⬅ العودة للقائمة", key=f"btn_retour_{اسم_الدرس}"):
+    if st.button("⬅ العودة للقائمة", key=f"back_{اسم_الدرس}"):
         st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
         st.rerun()
-    
     st.markdown(f"<h2 style='text-align: center;'>{اسم_الدرس}</h2>", unsafe_allow_html=True)
-    
-    # اختيار السنة مع مفتاح فريد
     annee = st.selectbox("اختر السنة الدراسية:", [1, 2, 3, 4, 5], key=f"select_{اسم_الدرس}")
-    
-    # تصحيح جذري: البحث في محتوى_الألعاب بدلاً من محتوى_الدروس المحذوف
-    if اسم_الدرس in محتوى_الألعاب:
-        st.write(f"### 📖 تحدي السنة {annee}")
-        تشغيل_لعبة_الدرس(اسم_الدرس, annee)
-    else:
-        st.warning("⚠️ عذراً، لا توجد تحديات لهذا الدرس حالياً.")
-        
+    تشغيل_لعبة_الدرس(اسم_الدرس, annee)
     st.markdown("</div>", unsafe_allow_html=True)
 
+# 5. منطق الحالة
+if "الصفحة_الحالية" not in st.session_state: st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
+if "نقاط" not in st.session_state: st.session_state.نقاط = 0
 
-# 6. التنقل - قم بتغيير هذا الجزء في كودك كاملاً
+# 6. الواجهة الرئيسية
 if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
     عرض_الشعار_الكبير()
     st.markdown("<h1 style='text-align: center; color: white;'>🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈</h1>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; color: #FFD700; font-size: 20px; font-weight: bold;'>جميع هذه الدروس مطابقة تماماً للمناهج التعليمية الوطنية الجزائرية</p>", unsafe_allow_html=True)
-    
     st.markdown("<br>", unsafe_allow_html=True)
     
     c1, c2, c3 = st.columns(3)
-    
-    # إضافة key فريد لكل زر لمنع خطأ StreamlitDuplicateElementId
-    if c1.button("🌟 دروس مرجعية", key="btn_dourous_marjaia"):
-        st.session_state.الصفحة_الحالية = "الدرس_الأول"
-        st.rerun()
-        
-    if c2.button("🏰 حصن الجملة", key="btn_hisn_jumla"):
-        st.session_state.الصفحة_الحالية = "الدرس_الثاني"
-        st.rerun()
-        
-    if c3.button("🏆 لوحة الإنجازات", key="btn_lohat_injazat"):
-        st.session_state.الصفحة_الحالية = "لوحة_الإنجازات"
-        st.rerun()
+    if c1.button("🌟 دروس مرجعية", key="btn_1"): st.session_state.الصفحة_الحالية = "الدرس_الأول"; st.rerun()
+    if c2.button("🏰 حصن الجملة", key="btn_2"): st.session_state.الصفحة_الحالية = "الدرس_الثاني"; st.rerun()
+    if c3.button("🏆 لوحة الإنجازات", key="btn_3"): st.session_state.الصفحة_الحالية = "لوحة_الإنجازات"; st.rerun()
 
-# 3. CSS المخصص
-css_style = """
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
-html, body, [data-testid="stMarkdownContainer"] { font-family: 'Cairo', sans-serif !important; direction: RTL; }
-.stApp { background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); color: white; }
-.stButton>button { width: 100% !important; height: 80px !important; border-radius: 50px !important; font-size: 20px !important; background: linear-gradient(45deg, #FF9A9E 0%, #FEC163 99%) !important; color: #333 !important; }
-.content-card { background-color: rgba(255, 255, 255, 0.95); padding: 40px; border-radius: 30px; color: #333; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-</style>
-"""
-st.markdown(css_style, unsafe_allow_html=True)
-
-# 4. دالة عرض الشعار
-def عرض_الشعار_الكبير():
-    if os.path.exists("logo.jpeg"):
-        col1, col2, col3 = st.columns([1, 2, 1])
-        with col2:
-            st.image("logo.jpeg", width=1000)
-    else:
-        st.warning("⚠️ يرجى التأكد من وضع ملف 'logo.jpeg' في نفس المجلد")
-
-# 5. دالة عرض محتوى الدرس
-def عرض_محتوى_الدرس(اسم_الدرس):
-    st.markdown("<div class='content-card'>", unsafe_allow_html=True)
-    if st.button("⬅ العودة للقائمة"):
-        st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
-        st.rerun()
-    
-    st.markdown(f"<h2 style='text-align: center;'>{اسم_الدرس}</h2>", unsafe_allow_html=True)
-    annee = st.selectbox("اختر السنة الدراسية:", [1, 2, 3, 4, 5])
-    
-    st.write(f"### 📖 دروس السنة {annee}:")
-    
-    liste_cours = محتوى_الدروس.get(اسم_الدرس, {}).get(annee, ["لا يوجد محتوى حالي لهذه السنة"])
-    
-    for cours in liste_cours:
-        st.success(f"✅ {cours}")
-        
-    st.markdown("</div>", unsafe_allow_html=True)
-
-# 6. منطق التنقل بين الصفحات
-if "الصفحة_الحالية" not in st.session_state:
-    st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
-
-if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
-    عرض_الشعار_الكبير()
-    st.markdown("<h1 style='text-align: center; color: white;'>🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈</h1>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center; color: #FFD700; font-size: 20px; font-weight: bold;'>جميع هذه الدروس مطابقة تماماً للمناهج التعليمية الوطنية الجزائرية</p>", unsafe_allow_html=True)
-    
-    st.markdown("<br>", unsafe_allow_html=True)
-    
-    c1, c2, c3 = st.columns(3)
-    with c1:
-        if st.button("🌟 دروس مرجعية"):
-            st.session_state.الصفحة_الحالية = "الدرس_الأول"
-            st.rerun()
-    with c2:
-        if st.button("🏰 حصن الجملة"):
-            st.session_state.الصفحة_الحالية = "الدرس_الثاني"
-            st.rerun()
-    with c3:
-        if st.button("🏆 لوحة الإنجازات"):
-            st.session_state.الصفحة_الحالية = "لوحة_الإنجازات"
-            st.rerun()
-
-elif st.session_state.الصفحة_الحالية == "الدرس_الأول":
-    عرض_محتوى_الدرس("أقسام الكلمة")
-
-elif st.session_state.الصفحة_الحالية == "الدرس_الثاني":
-    عرض_محتوى_الدرس("الجملة الاسمية والفعلية")
-
+elif st.session_state.الصفحة_الحالية == "الدرس_الأول": عرض_محتوى_الدرس("أقسام الكلمة")
+elif st.session_state.الصفحة_الحالية == "الدرس_الثاني": عرض_محتوى_الدرس("الجملة الاسمية والفعلية")
 elif st.session_state.الصفحة_الحالية == "لوحة_الإنجازات":
-    st.markdown("<div class='content-card'>", unsafe_allow_html=True)
-    if st.button("⬅ العودة للقائمة"):
-        st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
-        st.rerun()
-    st.markdown("<h2 style='text-align: center;'>🌿 لَوْحَةُ الإِنْجَازَاتِ 🌿</h2>", unsafe_allow_html=True)
-    st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='content-card'><h2>مجموع نقاطك: {st.session_state.نقاط} 🏆</h2></div>", unsafe_allow_html=True)
+    if st.button("⬅ العودة للقائمة", key="back_main"): st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"; st.rerun()
