@@ -56,12 +56,23 @@ def تشغيل_لعبة_الدرس(اسم_الدرس, مستوى_السنة):
 
 def عرض_محتوى_الدرس(اسم_الدرس):
     st.markdown("<div class='content-card'>", unsafe_allow_html=True)
+    
+    # زر العودة
     if st.button("⬅ العودة للقائمة"):
         st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
         st.rerun()
+    
     st.markdown(f"<h2 style='text-align: center;'>{اسم_الدرس}</h2>", unsafe_allow_html=True)
+    
+    # اختيار السنة
     annee = st.selectbox("اختر السنة الدراسية:", [1, 2, 3, 4, 5])
-    تشغيل_لعبة_الدرس(اسم_الدرس, annee)
+    
+    # التأكد من وجود بيانات لهذا الدرس في القاموس الجديد
+    if اسم_الدرس in محتوى_الألعاب:
+        تشغيل_لعبة_الدرس(اسم_الدرس, annee)
+    else:
+        st.warning("⚠️ عذراً، لا توجد دروس أو ألعاب لهذا العنوان حالياً.")
+        
     st.markdown("</div>", unsafe_allow_html=True)
 
 # 6. التنقل
