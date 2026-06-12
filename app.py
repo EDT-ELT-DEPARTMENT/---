@@ -127,13 +127,49 @@ def admin_panel():
     st.write("### 📋 قائمة المستخدمين المسجلين:")
     st.dataframe(df)
     
+    # 1. زر تحميل CSV
     csv = df.to_csv(index=False).encode('utf-8')
     st.download_button(label="📥 تحميل قائمة العملاء (CSV)", data=csv, file_name='clients_data.csv', mime='text/csv')
+    
+    # 2. زر تحميل Excel بتنسيق منظم
+    import io
+    buffer = io.BytesIO()
+    with pd.ExcelWriter(buffer, engine='openpyxl') as writer:
+        df.to_excel(writer, index=False, sheet_name='Clients')
+    st.download_button(
+        label="📊 تحميل قائمة العملاء (Excel)",
+        data=buffer.getvalue(),
+        file_name="clients_data.xlsx",
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+    
+    # 3. زر تحميل HTML بتنسيق مفصل
+    html_data = df.to_html(index=False, classes='table table-striped', border=1)
+    st.download_button(
+        label="🌐 تحميل قائمة العملاء (HTML)",
+        data=html_data,
+        file_name="clients_data.html",
+        mime="text/html"
+    )
     
     st.markdown("---")
     st.write("### ⚙️ تفعيل حساب وتحديث المبلغ:")
     email_to_act = st.text_input("إيميل التلميذ لتفعيله:")
     montant_paye = st.number_input("المبلغ المدفوع (DA):", min_value=0.0)
+    
+    if st.button("تأكيد التفعيل والمبلغ"):
+        conn = get_db_connection()
+        c = conn.cursor()
+        c.execute('UPDATE users SET paye = 1, montant = ? WHERE email = ?', (montant_paye, email_to_act))
+        conn.commit()
+        conn.close()
+        st.success(f"تم تفعيل الحساب وتحديث المبلغ لـ: {email_to_act}")
+        st.rerun()
+        
+    if st.button("خروج من لوحة التحكم"):
+        st.session_state.connecte = False
+        st.session_state.is_admin = False
+        st.rerun()
     
     if st.button("تأكيد التفعيل والمبلغ"):
         conn = get_db_connection()
