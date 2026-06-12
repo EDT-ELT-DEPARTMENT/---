@@ -4,6 +4,74 @@ import os
 # 1. إعداد الصفحة
 st.set_page_config(page_title="المنصة التعليمية قِصَّتِي دِرَاسَتِي", layout="wide")
 
+# الهيدر الرئيسي
+st.markdown("<h1 style='text-align: center; color: white;'>🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈</h1>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #FFD700; font-size: 24px; font-weight: bold;'>جميع هذه الدروس مطابقة تماماً للمناهج التعليمية الوطنية الجزائرية</p>", unsafe_allow_html=True)
+
+# 2. تهيئة الحالة
+if "الصفحة_الحالية" not in st.session_state:
+    st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
+if "نقاط" not in st.session_state:
+    st.session_state.نقاط = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
+
+# 3. الدوال الأساسية
+def عرض_الشعار_الكبير():
+    if os.path.exists("logo.jpeg"):
+        st.image("logo.jpeg")
+
+def afficher_page_hamza():
+    st.markdown("<div class='content-card'>", unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align: center;'>✍️ قواعدي في قصتي (الهمزة)</h2>", unsafe_allow_html=True)
+    
+    tab1, tab2 = st.tabs(["📖 قصة صراع الحركات", "✍️ قواعد الهمزة"])
+    
+    with tab1:
+        st.write("في مدينةِ الحروف، كانت الهمزةُ المتوسطة تعيشُ في حيرةٍ من أمرها... قررَت الحركاتُ أن تقيمَ مسابقةً لتعرفَ من هي الأقوى.")
+        st.markdown("""
+        ### 💡 جدول قوة الحركات:
+        | الترتيب | الحركة | ما يناسبها |
+        | :--- | :--- | :--- |
+        | 1 (الأقوى) | الكسرة | النبرة (ئـ) |
+        | 2 | الضمة | الواو (ؤ) |
+        | 3 | الفتحة | الألف (أ) |
+        | 4 | السكون | على السطر (ء) |
+        """)
+        
+        
+    with tab2:
+        st.write("### قواعد الهمزة:")
+        st.write("1. **أول الكلمة:** وصل (ا) أو قطع (أ/إ).")
+        st.write("2. **المتوسطة:** تعتمد على أقوى الحركات.")
+        st.write("3. **المتطرفة:** تعتمد على حركة ما قبلها.")
+    
+    if st.button("⬅ العودة للقائمة"):
+        st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
+        st.rerun()
+    st.markdown("</div>", unsafe_allow_html=True)
+
+# 4. التنسيق
+css_style = """
+<style>
+    html, body, [data-testid="stAppViewContainer"] { direction: rtl !important; }
+    .content-card { background-color: #fff; padding: 40px; border-radius: 30px; color: #333; text-align: justify !important; }
+    h1, h2, h3, h4, p, li { text-align: right !important; }
+</style>
+"""
+st.markdown(css_style, unsafe_allow_html=True)
+
+# 5. منطق التنقل
+if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
+    if st.button("✍️ قواعدي في قصتي"):
+        st.session_state.الصفحة_الحالية = "Page_Hamza"
+        st.rerun()
+elif st.session_state.الصفحة_الحالية == "Page_Hamza":
+    afficher_page_hamza()
+import streamlit as st
+import os
+
+# 1. إعداد الصفحة
+st.set_page_config(page_title="المنصة التعليمية قِصَّتِي دِرَاسَتِي", layout="wide")
+
 # الهيدر الرئيسي للمنصة
 st.markdown("<h1 style='text-align: center; color: white;'>🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center; color: #FFD700; font-size: 24px; font-weight: bold;'>جميع هذه الدروس مطابقة تماماً للمناهج التعليمية الوطنية الجزائرية</p>", unsafe_allow_html=True)
