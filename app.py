@@ -63,6 +63,17 @@ def عرض_محتوى_الدرس(اسم_الدرس):
     annee = st.selectbox("اختر السنة الدراسية:", [1, 2, 3, 4, 5], key=f"select_{اسم_الدرس}")
     تشغيل_لعبة_الدرس(اسم_الدرس, annee)
     st.markdown("</div>", unsafe_allow_html=True)
+def afficher_fiche_interactive():
+    st.markdown("<div class='content-card'>", unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align: center;'>📖 رحلة القلم الصغير</h2>", unsafe_allow_html=True)
+    st.write("""
+    كان يا مكان، في عالم الكلمات الملون، التقى القلم بـ 'يذهب' (الفعل) 
+    الذي كان يجري بسرعة! ثم التقى بـ 'مدرسة' (الاسم) التي علمته الثبات.
+    """)
+    if st.button("⬅ العودة للقائمة", key="back_fiche"):
+        st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
+        st.rerun()
+    st.markdown("</div>", unsafe_allow_html=True)
 
 # 5. التنسيق
 css_style = "<style>.content-card { background-color: rgba(255,255,255,0.95); padding: 40px; border-radius: 30px; color: #333; }</style>"
@@ -72,10 +83,11 @@ st.markdown(css_style, unsafe_allow_html=True)
 if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
     عرض_الشعار_الكبير()
     st.title("🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈")
-    c1, c2, c3 = st.columns(3)
-    if c1.button("🌟 دروس مرجعية", key="b1"): st.session_state.الصفحة_الحالية = "الدرس_الأول"; st.rerun()
-    if c2.button("🏰 حصن الجملة", key="b2"): st.session_state.الصفحة_الحالية = "الدرس_الثاني"; st.rerun()
-    if c3.button("🏆 لوحة الإنجازات", key="b3"): st.session_state.الصفحة_الحالية = "لوحة_الإنجازات"; st.rerun()
+    c1, c2, c3, c4 = st.columns(4) # Ajout d'une 4ème colonne
+    if c1.button("🌟 دروس", key="b1"): st.session_state.الصفحة_الحالية = "الدرس_الأول"; st.rerun()
+    if c2.button("🏰 حصن", key="b2"): st.session_state.الصفحة_الحالية = "الدرس_الثاني"; st.rerun()
+    if c3.button("📜 قصة", key="b4"): st.session_state.الصفحة_الحالية = "Fiche_Vocabulaire"; st.rerun()
+    if c4.button("🏆 لوحة", key="b3"): st.session_state.الصفحة_الحالية = "لوحة_الإنجازات"; st.rerun()
 
 elif st.session_state.الصفحة_الحالية == "الدرس_الأول":
     عرض_محتوى_الدرس("أقسام الكلمة")
@@ -92,3 +104,5 @@ elif st.session_state.الصفحة_الحالية == "لوحة_الإنجازا�
     st.markdown(f"--- \n ### 🌟 المجموع الكلي: {total} نقطة")
     if st.button("⬅ العودة للقائمة", key="back_final"): st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"; st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
+elif st.session_state.الصفحة_الحالية == "Fiche_Vocabulaire":
+    afficher_fiche_interactive()
