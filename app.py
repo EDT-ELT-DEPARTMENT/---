@@ -22,7 +22,7 @@ st.set_page_config(page_title="المنصة التعليمية قِصَّتِي 
     }
 }
 
-# 3. CSS المخصص
+# 3. التنسيق (CSS)
 css_style = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
@@ -37,9 +37,9 @@ st.markdown(css_style, unsafe_allow_html=True)
 # 4. الدوال الأساسية
 def عرض_الشعار_الكبير():
     if os.path.exists("logo.jpeg"):
-        col1, col2, col3 = st.columns([1, 2, 1])
+        col1, col2, col3 = st.columns([1, 10, 1])
         with col2:
-            st.image("logo.jpeg", width=400)
+            st.image("logo.jpeg", width=1000)
 
 def تشغيل_لعبة_الدرس(اسم_الدرس, مستوى_السنة):
     data = محتوى_الألعاب.get(اسم_الدرس, {}).get(مستوى_السنة)
@@ -66,11 +66,11 @@ def عرض_محتوى_الدرس(اسم_الدرس):
     تشغيل_لعبة_الدرس(اسم_الدرس, annee)
     st.markdown("</div>", unsafe_allow_html=True)
 
-# 5. منطق الحالة
+# 5. تهيئة الحالة
 if "الصفحة_الحالية" not in st.session_state: st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
 if "نقاط" not in st.session_state: st.session_state.نقاط = 0
 
-# 6. الواجهة الرئيسية
+# 6. منطق التنقل
 if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
     عرض_الشعار_الكبير()
     st.markdown("<h1 style='text-align: center; color: white;'>🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈</h1>", unsafe_allow_html=True)
