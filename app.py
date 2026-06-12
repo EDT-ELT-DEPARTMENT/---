@@ -4,7 +4,7 @@ import os
 # 1. إعداد الصفحة
 st.set_page_config(page_title="المنصة التعليمية قِصَّتِي دِرَاسَتِي", page_icon="🎈", layout="wide")
 
-# 2. هيكلة الدروس (يمكنك إضافة أي دروس هنا)
+# 2. هيكلة الدروس
 محتوى_الدروس = {
     "أقسام الكلمة": {
         1: ["الكلمة والحرف", "أشكال الحروف"],
@@ -34,7 +34,16 @@ html, body, [data-testid="stMarkdownContainer"] { font-family: 'Cairo', sans-ser
 """
 st.markdown(css_style, unsafe_allow_html=True)
 
-# 4. دالة عرض محتوى الدرس
+# 4. دالة عرض الشعار
+def عرض_الشعار_الكبير():
+    if os.path.exists("logo.jpeg"):
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            st.image("logo.jpeg", width=400)
+    else:
+        st.warning("⚠️ يرجى التأكد من وضع ملف 'logo.jpeg' في نفس المجلد")
+
+# 5. دالة عرض محتوى الدرس
 def عرض_محتوى_الدرس(اسم_الدرس):
     st.markdown("<div class='content-card'>", unsafe_allow_html=True)
     if st.button("⬅ العودة للقائمة"):
@@ -46,7 +55,6 @@ def عرض_محتوى_الدرس(اسم_الدرس):
     
     st.write(f"### 📖 دروس السنة {annee}:")
     
-    # جلب الدروس من القاموس أعلاه
     liste_cours = محتوى_الدروس.get(اسم_الدرس, {}).get(annee, ["لا يوجد محتوى حالي لهذه السنة"])
     
     for cours in liste_cours:
@@ -54,22 +62,41 @@ def عرض_محتوى_الدرس(اسم_الدرس):
         
     st.markdown("</div>", unsafe_allow_html=True)
 
-# 5. منطق الصفحات
-if "الصفحة_الحالية" not in st.session_state: st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
+# 6. منطق التنقل بين الصفحات
+if "الصفحة_الحالية" not in st.session_state:
+    st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
 
 if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
+    عرض_الشعار_الكبير()
     st.markdown("<h1 style='text-align: center; color: white;'>🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈</h1>", unsafe_allow_html=True)
-    # [باقي أزرار القائمة الرئيسية كما هي...]
+    st.markdown("<p style='text-align: center; color: #FFD700; font-size: 20px; font-weight: bold;'>جميع هذه الدروس مطابقة تماماً للمناهج التعليمية الوطنية الجزائرية</p>", unsafe_allow_html=True)
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    
     c1, c2, c3 = st.columns(3)
     with c1:
-        if st.button("🌟 دروس مرجعية"): st.session_state.الصفحة_الحالية = "الدرس_الأول"; st.rerun()
+        if st.button("🌟 دروس مرجعية"):
+            st.session_state.الصفحة_الحالية = "الدرس_الأول"
+            st.rerun()
     with c2:
-        if st.button("🏰 حصن الجملة"): st.session_state.الصفحة_الحالية = "الدرس_الثاني"; st.rerun()
+        if st.button("🏰 حصن الجملة"):
+            st.session_state.الصفحة_الحالية = "الدرس_الثاني"
+            st.rerun()
     with c3:
-        if st.button("🏆 لوحة الإنجازات"): st.session_state.الصفحة_الحالية = "لوحة_الإنجازات"; st.rerun()
+        if st.button("🏆 لوحة الإنجازات"):
+            st.session_state.الصفحة_الحالية = "لوحة_الإنجازات"
+            st.rerun()
 
 elif st.session_state.الصفحة_الحالية == "الدرس_الأول":
     عرض_محتوى_الدرس("أقسام الكلمة")
 
 elif st.session_state.الصفحة_الحالية == "الدرس_الثاني":
     عرض_محتوى_الدرس("الجملة الاسمية والفعلية")
+
+elif st.session_state.الصفحة_الحالية == "لوحة_الإنجازات":
+    st.markdown("<div class='content-card'>", unsafe_allow_html=True)
+    if st.button("⬅ العودة للقائمة"):
+        st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
+        st.rerun()
+    st.markdown("<h2 style='text-align: center;'>🌿 لَوْحَةُ الإِنْجَازَاتِ 🌿</h2>", unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
