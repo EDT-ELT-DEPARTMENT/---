@@ -118,7 +118,6 @@ def عرض_الشعار_الكبير():
             st.image("logo.jpeg", width=1000)
 
 def admin_panel():
-def admin_panel():
     st.markdown("## 🛠 لوحة تحكم الأدمن والمالية")
     
     conn = get_db_connection()
