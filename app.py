@@ -39,7 +39,7 @@ def عرض_الشعار_الكبير():
     if os.path.exists("logo.jpeg"):
         col1, col2, col3 = st.columns([1, 2, 1])
         with col2:
-            st.image("logo.jpeg", width=450)
+            st.image("logo.jpeg", width=1000)
     else:
         st.warning("⚠️ يرجى التأكد من وضع ملف 'logo.jpeg' في نفس المجلد")
 
