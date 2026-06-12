@@ -91,7 +91,35 @@ def afficher_fiche_interactive():
         st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
-
+# 5. التنسيق (هذا الجزء يحل مشكلة اليمين إلى اليسار)
+css_style = """
+<style>
+    /* جعل واجهة التطبيق بالكامل من اليمين إلى اليسار */
+    html, body, [data-testid="stAppViewContainer"] {
+        direction: rtl !important;
+        text-align: right !important;
+    }
+    
+    /* تنسيق البطاقات التعليمية */
+    .content-card { 
+        background-color: rgba(255,255,255,0.95); 
+        padding: 40px; 
+        border-radius: 30px; 
+        color: #333; 
+    }
+    
+    /* ضمان محاذاة كل النصوص للعناوين */
+    h1, h2, h3, h4, p, div {
+        text-align: right !important;
+    }
+    
+    /* محاذاة القوائم المنسدلة */
+    .stSelectbox, .stRadio {
+        text-align: right !important;
+    }
+</style>
+"""
+st.markdown(css_style, unsafe_allow_html=True)
 # 2. منطق التنقل (استبدل القسم 6 بهذا الجزء)
 if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
     عرض_الشعار_الكبير()
