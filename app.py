@@ -71,41 +71,7 @@ elif st.session_state.الصفحة_الحالية == "لوحة_الإنجازا�
     for annee, score in st.session_state.نقاط.items():
         st.write(f"السنة {annee}: {score} نقطة")
     if st.button("⬅ العودة", key="back_final"): st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"; st.rerun()
-import streamlit as st
-import os
 
-# 1. إعداد الصفحة
-st.set_page_config(page_title="المنصة التعليمية قِصَّتِي دِرَاسَتِي", page_icon="🎈", layout="wide")
-
-# 2. قاموس الألعاب المتكامل
-محتوى_الألعاب = {
-    "أقسام الكلمة": {
-        1: {"سؤال": "ما هو نوع كلمة 'قلم'؟", "خيارات": ["فعل", "اسم", "حرف"], "إجابة": "اسم"},
-        2: {"سؤال": "ما هو نوع كلمة 'يذهب'؟", "خيارات": ["فعل", "اسم", "حرف"], "إجابة": "فعل"},
-        3: {"سؤال": "ما نوع كلمة 'في'؟", "خيارات": ["اسم", "فعل", "حرف"], "إجابة": "حرف"},
-        4: {"سؤال": "أي مما يلي اسم إنسان؟", "خيارات": ["شجرة", "محمد", "يقرأ"], "إجابة": "محمد"},
-        5: {"سؤال": "كلمة 'مدرسة' تدل على:", "خيارات": ["مكان", "زمان", "فعل"], "إجابة": "مكان"}
-    },
-    "الجملة الاسمية والفعلية": {
-        1: {"سؤال": "الجملة الاسمية تبدأ بـ:", "خيارات": ["فعل", "اسم", "حرف"], "إجابة": "اسم"},
-        2: {"سؤال": "الجملة الفعلية تبدأ بـ:", "خيارات": ["اسم", "فعل", "حرف"], "إجابة": "فعل"},
-        3: {"سؤال": "حول 'يلعبُ الولدُ' لجملة اسمية:", "خيارات": ["الولدُ يلعبُ", "يلعبُ الولدُ", "الولدُ يلعبُ في البيت"], "إجابة": "الولدُ يلعبُ"},
-        4: {"سؤال": "ما ركن الجملة الاسمية الأساسي؟", "خيارات": ["المبتدأ والخبر", "الفعل والفاعل", "الحرف والاسم"], "إجابة": "المبتدأ والخبر"},
-        5: {"سؤال": "في 'الطالبُ يدرسُ'، ما هو الخبر؟", "خيارات": ["الطالبُ", "يدرسُ", "لا يوجد"], "إجابة": "يدرسُ"}
-    }
-}
-
-# 3. التنسيق (CSS)
-css_style = """
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
-html, body, [data-testid="stMarkdownContainer"] { font-family: 'Cairo', sans-serif !important; direction: RTL; }
-.stApp { background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); color: white; }
-.stButton>button { width: 100% !important; height: 80px !important; border-radius: 50px !important; font-size: 20px !important; background: linear-gradient(45deg, #FF9A9E 0%, #FEC163 99%) !important; color: #333 !important; }
-.content-card { background-color: rgba(255, 255, 255, 0.95); padding: 40px; border-radius: 30px; color: #333; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-</style>
-"""
-st.markdown(css_style, unsafe_allow_html=True)
 
 # 4. الدوال الأساسية
 def عرض_الشعار_الكبير():
