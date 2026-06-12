@@ -2,6 +2,7 @@ import streamlit as st
 import os
 import sqlite3
 import hashlib
+import pandas as pd
 
 # 1. إعداد قاعدة البيانات
 def get_db_connection():
@@ -11,9 +12,10 @@ def get_db_connection():
 # تهيئة الجدول عند بداية التشغيل
 conn = get_db_connection()
 c = conn.cursor()
-c.execute('CREATE TABLE IF NOT EXISTS users (email TEXT PRIMARY KEY, password TEXT, nom TEXT, prenom TEXT, paye INTEGER)')
+c.execute('CREATE TABLE IF NOT EXISTS users (email TEXT PRIMARY KEY, password TEXT, nom TEXT, prenom TEXT, paye INTEGER, montant REAL)')
 try:
     c.execute('ALTER TABLE users ADD COLUMN paye INTEGER DEFAULT 0')
+    c.execute('ALTER TABLE users ADD COLUMN montant REAL DEFAULT 0')
     conn.commit()
 except sqlite3.OperationalError:
     pass
@@ -81,7 +83,7 @@ def afficher_login():
             try:
                 conn = get_db_connection()
                 c = conn.cursor()
-                c.execute('INSERT INTO users VALUES (?,?,?,?,?)', (email, make_hashes(password), prenom, nom, 0))
+                c.execute('INSERT INTO users VALUES (?,?,?,?,?,?)', (email, make_hashes(password), prenom, nom, 0, 0.0))
                 conn.commit()
                 conn.close()
                 st.success("تم إنشاء الحساب بنجاح! بانتظار تفعيل الإدارة.")
@@ -101,7 +103,7 @@ def afficher_login():
             else:
                 st.error("الإيميل غير مسجل.")
 
-# 5. دوال العرض والمنطق (كما هي تماماً)
+# 5. دوال العرض والمنطق
 def عرض_الشعار_الكبير():
     if os.path.exists("logo.jpeg"):
         col1, col2, col3 = st.columns([1, 10, 1])
@@ -109,15 +111,32 @@ def عرض_الشعار_الكبير():
             st.image("logo.jpeg", width=1000)
 
 def admin_panel():
-    st.markdown("## 🛠 لوحة تحكم الأدمن")
-    email_to_activate = st.text_input("إيميل التلميذ لتفعيله:")
-    if st.button("تفعيل الحساب (الدفع)"):
+    st.markdown("## 🛠 لوحة تحكم الأدمن والمالية")
+    
+    conn = get_db_connection()
+    df = pd.read_sql_query("SELECT * FROM users", conn)
+    conn.close()
+    
+    st.write("### 📋 قائمة المستخدمين المسجلين:")
+    st.dataframe(df)
+    
+    csv = df.to_csv(index=False).encode('utf-8')
+    st.download_button(label="📥 تحميل قائمة العملاء (CSV)", data=csv, file_name='clients_data.csv', mime='text/csv')
+    
+    st.markdown("---")
+    st.write("### ⚙️ تفعيل حساب وتحديث المبلغ:")
+    email_to_act = st.text_input("إيميل التلميذ لتفعيله:")
+    montant_paye = st.number_input("المبلغ المدفوع (DA):", min_value=0.0)
+    
+    if st.button("تأكيد التفعيل والمبلغ"):
         conn = get_db_connection()
         c = conn.cursor()
-        c.execute('UPDATE users SET paye = 1 WHERE email = ?', (email_to_activate,))
+        c.execute('UPDATE users SET paye = 1, montant = ? WHERE email = ?', (montant_paye, email_to_act))
         conn.commit()
         conn.close()
-        st.success(f"تم تفعيل الحساب بنجاح لـ: {email_to_activate}")
+        st.success(f"تم تفعيل الحساب وتحديث المبلغ لـ: {email_to_act}")
+        st.rerun()
+        
     if st.button("خروج من لوحة التحكم"):
         st.session_state.connecte = False
         st.session_state.is_admin = False
@@ -149,9 +168,7 @@ else:
             conn.close()
             
             if result and result[0] == 1:
-                # محتوى المنصة للأعضاء
                 st.markdown("<h1 style='text-align: center; color: white;'>🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈</h1>", unsafe_allow_html=True)
-                # (أضف هنا بقية محتوى القائمة الرئيسية والدوال...)
                 if st.button("🚪 تسجيل الخروج"):
                     st.session_state.connecte = False
                     st.rerun()
