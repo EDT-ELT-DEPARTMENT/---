@@ -2,10 +2,10 @@ import streamlit as st
 import os
 
 # 1. إعداد الصفحة
+st.set_page_config(page_title="المنصة التعليمية قِصَّتِي دِرَاسَتِي", layout="wide")
 st.markdown("<h1 style='text-align: center; color: white;'>🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: #FFD700; font-size: 20px; font-weight: withe;'>جميع هذه الدروس مطابقة تماماً للمناهج التعليمية الوطنية الجزائرية</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #FFD700; font-size: 20px; font-weight: bold;'>جميع هذه الدروس مطابقة تماماً للمناهج التعليمية الوطنية الجزائرية</p>", unsafe_allow_html=True)
 st.markdown("<br>", unsafe_allow_html=True)
-
 
 # 2. تهيئة الحالة (Session State)
 if "الصفحة_الحالية" not in st.session_state:
@@ -43,7 +43,6 @@ def تشغيل_لعبة_الدرس(اسم_الدرس, مستوى_السنة):
     if data:
         st.markdown(f"### 🎮 تحدي: {data['سؤال']}")
         choix = st.radio("اختر الإجابة:", data['خيارات'], key=f"radio_{اسم_الدرس}_{مستوى_السنة}")
-        
         if st.button("تحقق من إجابتي!", key=f"btn_check_{اسم_الدرس}_{مستوى_السنة}"):
             if choix == data['إجابة']:
                 st.session_state.نقاط[مستوى_السنة] += 10
@@ -63,116 +62,63 @@ def عرض_محتوى_الدرس(اسم_الدرس):
     annee = st.selectbox("اختر السنة الدراسية:", [1, 2, 3, 4, 5], key=f"select_{اسم_الدرس}")
     تشغيل_لعبة_الدرس(اسم_الدرس, annee)
     st.markdown("</div>", unsafe_allow_html=True)
+
 def afficher_fiche_interactive():
     st.markdown("<div class='content-card'>", unsafe_allow_html=True)
     st.markdown("<h2 style='text-align: center; color: #6a11cb;'>📖 رحلة القلم الصغير في مدينة الكلمات</h2>", unsafe_allow_html=True)
-    
     st.write("""
     في **"مدينة الكلمات"**، يعيش ثلاثة أنواع من المواطنين:
-    1. **الاسم:** (مثل: مدرسة، محمد، قلم). هو كائن ثابت، له اسم ونوع، لا يتغير ولا يرتبط بزمن.
-    2. **الفعل:** (مثل: يذهب، كتب، ادرس). هو كائن حيّ، يحب الحركة، ويرتبط دائماً بزمن (ماضي، مضارع، أو أمر).
-    3. **الحرف:** (مثل: في، على، من). هو "جسر العبور"، لا معنى له بمفرده، لكنه يربط الكلمات ببعضها لتكتمل الجملة.
-    
-    **حوار الرحلة:**
-    التقى القلم (اسم) بـ 'يذهب' (فعل)، فقال له: "لماذا تجري يا صديقي؟"
-    رد الفعل: "لأني أبحث عن زمن! أما أنت يا قلم فمكانك ثابت في الحقيبة."
-    ظهر الحرف 'في' وقال: "بدوني لا يمكنكما تكوين جملة مفيدة: *القلم في الحقيبة*!"
+    1. **الاسم:** هو كائن ثابت، له اسم ونوع، لا يتغير ولا يرتبط بزمن.
+    2. **الفعل:** هو كائن حيّ، يحب الحركة، ويرتبط دائماً بزمن.
+    3. **الحرف:** هو 'جسر العبور'، يربط الكلمات ببعضها لتكتمل الجملة.
     """)
-    
     st.markdown("---")
     st.markdown("### 🛠️ قاعدة ذهبية للتعلم:")
     col1, col2, col3 = st.columns(3)
     col1.info("**الاسم:** إنسان، حيوان، نبات، جماد.")
     col2.info("**الفعل:** حدث مقترن بزمن.")
     col3.info("**الحرف:** يربط بين الكلمات.")
-    
-    # إضافة الأزرار في سطر واحد
     c1, c2 = st.columns(2)
-    with c1:
-        if st.button("⬅ العودة للقائمة", key="back_fiche"):
-            st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
-            st.rerun()
-    with c2:
-        if st.button("🎬 الانتقال للسينما مباشرة ➔", key="go_cinema"):
-            st.session_state.الصفحة_الحالية = "Cinema_Grammaire"
-            st.rerun()
-            
+    if c1.button("⬅ العودة للقائمة", key="back_fiche"): st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"; st.rerun()
+    if c2.button("🎬 الانتقال للسينما مباشرة ➔", key="go_cinema"): st.session_state.الصفحة_الحالية = "Cinema_Grammaire"; st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
+
 def عرض_سينما_القواعد():
-   st.markdown("<div class='content-card'>", unsafe_allow_html=True)
-   st.markdown("<h2 style='text-align: center; color: #FF4B4B;'>🎬 سينما القواعد: حارس غابة الكلمات</h2>", unsafe_allow_html=True)
-    
-   # القصة الجذابة
-   st.write("""
-   ### 🌲 مغامرة في غابة الكلمات:
-   في قديم الزمان، كانت الكلمات تعيش في غابة سحرية. لكن فجأة، اختلطت الأسماء بالأفعال!
-   بطلنا **'قلم'** هو الحارس الشجاع، انطلق في رحلته ليعيد النظام بمساعدة **'الفيديو السحري'** أدناه.
-   """)
-    
-   # إضافة الفيديو (يمكنك استبدال الرابط برابط فيديو يوتيوب تعليمي)
-   st.video("https://www.youtube.com/watch?v=9_6A_M542u8") # مثال لفيديو أقسام الكلمة
-    
-   if st.button("⬅ العودة للقائمة", key="back_cinema"):
-       st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
-       st.rerun()
-   st.markdown("</div>", unsafe_allow_html=True)   
-# 5. التنسيق (هذا الجزء يحل مشكلة اليمين إلى اليسار)
+    st.markdown("<div class='content-card'>", unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align: center; color: #FF4B4B;'>🎬 سينما القواعد: حارس غابة الكلمات</h2>", unsafe_allow_html=True)
+    st.video("https://www.youtube.com/watch?v=9_6A_M542u8")
+    if st.button("⬅ العودة للقائمة", key="back_cinema"):
+        st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
+        st.rerun()
+    st.markdown("</div>", unsafe_allow_html=True)
+
+# 5. التنسيق
 css_style = """
 <style>
-    /* جعل واجهة التطبيق بالكامل من اليمين إلى اليسار */
-    html, body, [data-testid="stAppViewContainer"] {
-        direction: rtl !important;
-        text-align: right !important;
-    }
-    
-    /* تنسيق البطاقات التعليمية */
-    .content-card { 
-        background-color: rgba(255,255,255,0.95); 
-        padding: 40px; 
-        border-radius: 30px; 
-        color: #333; 
-    }
-    
-    /* ضمان محاذاة كل النصوص للعناوين */
-    h1, h2, h3, h4, p, div {
-        text-align: right !important;
-    }
-    
-    /* محاذاة القوائم المنسدلة */
-    .stSelectbox, .stRadio {
-        text-align: right !important;
-    }
+    html, body, [data-testid="stAppViewContainer"] { direction: rtl !important; text-align: right !important; }
+    .content-card { background-color: rgba(255,255,255,0.95); padding: 40px; border-radius: 30px; color: #333; }
+    h1, h2, h3, h4, p, div { text-align: right !important; }
 </style>
 """
 st.markdown(css_style, unsafe_allow_html=True)
-# 2. منطق التنقل (استبدل القسم 6 بهذا الجزء)
+
+# 6. منطق التنقل
 if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
     عرض_الشعار_الكبير()
-    st.title("🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈")
-    st.markdown("<p style='text-align: center; color: #FFD700; font-size: 20px; font-weight: bold;'>جميع هذه الدروس مطابقة تماماً للمناهج التعليمية الوطنية الجزائرية</p>", unsafe_allow_html=True)
-    c1, c2, c3, c4, c5 = st.columns(5) 
+    c1, c2, c3, c4, c5 = st.columns(5)
     if c1.button("🌟 دروس", key="b1"): st.session_state.الصفحة_الحالية = "الدرس_الأول"; st.rerun()
     if c2.button("🏰 حصن", key="b2"): st.session_state.الصفحة_الحالية = "الدرس_الثاني"; st.rerun()
     if c3.button("📜 قصة", key="b4"): st.session_state.الصفحة_الحالية = "Fiche_Vocabulaire"; st.rerun()
     if c4.button("🎬 سينما", key="b5"): st.session_state.الصفحة_الحالية = "Cinema_Grammaire"; st.rerun()
     if c5.button("🏆 لوحة", key="b3"): st.session_state.الصفحة_الحالية = "لوحة_الإنجازات"; st.rerun()
 
-elif st.session_state.الصفحة_الحالية == "الدرس_الأول":
-    عرض_محتوى_الدرس("أقسام الكلمة")
-
-elif st.session_state.الصفحة_الحالية == "الدرس_الثاني":
-    عرض_محتوى_الدرس("الجملة الاسمية والفعلية")
-elif st.session_state.الصفحة_الحالية == "Cinema_Grammaire":
-    عرض_سينما_القواعد()
-elif st.session_state.الصفحة_الحالية == "Fiche_Vocabulaire":
-    afficher_fiche_interactive()
-
+elif st.session_state.الصفحة_الحالية == "الدرس_الأول": عرض_محتوى_الدرس("أقسام الكلمة")
+elif st.session_state.الصفحة_الحالية == "الدرس_الثاني": عرض_محتوى_الدرس("الجملة الاسمية والفعلية")
+elif st.session_state.الصفحة_الحالية == "Cinema_Grammaire": عرض_سينما_القواعد()
+elif st.session_state.الصفحة_الحالية == "Fiche_Vocabulaire": afficher_fiche_interactive()
 elif st.session_state.الصفحة_الحالية == "لوحة_الإنجازات":
     st.markdown("<div class='content-card'>", unsafe_allow_html=True)
-    st.markdown("<h2>🏆 لوحة الإنجازات حسب المستوى</h2>", unsafe_allow_html=True)
-    for annee, score in st.session_state.نقاط.items():
-        st.write(f"### السنة {annee}: {score} نقطة")
-    total = sum(st.session_state.نقاط.values())
-    st.markdown(f"--- \n ### 🌟 المجموع الكلي: {total} نقطة")
-    if st.button("⬅ العودة للقائمة", key="back_final"): st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"; st.rerun()
+    st.markdown("<h2>🏆 لوحة الإنجازات</h2>", unsafe_allow_html=True)
+    for annee, score in st.session_state.نقاط.items(): st.write(f"### السنة {annee}: {score} نقطة")
+    if st.button("⬅ العودة", key="back_final"): st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"; st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
