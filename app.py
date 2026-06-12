@@ -97,33 +97,6 @@ def afficher_page_hamza():
         st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
-def afficher_page_hamza():
-    st.markdown("<div class='content-card'>", unsafe_allow_html=True)
-    head_col1, head_col2 = st.columns([4, 1])
-    with head_col1:
-        st.markdown("<h2 style='margin-top: 50px;'>✍️ قواعدي في قصتي (الهمزة)</h2>", unsafe_allow_html=True)
-    with head_col2:
-        st.markdown("<div style='font-size: 80px; text-align: center;'>✍️</div>")
-    
-    tab1, tab2 = st.tabs(["📖 قصة صراع الحركات", "✍️ قواعد الهمزة"])
-    
-    with tab1:
-        st.markdown("<h3 style='text-align: center;'>📖 قصة: صراع الحركات في مدينة الهمزة</h3>", unsafe_allow_html=True)
-        st.write("في مدينةِ الحروف، كانت الهمزةُ المتوسطة تعيشُ في حيرةٍ من أمرها، فهي لا تعرفُ أين تجلس! قررَت الحركاتُ أن تقيمَ مسابقةً لتعرفَ من هي الأقوى لتفوز بكرسي الهمزة.")
-        st.markdown("### 💡 جدول قوة الحركات:")
-        st.markdown("| الترتيب | الحركة | ما يناسبها |\n| :--- | :--- | :--- |\n| 1 (الأقوى) | الكسرة | النبرة (ئـ) |\n| 2 | الضمة | الواو (ؤ) |\n| 3 | الفتحة | الألف (أ) |\n| 4 | السكون | على السطر (ء) |")
-        
-    with tab2:
-        st.markdown("<h3 style='text-align: center;'>✍️ قواعد الهمزة للسنة الرابعة</h3>", unsafe_allow_html=True)
-        st.write("### 1. الهمزة في أول الكلمة:\n- **همزة الوصل (ا):** تظهر في بداية الكلمة ولا تُنطق في وسط الكلام.\n- **همزة القطع (أ / إ):** تُكتب وتُنطق بوضوح دائماً.")
-        st.write("### 2. الهمزة المتوسطة:\nتعتمد كتابتها على أقوى الحركات.")
-        st.write("### 3. الهمزة المتطرفة:\nتكتب في آخر الكلمة حسب حركة الحرف الذي قبلها فقط.")
-    
-    st.markdown("---")
-    if st.button("⬅ العودة للقائمة", key="back_hamza_btn"):
-        st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
-        st.rerun()
-    st.markdown("</div>", unsafe_allow_html=True)
 
 def عرض_سينما_القواعد():
     st.markdown("<div class='content-card'>", unsafe_allow_html=True)
