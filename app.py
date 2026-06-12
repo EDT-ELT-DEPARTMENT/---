@@ -62,16 +62,12 @@ def عرض_محتوى_الدرس(اسم_الدرس):
 def afficher_page_hamza():
     st.markdown("<div class='content-card'>", unsafe_allow_html=True)
     
-    # استخدام Iframe لعرض الأنميشن بدون مكتبات خارجية
-    lottie_html = """
-    <iframe src="https://lottie.host/embed/802b545d-7a0e-436d-8a4a-1010376d5402/A8Dq5Jp6E0.json" width="150" height="150" frameborder="0"></iframe>
-    """
-    
+    # تم حذف الرابط الخارجي المسبب للمشكلة واستبداله بعنوان توضيحي جذاب
     head_col1, head_col2 = st.columns([4, 1])
     with head_col1:
         st.markdown("<h2 style='margin-top: 50px;'>✍️ قواعدي في قصتي (الهمزة)</h2>", unsafe_allow_html=True)
     with head_col2:
-        st.components.v1.html(lottie_html, height=150)
+        st.markdown("<div style='font-size: 80px; text-align: center;'>✍️</div>")
     
     tab1, tab2 = st.tabs(["📖 قصة صراع الحركات", "✍️ قواعد الهمزة"])
     
@@ -91,7 +87,8 @@ def afficher_page_hamza():
         | 3 | الفتحة | الألف (أ) |
         | 4 | السكون | على السطر (ء) |
         """)
-        # 
+        # هنا يمكنك إضافة مخطط توضيحي لفهم تسلسل القوة
+        
         
     with tab2:
         st.markdown("<h3 style='text-align: center;'>✍️ قواعد الهمزة للسنة الرابعة</h3>", unsafe_allow_html=True)
