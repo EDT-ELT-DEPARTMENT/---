@@ -99,21 +99,6 @@ if st.session_state.الصفحة_الحالية == "القائمة_الرئيس�
         st.session_state.الصفحة_الحالية = "لوحة_الإنجازات"
         st.rerun()
 
-# 5. دالة عرض محتوى الدرس المحدثة
-def عرض_محتوى_الدرس(اسم_الدرس):
-    st.markdown("<div class='content-card'>", unsafe_allow_html=True)
-    if st.button("⬅ العودة للقائمة"):
-        st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
-        st.rerun()
-    
-    st.markdown(f"<h2 style='text-align: center;'>{اسم_الدرس}</h2>", unsafe_allow_html=True)
-    annee = st.selectbox("اختر السنة الدراسية:", [1, 2, 3, 4, 5])
-    
-    # عرض اللعبة
-    تشغيل_لعبة_الدرس(اسم_الدرس, annee)
-        
-    st.markdown("</div>", unsafe_allow_html=True)
-
 # 3. CSS المخصص
 css_style = """
 <style>
