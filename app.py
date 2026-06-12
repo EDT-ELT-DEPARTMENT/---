@@ -184,10 +184,20 @@ css_style = """
 st.markdown(css_style, unsafe_allow_html=True)
 
 # 8. المنطق الرئيسي
+# 8. المنطق الرئيسي
 if not st.session_state.connecte:
     afficher_login()
 else:
-    st.markdown("<h1 style='text-align: center; color: white;'>🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈</h1>", unsafe_allow_html=True)
+    # إضافة زر تسجيل الخروج في الأعلى
+    col_header, col_logout = st.columns([6, 1])
+    with col_header:
+        st.markdown("<h1 style='text-align: center; color: white;'>🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈</h1>", unsafe_allow_html=True)
+    with col_logout:
+        if st.button("🚪 تسجيل الخروج"):
+            st.session_state.connecte = False
+            st.session_state.nom_eleve = ""
+            st.rerun()
+
     st.write(f"### أهلاً بك يا بطل/بطلة: {st.session_state.nom_eleve}")
     
     if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
