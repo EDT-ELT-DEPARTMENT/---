@@ -78,25 +78,43 @@ def عرض_محتوى_الدرس(اسم_الدرس):
 
 def afficher_fiche_interactive():
     st.markdown("<div class='content-card'>", unsafe_allow_html=True)
-    st.markdown("<h2 style='text-align: center; color: #6a11cb;'>📖 رحلة القلم الصغير في مدينة الكلمات</h2>", unsafe_allow_html=True)
-    st.write("في 'مدينة الكلمات'، يعيش ثلاثة أنواع من المواطنين: الاسم، الفعل، والحرف.")
-    st.markdown("### 🛠️ قاعدة ذهبية للتعلم:")
-    col1, col2, col3 = st.columns(3)
-    col1.info("**الاسم:** إنسان، حيوان، نبات، جماد.")
-    col2.info("**الفعل:** حدث مقترن بزمن.")
-    col3.info("**الحرف:** يربط بين الكلمات.")
-    c1, c2 = st.columns(2)
-    if c1.button("⬅ العودة للقائمة", key="back_fiche"): st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"; st.rerun()
-    if c2.button("🎬 الانتقال للسينما مباشرة ➔", key="go_cinema"): st.session_state.الصفحة_الحالية = "Cinema_Grammaire"; st.rerun()
-    st.markdown("</div>", unsafe_allow_html=True)
+    
+    # استخدام التبويبات للدمج بين القصة والهمزة
+    tab1, tab2 = st.tabs(["📖 رحلة القلم الصغير", "✍️ قواعد الهمزة"])
+    
+    with tab1:
+        st.markdown("<h2 style='text-align: center; color: #6a11cb;'>📖 رحلة القلم الصغير في مدينة الكلمات</h2>", unsafe_allow_html=True)
+        st.write("""
+        في **"مدينة الكلمات"**، يعيش ثلاثة أنواع من المواطنين:
+        1. **الاسم:** كائن ثابت لا يرتبط بزمن.
+        2. **الفعل:** كائن حركي يرتبط بزمن.
+        3. **الحرف:** جسر للربط بين الكلمات.
+        """)
+        st.markdown("### 🛠️ قاعدة ذهبية للتعلم:")
+        col1, col2, col3 = st.columns(3)
+        col1.info("**الاسم:** إنسان، حيوان، نبات، جماد.")
+        col2.info("**الفعل:** حدث مقترن بزمن.")
+        col3.info("**الحرف:** يربط بين الكلمات.")
 
-def عرض_سينما_القواعد():
-    st.markdown("<div class='content-card'>", unsafe_allow_html=True)
-    st.markdown("<h2 style='text-align: center; color: #FF4B4B;'>🎬 سينما القواعد: حارس غابة الكلمات</h2>", unsafe_allow_html=True)
-    st.video("https://www.youtube.com/watch?v=9_6A_M542u8")
-    if st.button("⬅ العودة للقائمة", key="back_cinema"):
+    with tab2:
+        st.markdown("<h2 style='text-align: center; color: #2c3e50;'>✍️ قواعد الهمزة للسنة الرابعة</h2>", unsafe_allow_html=True)
+        st.write("""
+        - **الهمزة في أول الكلمة:** همزة وصل (ا) لا تُنطق وسط الكلام، وهمزة قطع (أ/إ) تُنطق دائماً.
+        - **الهمزة المتوسطة:** تعتمد على أقوى الحركات.
+        - **الهمزة المتطرفة:** تعتمد على حركة الحرف الذي قبلها فقط.
+        """)
+        
+
+    st.markdown("---")
+    # الأزرار في الأسفل
+    c1, c2 = st.columns(2)
+    if c1.button("⬅ العودة للقائمة", key="back_fiche"): 
         st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
         st.rerun()
+    if c2.button("🎬 الانتقال للسينما ➔", key="go_cinema"): 
+        st.session_state.الصفحة_الحالية = "Cinema_Grammaire"
+        st.rerun()
+        
     st.markdown("</div>", unsafe_allow_html=True)
 
 # 5. التنسيق
