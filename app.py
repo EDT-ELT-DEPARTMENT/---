@@ -66,11 +66,14 @@ if "الصفحة_الحالية" not in st.session_state:
     st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
 
 # 5. بناء واجهة الصفحات
+# 5. بناء واجهة الصفحات
 if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
     عرض_الشعار_الكبير()
     st.markdown("<h1 style='text-align: center; color: white;'>🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈</h1>", unsafe_allow_html=True)
     
-    # استبدال st.write("<br>") بهذا السطر لإضافة مسافة حقيقية بدون ظهور كلمة br
+    # الجملة الجديدة المضافة
+    st.markdown("<p style='text-align: center; color: #FFD700; font-size: 20px; font-weight: bold;'>جميع هذه الدروس مطابقة تماماً للمناهج التعليمية الوطنية الجزائرية</p>", unsafe_allow_html=True)
+    
     st.markdown("<br>", unsafe_allow_html=True) 
     
     c1, c2, c3 = st.columns([1, 1, 1])
