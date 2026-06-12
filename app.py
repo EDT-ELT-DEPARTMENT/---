@@ -70,7 +70,9 @@ if st.session_state.الصفحة_الحالية == "القائمة_الرئيس�
     عرض_الشعار_الكبير()
     st.markdown("<h1 style='text-align: center; color: white;'>🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈</h1>", unsafe_allow_html=True)
     
-    st.write("<br>")
+    # استبدال st.write("<br>") بهذا السطر لإضافة مسافة حقيقية بدون ظهور كلمة br
+    st.markdown("<br>", unsafe_allow_html=True) 
+    
     c1, c2, c3 = st.columns([1, 1, 1])
     with c1:
         if st.button("🌟 دروس مرجعية"):
