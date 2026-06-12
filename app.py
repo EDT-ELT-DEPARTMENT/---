@@ -101,8 +101,9 @@ elif st.session_state.الصفحة_الحالية == "لوحة_الإنجازا�
     for annee, score in st.session_state.نقاط.items():
         st.write(f"### السنة {annee}: {score} نقطة")
     total = sum(st.session_state.نقاط.values())
+elif st.session_state.الصفحة_الحالية == "Fiche_Vocabulaire":
+    afficher_fiche_interactive()
     st.markdown(f"--- \n ### 🌟 المجموع الكلي: {total} نقطة")
     if st.button("⬅ العودة للقائمة", key="back_final"): st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"; st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
-elif st.session_state.الصفحة_الحالية == "Fiche_Vocabulaire":
-    afficher_fiche_interactive()
+
