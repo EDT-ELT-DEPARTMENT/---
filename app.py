@@ -4,10 +4,20 @@ import sqlite3
 import hashlib
 
 # 1. إعداد قاعدة البيانات
+# 1. إعداد قاعدة البيانات
 conn = sqlite3.connect('users.db')
 c = conn.cursor()
-# تمت إضافة عمود paye (0 = غير مدفوع، 1 = مدفوع)
+
+# إنشاء الجدول إذا لم يكن موجوداً
 c.execute('CREATE TABLE IF NOT EXISTS users (email TEXT PRIMARY KEY, password TEXT, nom TEXT, prenom TEXT, paye INTEGER)')
+
+# محاولة إضافة عمود paye إذا كان الجدول قديماً (هذا يمنع ظهور الخطأ)
+try:
+    c.execute('ALTER TABLE users ADD COLUMN paye INTEGER DEFAULT 0')
+    conn.commit()
+except sqlite3.OperationalError:
+    pass # العمود موجود بالفعل، لا توجد مشكلة
+
 conn.commit()
 
 # وظائف تشفير كلمة المرور
