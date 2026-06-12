@@ -63,27 +63,42 @@ def عرض_محتوى_الدرس(اسم_الدرس):
     annee = st.selectbox("اختر السنة الدراسية:", [1, 2, 3, 4, 5], key=f"select_{اسم_الدرس}")
     تشغيل_لعبة_الدرس(اسم_الدرس, annee)
     st.markdown("</div>", unsafe_allow_html=True)
+# 1. الدالة المحدثة للقصة (ضع هذه في قسم الدوال)
 def afficher_fiche_interactive():
     st.markdown("<div class='content-card'>", unsafe_allow_html=True)
-    st.markdown("<h2 style='text-align: center;'>📖 رحلة القلم الصغير</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align: center; color: #6a11cb;'>📖 رحلة القلم الصغير في مدينة الكلمات</h2>", unsafe_allow_html=True)
+    
     st.write("""
-    كان يا مكان، في عالم الكلمات الملون، التقى القلم بـ 'يذهب' (الفعل) 
-    الذي كان يجري بسرعة! ثم التقى بـ 'مدرسة' (الاسم) التي علمته الثبات.
+    في **"مدينة الكلمات"**، يعيش ثلاثة أنواع من المواطنين:
+    1. **الاسم:** (مثل: مدرسة، محمد، قلم). هو كائن ثابت، له اسم ونوع، لا يتغير ولا يرتبط بزمن.
+    2. **الفعل:** (مثل: يذهب، كتب، ادرس). هو كائن حيّ، يحب الحركة، ويرتبط دائماً بزمن (ماضي، مضارع، أو أمر).
+    3. **الحرف:** (مثل: في، على، من). هو "جسر العبور"، لا معنى له بمفرده، لكنه يربط الكلمات ببعضها لتكتمل الجملة.
+    
+    **حوار الرحلة:**
+    التقى القلم (اسم) بـ 'يذهب' (فعل)، فقال له: "لماذا تجري يا صديقي؟"
+    رد الفعل: "لأني أبحث عن زمن! أما أنت يا قلم فمكانك ثابت في الحقيبة."
+    ظهر الحرف 'في' وقال: "بدوني لا يمكنكما تكوين جملة مفيدة: *القلم في الحقيبة*!"
     """)
+    
+    st.markdown("---")
+    st.markdown("### 🛠️ قاعدة ذهبية للتعلم:")
+    col1, col2, col3 = st.columns(3)
+    col1.info("**الاسم:** إنسان، حيوان، نبات، جماد.")
+    col2.info("**الفعل:** حدث مقترن بزمن.")
+    col3.info("**الحرف:** يربط بين الكلمات.")
+    
     if st.button("⬅ العودة للقائمة", key="back_fiche"):
         st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
 
-# 5. التنسيق
-css_style = "<style>.content-card { background-color: rgba(255,255,255,0.95); padding: 40px; border-radius: 30px; color: #333; }</style>"
-st.markdown(css_style, unsafe_allow_html=True)
-
-# 6. منطق التنقل
+# 2. منطق التنقل (استبدل القسم 6 بهذا الجزء)
 if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
     عرض_الشعار_الكبير()
     st.title("🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈")
-    c1, c2, c3, c4 = st.columns(4) # Ajout d'une 4ème colonne
+    st.markdown("<p style='text-align: center; color: #FFD700; font-size: 20px; font-weight: bold;'>جميع هذه الدروس مطابقة تماماً للمناهج التعليمية الوطنية الجزائرية</p>", unsafe_allow_html=True)
+    
+    c1, c2, c3, c4 = st.columns(4)
     if c1.button("🌟 دروس", key="b1"): st.session_state.الصفحة_الحالية = "الدرس_الأول"; st.rerun()
     if c2.button("🏰 حصن", key="b2"): st.session_state.الصفحة_الحالية = "الدرس_الثاني"; st.rerun()
     if c3.button("📜 قصة", key="b4"): st.session_state.الصفحة_الحالية = "Fiche_Vocabulaire"; st.rerun()
@@ -95,6 +110,9 @@ elif st.session_state.الصفحة_الحالية == "الدرس_الأول":
 elif st.session_state.الصفحة_الحالية == "الدرس_الثاني":
     عرض_محتوى_الدرس("الجملة الاسمية والفعلية")
 
+elif st.session_state.الصفحة_الحالية == "Fiche_Vocabulaire":
+    afficher_fiche_interactive()
+
 elif st.session_state.الصفحة_الحالية == "لوحة_الإنجازات":
     st.markdown("<div class='content-card'>", unsafe_allow_html=True)
     st.markdown("<h2>🏆 لوحة الإنجازات حسب المستوى</h2>", unsafe_allow_html=True)
@@ -104,5 +122,3 @@ elif st.session_state.الصفحة_الحالية == "لوحة_الإنجازا�
     st.markdown(f"--- \n ### 🌟 المجموع الكلي: {total} نقطة")
     if st.button("⬅ العودة للقائمة", key="back_final"): st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"; st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
-elif st.session_state.الصفحة_الحالية == "Fiche_Vocabulaire":
-    afficher_fiche_interactive()
