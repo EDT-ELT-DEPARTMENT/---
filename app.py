@@ -1,20 +1,8 @@
 import streamlit as st
 import os
-import requests
-from streamlit_lottie import st_lottie
 
 # 1. إعداد الصفحة
 st.set_page_config(page_title="المنصة التعليمية قِصَّتِي دِرَاسَتِي", layout="wide")
-
-# دالة تحميل الرسوم المتحركة (Lottie) من الرابط
-def load_lottieurl(url: str):
-    r = requests.get(url)
-    if r.status_code != 200:
-        return None
-    return r.json()
-
-# تحميل أنميشن القلم (رابط تفاعلي)
-lottie_pen = load_lottieurl("https://lottie.host/802b545d-7a0e-436d-8a4a-1010376d5402/A8Dq5Jp6E0.json")
 
 # الهيدر الرئيسي للمنصة
 st.markdown("<h1 style='text-align: center; color: white;'>🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈</h1>", unsafe_allow_html=True)
@@ -74,15 +62,17 @@ def عرض_محتوى_الدرس(اسم_الدرس):
 def afficher_page_hamza():
     st.markdown("<div class='content-card'>", unsafe_allow_html=True)
     
-    # عرض العنوان مع أنميشن القلم بجانبه
+    # القلم المتحرك عبر HTML مباشر (لا يحتاج مكتبات)
+    lottie_html = """
+    <iframe src="https://lottie.host/embed/802b545d-7a0e-436d-8a4a-1010376d5402/A8Dq5Jp6E0.json" width="150" height="150" frameborder="0"></iframe>
+    """
+    
     head_col1, head_col2 = st.columns([4, 1])
     with head_col1:
         st.markdown("<h2 style='margin-top: 50px;'>✍️ قواعدي في قصتي (الهمزة)</h2>", unsafe_allow_html=True)
     with head_col2:
-        if lottie_pen:
-            st_lottie(lottie_pen, height=150, key="pen_animation")
+        st.components.v1.html(lottie_html, height=150)
     
-    # التبويبات للدمج بين القصة والقاعدة
     tab1, tab2 = st.tabs(["📖 قصة صراع الحركات", "✍️ قواعد الهمزة"])
     
     with tab1:
@@ -95,6 +85,10 @@ def afficher_page_hamza():
         - **الفتحةُ:** حركة رقيقة، وتناسبها 'الألف' (أ).
         **القاعدةُ الذهبية:** الهمزةُ المتوسطةُ لا تجلسُ إلا في مكانِ الحركةِ الأقوى: (الكسرة تليها الضمة ثم الفتحة ثم السكون).
         """)
+        # المخطط الانسيابي لفهم الترتيب
+        st.markdown("---")
+        st.info("💡 مخطط قوة الحركات:")
+        
         
     with tab2:
         st.markdown("<h3 style='text-align: center;'>✍️ قواعد الهمزة للسنة الرابعة</h3>", unsafe_allow_html=True)
@@ -125,34 +119,13 @@ def عرض_سينما_القواعد():
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
 
-# 5. التنسيق (CSS المحسن والمصحح)
 # 5. التنسيق
 css_style = """
 <style>
-    /* التأكد من اتجاه الصفحة لليمين */
-    html, body, [data-testid="stAppViewContainer"] { 
-        direction: rtl !important; 
-    }
-    
-    /* تنسيق البطاقة وتبرير النصوص */
-    .content-card { 
-        background-color: rgba(255,255,255,0.95); 
-        padding: 40px; 
-        border-radius: 30px; 
-        color: #333; 
-        text-align: justify !important; /* هذا هو التعديل الأهم لتبرير النص */
-    }
-    
-    /* تنسيق عام للعناصر لضمان عدم وجود خلل في المحاذاة */
-    h1, h2, h3, h4, p, li, div, .stButton { 
-        text-align: right !important; 
-    }
-    
-    /* تكبير حجم الخط ووضوح النصوص */
-    p, li, .stMarkdown { 
-        font-size: 22px !important; 
-        line-height: 1.6 !important; /* مسافة مريحة بين الأسطر */
-    }
+    html, body, [data-testid="stAppViewContainer"] { direction: rtl !important; }
+    .content-card { background-color: rgba(255,255,255,0.95); padding: 40px; border-radius: 30px; color: #333; text-align: justify !important; }
+    h1, h2, h3, h4, p, li, div, .stButton { text-align: right !important; }
+    p, li, .stMarkdown { font-size: 22px !important; line-height: 1.6 !important; }
 </style>
 """
 st.markdown(css_style, unsafe_allow_html=True)
