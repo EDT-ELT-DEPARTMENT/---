@@ -127,40 +127,45 @@ def admin_panel():
     st.write("### 📋 قائمة المستخدمين المسجلين:")
     st.dataframe(df)
     
-    # تحسين أزرار التحميل بـ keys فريدة
+    # تحضير البيانات للتحميل
     csv = df.to_csv(index=False).encode('utf-8')
-    st.download_button(label="📥 تحميل قائمة العملاء (CSV)", data=csv, file_name='clients_data.csv', mime='text/csv', key="download_csv")
+    
+    import io
+    # Excel
+    buffer = io.BytesIO()
+    with pd.ExcelWriter(buffer, engine='openpyxl') as writer:
+        df.to_excel(writer, index=False, sheet_name='Clients')
+    excel_data = buffer.getvalue()
+    
+    # HTML
+    html_data = df.to_html(index=False, classes='table table-striped', border=1)
+
+    # وضع الأزرار بشكل أفقي
+    st.write("#### 📥 تحميل البيانات:")
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.download_button(label="📄 تحميل (CSV)", data=csv, file_name='clients.csv', mime='text/csv', key="csv_btn")
+    with col2:
+        st.download_button(label="📊 تحميل (Excel)", data=excel_data, file_name="clients.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", key="xlsx_btn")
+    with col3:
+        st.download_button(label="🌐 تحميل (HTML)", data=html_data, file_name="clients.html", mime="text/html", key="html_btn")
     
     st.markdown("---")
     st.write("### ⚙️ تفعيل حساب وتحديث المبلغ:")
-    email_to_act = st.text_input("إيميل التلميذ لتفعيله:", key="email_input")
-    montant_paye = st.number_input("المبلغ المدفوع (DA):", min_value=0.0, key="amount_input")
+    email_to_act = st.text_input("إيميل التلميذ لتفعيله:", key="email_admin")
+    montant_paye = st.number_input("المبلغ المدفوع (DA):", min_value=0.0, key="amount_admin")
     
-    # إضافة key فريد للزر لمنع الخطأ
-    if st.button("تأكيد التفعيل والمبلغ", key="confirm_btn"):
+    if st.button("✅ تأكيد التفعيل والمبلغ", key="confirm_admin"):
         conn = get_db_connection()
         c = conn.cursor()
         c.execute('UPDATE users SET paye = 1, montant = ? WHERE email = ?', (montant_paye, email_to_act))
         conn.commit()
         conn.close()
-        st.success(f"تم تفعيل الحساب وتحديث المبلغ لـ: {email_to_act}")
+        st.success(f"تم تحديث بيانات التلميذ: {email_to_act}")
         st.rerun()
         
-    if st.button("خروج من لوحة التحكم", key="logout_btn"):
-        st.session_state.connecte = False
-        st.session_state.is_admin = False
-        st.rerun()    
-    
-    if st.button("تأكيد التفعيل والمبلغ"):
-        conn = get_db_connection()
-        c = conn.cursor()
-        c.execute('UPDATE users SET paye = 1, montant = ? WHERE email = ?', (montant_paye, email_to_act))
-        conn.commit()
-        conn.close()
-        st.success(f"تم تفعيل الحساب وتحديث المبلغ لـ: {email_to_act}")
-        st.rerun()
-        
-    if st.button("خروج من لوحة التحكم"):
+    if st.button("🚪 خروج", key="logout_admin"):
         st.session_state.connecte = False
         st.session_state.is_admin = False
         st.rerun()
