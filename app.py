@@ -233,5 +233,4 @@ else:
                 """)
                 if st.button("🚪 تسجيل الخروج"):
                     st.session_state.connecte = False
-                    st.rerun()
-            
+                    st.rerun()    
