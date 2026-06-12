@@ -63,7 +63,6 @@ def عرض_محتوى_الدرس(اسم_الدرس):
     annee = st.selectbox("اختر السنة الدراسية:", [1, 2, 3, 4, 5], key=f"select_{اسم_الدرس}")
     تشغيل_لعبة_الدرس(اسم_الدرس, annee)
     st.markdown("</div>", unsafe_allow_html=True)
-# 1. الدالة المحدثة للقصة (ضع هذه في قسم الدوال)
 def afficher_fiche_interactive():
     st.markdown("<div class='content-card'>", unsafe_allow_html=True)
     st.markdown("<h2 style='text-align: center; color: #6a11cb;'>📖 رحلة القلم الصغير في مدينة الكلمات</h2>", unsafe_allow_html=True)
@@ -87,9 +86,17 @@ def afficher_fiche_interactive():
     col2.info("**الفعل:** حدث مقترن بزمن.")
     col3.info("**الحرف:** يربط بين الكلمات.")
     
-    if st.button("⬅ العودة للقائمة", key="back_fiche"):
-        st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
-        st.rerun()
+    # إضافة الأزرار في سطر واحد
+    c1, c2 = st.columns(2)
+    with c1:
+        if st.button("⬅ العودة للقائمة", key="back_fiche"):
+            st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
+            st.rerun()
+    with c2:
+        if st.button("🎬 الانتقال للسينما مباشرة ➔", key="go_cinema"):
+            st.session_state.الصفحة_الحالية = "Cinema_Grammaire"
+            st.rerun()
+            
     st.markdown("</div>", unsafe_allow_html=True)
 def عرض_سينما_القواعد():
    st.markdown("<div class='content-card'>", unsafe_allow_html=True)
