@@ -39,7 +39,7 @@ def عرض_الشعار_الكبير():
     if os.path.exists("logo.jpeg"):
         col1, col2, col3 = st.columns([1, 10, 1])
         with col2:
-            st.image("logo.jpeg", width=2000)
+            st.image("logo.jpeg", width=1500)
 
 def تشغيل_لعبة_الدرس(اسم_الدرس, مستوى_السنة):
     data = محتوى_الألعاب.get(اسم_الدرس, {}).get(مستوى_السنة)
