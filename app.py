@@ -82,6 +82,18 @@ def afficher_page_hamza():
         st.write("🥈 **الضمة:** تجلس على الواو (ؤ)")
         st.write("🥉 **الفتحة:** تجلس على الألف (أ)")
         st.write("🏅 **السكون:** تجلس على السطر (ء)")
+        st.markdown("---")
+        st.write("### 🥊 ابدأ الصراع بنفسك!")
+        col_a, col_b = st.columns(2)
+        
+        with col_a:
+            if st.button("الكسرة ضد الضمة"):
+                st.success("الكسرة (ئـ) تهزم الضمة!")
+                st.balloons()
+        with col_b:
+            if st.button("الفتحة ضد السكون"):
+                st.success("الفتحة (أ) تهزم السكون!")
+                st.snow() # تأثير ثلج بسيط كبديل للأنميشن
         
     with tab2:
         st.markdown("<h3 style='text-align: center;'>✍️ قواعد الهمزة للسنة الرابعة</h3>", unsafe_allow_html=True)
