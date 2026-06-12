@@ -1,12 +1,22 @@
 import streamlit as st
 import os
-import smtplib
-import random
-from email.message import EmailMessage
+import sqlite3
+import hashlib
 
-# 1. إعداد البريد الإلكتروني (يجب ملء هذه البيانات)
-EMAIL_ADDRESS = "chef.department.elt.fge@gmail.com"
-EMAIL_PASSWORD = "gkzs pdza yodb icvd"
+# 1. إعداد قاعدة البيانات
+conn = sqlite3.connect('users.db')
+c = conn.cursor()
+c.execute('CREATE TABLE IF NOT EXISTS users (email TEXT PRIMARY KEY, password TEXT, nom TEXT, prenom TEXT)')
+conn.commit()
+
+# وظائف تشفير كلمة المرور
+def make_hashes(password):
+    return hashlib.sha256(str.encode(password)).hexdigest()
+
+def check_hashes(password, hashed_text):
+    if make_hashes(password) == hashed_text:
+        return True
+    return False
 
 # 2. إعداد الصفحة الأساسي
 st.set_page_config(page_title="المنصة التعليمية قِصَّتِي دِرَاسَتِي", layout="wide")
@@ -14,53 +24,54 @@ st.set_page_config(page_title="المنصة التعليمية قِصَّتِي 
 # 3. تهيئة الحالة (Session State)
 if "connecte" not in st.session_state:
     st.session_state.connecte = False
-if "code_envoye" not in st.session_state:
-    st.session_state.code_envoye = None
 if "الصفحة_الحالية" not in st.session_state:
     st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
 if "نقاط" not in st.session_state:
     st.session_state.نقاط = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
 
-# 4. وظيفة إرسال الإيميل
-def envoyer_code(destinataire, code):
-    msg = EmailMessage()
-    msg['Subject'] = 'كود الدخول لمنصتك التعليمية'
-    msg['From'] = EMAIL_ADDRESS
-    msg['To'] = destinataire
-    msg.set_content(f"مرحباً، كود الدخول الخاص بك هو: {code}")
-    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
-        smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
-        smtp.send_message(msg)
-
-# 5. وظيفة تسجيل الدخول
+# 4. وظيفة تسجيل الدخول أو إنشاء حساب
 def afficher_login():
-    st.markdown("<h2 style='text-align: center;'>🔐 تسجيل الدخول للمنصة التعليمية</h2>", unsafe_allow_html=True)
-    with st.container():
+    st.markdown("<h2 style='text-align: center;'>🔐 الدخول للمنصة</h2>", unsafe_allow_html=True)
+    menu = ["دخول", "إنشاء حساب", "استعادة كلمة المرور"]
+    choice = st.sidebar.selectbox("العمليات", menu)
+
+    if choice == "دخول":
+        email = st.text_input("البريد الإلكتروني:")
+        password = st.text_input("كلمة المرور:", type="password")
+        if st.button("دخول"):
+            c.execute('SELECT * FROM users WHERE email = ? AND password = ?', (email, make_hashes(password)))
+            user = c.fetchone()
+            if user:
+                st.session_state.connecte = True
+                st.session_state.nom_eleve = f"{user[3]} {user[2]}"
+                st.rerun()
+            else:
+                st.error("البريد أو كلمة المرور خطأ!")
+
+    elif choice == "إنشاء حساب":
         nom = st.text_input("الاسم:")
         prenom = st.text_input("اللقب:")
         email = st.text_input("البريد الإلكتروني:")
-        age = st.number_input("العمر:", min_value=5, max_value=15)
-        annee = st.selectbox("السنة الدراسية:", [1, 2, 3, 4, 5])
-        
-        if st.button("إرسال كود الدخول"):
-            code = str(random.randint(1000, 9999))
-            st.session_state.code_envoye = code
+        password = st.text_input("كلمة المرور:", type="password")
+        if st.button("تسجيل"):
             try:
-                envoyer_code(email, code)
-                st.success("تم إرسال الكود إلى إيميلك!")
-            except Exception as e:
-                st.error("خطأ في إرسال الإيميل.")
+                c.execute('INSERT INTO users VALUES (?,?,?,?)', (email, make_hashes(password), prenom, nom))
+                conn.commit()
+                st.success("تم إنشاء الحساب بنجاح!")
+            except:
+                st.error("هذا الإيميل موجود مسبقاً!")
 
-        code_input = st.text_input("أدخل الكود المستلم:", type="password")
-        if st.button("دخول"):
-            if code_input == st.session_state.code_envoye and st.session_state.code_envoye is not None:
-                st.session_state.connecte = True
-                st.session_state.nom_eleve = f"{nom} {prenom}"
-                st.rerun()
+    elif choice == "استعادة كلمة المرور":
+        email = st.text_input("أدخل بريدك لاستعادة كلمة المرور:")
+        if st.button("استعادة"):
+            c.execute('SELECT * FROM users WHERE email = ?', (email,))
+            user = c.fetchone()
+            if user:
+                st.info(f"كلمة المرور المسجلة مرتبطة بحسابك. تواصل مع الإدارة.")
             else:
-                st.error("كود الدخول خاطئ!")
+                st.error("الإيميل غير مسجل.")
 
-# 6. قاموس الألعاب
+# 5. قاموس الألعاب
 محتوى_الألعاب = {
     "أقسام الكلمة": {
         1: {"سؤال": "ما هو نوع كلمة 'قلم'؟", "خيارات": ["فعل", "اسم", "حرف"], "إجابة": "اسم"},
@@ -72,7 +83,7 @@ def afficher_login():
     }
 }
 
-# 7. الدوال الوظيفية
+# 6. الدوال الوظيفية
 def عرض_الشعار_الكبير():
     if os.path.exists("logo.jpeg"):
         col1, col2, col3 = st.columns([1, 10, 1])
@@ -153,7 +164,7 @@ def عرض_سينما_القواعد():
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
 
-# 8. تنسيق CSS
+# 7. تنسيق CSS
 css_style = """
 <style>
     html, body, [data-testid="stAppViewContainer"] { direction: rtl !important; }
@@ -164,7 +175,7 @@ css_style = """
 """
 st.markdown(css_style, unsafe_allow_html=True)
 
-# 9. المنطق الرئيسي
+# 8. المنطق الرئيسي
 if not st.session_state.connecte:
     afficher_login()
 else:
