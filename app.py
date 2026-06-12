@@ -1,17 +1,20 @@
 import streamlit as st
-import random
 import os
 
-# 1. Configuration de la page
-st.set_page_config(page_title="المنصة التعليمية - دخول", layout="wide")
+# 1. إعداد الصفحة الأساسي
+st.set_page_config(page_title="المنصة التعليمية قِصَّتِي دِرَاسَتِي", layout="wide")
 
-# 2. Gestion de la session (Login)
+# 2. تهيئة الحالة (Session State)
 if "connecte" not in st.session_state:
     st.session_state.connecte = False
+if "الصفحة_الحالية" not in st.session_state:
+    st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
+if "نقاط" not in st.session_state:
+    st.session_state.نقاط = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
 
-# Fonction de login
+# 3. وظيفة تسجيل الدخول
 def afficher_login():
-    st.markdown("<h2 style='text-align: center;'>🔐 تسجيل الدخول للمنصة</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align: center;'>🔐 تسجيل الدخول للمنصة التعليمية</h2>", unsafe_allow_html=True)
     with st.container():
         nom = st.text_input("الاسم:")
         prenom = st.text_input("اللقب:")
@@ -20,7 +23,7 @@ def afficher_login():
         code = st.text_input("أدخل كود الدخول:", type="password")
         
         if st.button("دخول"):
-            # Ici, vous définissez votre code secret (ex: 1234)
+            # كود الدخول الافتراضي هو 1234
             if code == "1234":
                 st.session_state.connecte = True
                 st.session_state.nom_eleve = f"{nom} {prenom}"
@@ -28,26 +31,7 @@ def afficher_login():
             else:
                 st.error("كود الدخول خاطئ!")
 
-# 3. Vérification de la connexion
-if not st.session_state.connecte:
-    afficher_login()
-else:
-
-# 1. إعداد الصفحة
-st.set_page_config(page_title="المنصة التعليمية قِصَّتِي دِرَاسَتِي", layout="wide")
-
-# الهيدر الرئيسي للمنصة
-st.markdown("<h1 style='text-align: center; color: white;'>🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: #FFD700; font-size: 24px; font-weight: bold;'>جميع هذه الدروس مطابقة تماماً للمناهج التعليمية الوطنية الجزائرية</p>", unsafe_allow_html=True)
-st.markdown("<br>", unsafe_allow_html=True)
-
-# 2. تهيئة الحالة (Session State)
-if "الصفحة_الحالية" not in st.session_state:
-    st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
-if "نقاط" not in st.session_state:
-    st.session_state.نقاط = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
-
-# 3. قاموس الألعاب
+# 4. قاموس الألعاب
 محتوى_الألعاب = {
     "أقسام الكلمة": {
         1: {"سؤال": "ما هو نوع كلمة 'قلم'؟", "خيارات": ["فعل", "اسم", "حرف"], "إجابة": "اسم"},
@@ -59,7 +43,7 @@ if "نقاط" not in st.session_state:
     }
 }
 
-# 4. الدوال الأساسية
+# 5. الدوال الوظيفية
 def عرض_الشعار_الكبير():
     if os.path.exists("logo.jpeg"):
         col1, col2, col3 = st.columns([1, 10, 1])
@@ -93,23 +77,17 @@ def عرض_محتوى_الدرس(اسم_الدرس):
 
 def afficher_page_hamza():
     st.markdown("<div class='content-card'>", unsafe_allow_html=True)
-    
-    # رأس الصفحة مع إيموجي كبير وجذاب
     head_col1, head_col2 = st.columns([4, 1])
     with head_col1:
         st.markdown("<h2 style='margin-top: 50px;'>✍️ قواعدي في قصتي (الهمزة)</h2>", unsafe_allow_html=True)
     with head_col2:
-        # إيموجي القلم والورقة للتعبير عن الكتابة
         st.markdown("<div style='font-size: 70px; text-align: center;'>📝</div>", unsafe_allow_html=True)
     
     tab1, tab2 = st.tabs(["📖 قصة صراع الحركات", "✍️ قواعد الهمزة"])
-    
     with tab1:
         st.markdown("<h3 style='text-align: center;'>📖 قصة: صراع الحركات في مدينة الهمزة</h3>", unsafe_allow_html=True)
         st.write("في مدينةِ الحروف، كانت الهمزةُ المتوسطة تعيشُ في حيرةٍ من أمرها، فهي لا تعرفُ أين تجلس! قررَت الحركاتُ أن تقيمَ مسابقةً لتعرفَ من هي الأقوى لتفوز بكرسي الهمزة.")
-        
         st.markdown("### 💡 سلم قوة الحركات (نظام الفوز):")
-        # استخدام إيموجي لتمثيل الكراسي (المواضع)
         st.write("🥇 **الكسرة:** تجلس على النبرة (ئـ)")
         st.write("🥈 **الضمة:** تجلس على الواو (ؤ)")
         st.write("🥉 **الفتحة:** تجلس على الألف (أ)")
@@ -117,7 +95,6 @@ def afficher_page_hamza():
         st.markdown("---")
         st.write("### 🥊 ابدأ الصراع بنفسك!")
         col_a, col_b = st.columns(2)
-        
         with col_a:
             if st.button("الكسرة ضد الضمة"):
                 st.success("الكسرة (ئـ) تهزم الضمة!")
@@ -125,8 +102,7 @@ def afficher_page_hamza():
         with col_b:
             if st.button("الفتحة ضد السكون"):
                 st.success("الفتحة (أ) تهزم السكون!")
-                st.snow() # تأثير ثلج بسيط كبديل للأنميشن
-        
+                st.snow()
     with tab2:
         st.markdown("<h3 style='text-align: center;'>✍️ قواعد الهمزة للسنة الرابعة</h3>", unsafe_allow_html=True)
         st.write("✅ **1. الهمزة في أول الكلمة:** وصل (ا) أو قطع (أ).")
@@ -148,7 +124,7 @@ def عرض_سينما_القواعد():
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
 
-# 5. التنسيق (CSS)
+# 6. تنسيق CSS
 css_style = """
 <style>
     html, body, [data-testid="stAppViewContainer"] { direction: rtl !important; }
@@ -159,31 +135,32 @@ css_style = """
 """
 st.markdown(css_style, unsafe_allow_html=True)
 
-# 6. منطق التنقل
-if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
-    عرض_الشعار_الكبير()
-    c1, c2, c3, c4, c5 = st.columns(5)
-    if c1.button("🌟 دروس", key="b1"): st.session_state.الصفحة_الحالية = "الدرس_الأول"; st.rerun()
-    if c2.button("🏰 حصن", key="b2"): st.session_state.الصفحة_الحالية = "الدرس_الثاني"; st.rerun()
-    if c3.button("✍️ قواعدي في قصتي", key="b4"): st.session_state.الصفحة_الحالية = "Page_Hamza"; st.rerun()
-    if c4.button("🎬 سينما", key="b5"): st.session_state.الصفحة_الحالية = "Cinema_Grammaire"; st.rerun()
-    if c5.button("🏆 لوحة", key="b3"): st.session_state.الصفحة_الحالية = "لوحة_الإنجازات"; st.rerun()
+# 7. المنطق الرئيسي (التنقل بعد تسجيل الدخول)
+if not st.session_state.connecte:
+    afficher_login()
+else:
+    # Header الرئيسي للمنصة (يظهر فقط بعد الدخول)
+    st.markdown("<h1 style='text-align: center; color: white;'>🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈</h1>", unsafe_allow_html=True)
+    st.write(f"### أهلاً بك يا بطل/بطلة: {st.session_state.nom_eleve}")
+    
+    if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
+        عرض_الشعار_الكبير()
+        c1, c2, c3, c4, c5 = st.columns(5)
+        if c1.button("🌟 دروس", key="b1"): st.session_state.الصفحة_الحالية = "الدرس_الأول"; st.rerun()
+        if c2.button("🏰 حصن", key="b2"): st.session_state.الصفحة_الحالية = "الدرس_الثاني"; st.rerun()
+        if c3.button("✍️ قواعدي في قصتي", key="b4"): st.session_state.الصفحة_الحالية = "Page_Hamza"; st.rerun()
+        if c4.button("🎬 سينما", key="b5"): st.session_state.الصفحة_الحالية = "Cinema_Grammaire"; st.rerun()
+        if c5.button("🏆 لوحة", key="b3"): st.session_state.الصفحة_الحالية = "لوحة_الإنجازات"; st.rerun()
 
-elif st.session_state.الصفحة_الحالية == "الدرس_الأول": 
-    عرض_محتوى_الدرس("أقسام الكلمة")
-elif st.session_state.الصفحة_الحالية == "الدرس_الثاني": 
-    عرض_محتوى_الدرس("الجملة الاسمية والفعلية")
-elif st.session_state.الصفحة_الحالية == "Page_Hamza": 
-    afficher_page_hamza()
-elif st.session_state.الصفحة_الحالية == "Cinema_Grammaire": 
-    عرض_سينما_القواعد()
-elif st.session_state.الصفحة_الحالية == "لوحة_الإنجازات":
-    st.markdown("<div class='content-card'>", unsafe_allow_html=True)
-    st.markdown("<h2>🏆 لوحة الإنجازات</h2>", unsafe_allow_html=True)
-    for annee, score in st.session_state.نقاط.items():
-        badge = "🌟" if score > 0 else "⏳"
-        st.write(f"### السنة {annee}: {score} نقطة {badge}")
-    if st.button("⬅ العودة", key="back_final"): 
-        st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
-        st.rerun()
-    st.markdown("</div>", unsafe_allow_html=True)
+    elif st.session_state.الصفحة_الحالية == "الدرس_الأول": عرض_محتوى_الدرس("أقسام الكلمة")
+    elif st.session_state.الصفحة_الحالية == "الدرس_الثاني": عرض_محتوى_الدرس("الجملة الاسمية والفعلية")
+    elif st.session_state.الصفحة_الحالية == "Page_Hamza": afficher_page_hamza()
+    elif st.session_state.الصفحة_الحالية == "Cinema_Grammaire": عرض_سينما_القواعد()
+    elif st.session_state.الصفحة_الحالية == "لوحة_الإنجازات":
+        st.markdown("<div class='content-card'>", unsafe_allow_html=True)
+        st.markdown("<h2>🏆 لوحة الإنجازات</h2>", unsafe_allow_html=True)
+        for annee, score in st.session_state.نقاط.items():
+            badge = "🌟" if score > 0 else "⏳"
+            st.write(f"### السنة {annee}: {score} نقطة {badge}")
+        if st.button("⬅ العودة", key="back_final"): st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"; st.rerun()
+        st.markdown("</div>", unsafe_allow_html=True)
