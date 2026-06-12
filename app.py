@@ -100,4 +100,4 @@ elif st.session_state.الصفحة_الحالية == "لوحة_الإنجازا�
     if st.button("⬅ العودة للقائمة", key="back_main"): 
         st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"; st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
-    if st.button("⬅ العودة للقائمة", key="back_main"): st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"; st.rerun()
+    
