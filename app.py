@@ -8,6 +8,7 @@ st.set_page_config(page_title="المنصة التعليمية قِصَّتِي 
 css_style = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
+
 html, body, [data-testid="stMarkdownContainer"] {
     font-family: 'Cairo', sans-serif !important;
     direction: RTL;
@@ -16,7 +17,7 @@ html, body, [data-testid="stMarkdownContainer"] {
 /* خلفية متدرجة جذابة */
 .stApp { 
     background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); 
-    : white;
+    color: white;
 }
 
 /* تنسيق الأزرار الجذابة */
@@ -28,7 +29,7 @@ html, body, [data-testid="stMarkdownContainer"] {
     font-weight: 900 !important; 
     border: none !important;
     background: linear-gradient(45deg, #FF9A9E 0%, #FEC163 99%, #FEC163 100%) !important; 
-    : #white !important;
+    color: #333 !important;
     box-shadow: 0px 10px 20px rgba(0,0,0,0.2) !important;
     transition: transform 0.3s ease, box-shadow 0.3s ease !important;
 }
@@ -41,7 +42,7 @@ html, body, [data-testid="stMarkdownContainer"] {
 
 /* حاوية المحتوى */
 .content-card {
-    background-color: withe(255, 255, 255, 0.95);
+    background-color: rgba(255, 255, 255, 0.95);
     padding: 40px;
     border-radius: 30px;
     color: #333;
@@ -71,7 +72,7 @@ if st.session_state.الصفحة_الحالية == "القائمة_الرئيس�
     st.markdown("<h1 style='text-align: center; color: white;'>🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈</h1>", unsafe_allow_html=True)
     
     # الجملة الجديدة المضافة
-    st.markdown("<p style='text-align: center; color: #withe; font-size: 20px; font-weight: bold;'>جميع هذه الدروس مطابقة تماماً للمناهج التعليمية الوطنية الجزائرية</p>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; color: #FFD700; font-size: 20px; font-weight: bold;'>جميع هذه الدروس مطابقة تماماً للمناهج التعليمية الوطنية الجزائرية</p>", unsafe_allow_html=True)
     
     st.markdown("<br>", unsafe_allow_html=True) 
     
