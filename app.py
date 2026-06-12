@@ -38,15 +38,23 @@ def afficher_login():
     if choice == "دخول":
         email = st.text_input("البريد الإلكتروني:")
         password = st.text_input("كلمة المرور:", type="password")
+        
         if st.button("دخول"):
-            c.execute('SELECT * FROM users WHERE email = ? AND password = ?', (email, make_hashes(password)))
-            user = c.fetchone()
-            if user:
+            # منطق دخول الأدمن المباشر
+            if email == "chef.department.elt.fge@gmail.com" and password == "123456":
                 st.session_state.connecte = True
-                st.session_state.nom_eleve = f"{user[3]} {user[2]}"
+                st.session_state.nom_eleve = "الأدمن (المعلم)"
                 st.rerun()
             else:
-                st.error("البريد أو كلمة المرور خطأ!")
+                # التحقق من قاعدة البيانات للتلاميذ
+                c.execute('SELECT * FROM users WHERE email = ? AND password = ?', (email, make_hashes(password)))
+                user = c.fetchone()
+                if user:
+                    st.session_state.connecte = True
+                    st.session_state.nom_eleve = f"{user[3]} {user[2]}"
+                    st.rerun()
+                else:
+                    st.error("البريد أو كلمة المرور خطأ!")
 
     elif choice == "إنشاء حساب":
         nom = st.text_input("الاسم:")
