@@ -46,13 +46,16 @@ def تشغيل_لعبة_الدرس(اسم_الدرس, مستوى_السنة):
     if data:
         st.markdown(f"### 🎮 تحدي: {data['سؤال']}")
         choix = st.radio("اختر الإجابة:", data['خيارات'], key=f"radio_{اسم_الدرس}_{مستوى_السنة}")
+        
         if st.button("تحقق من إجابتي!", key=f"btn_check_{اسم_الدرس}_{مستوى_السنة}"):
             if choix == data['إجابة']:
-                st.session_state.نقاط += 10
-                st.success(f"🎉 إجابة صحيحة! نقاطك الآن: {st.session_state.نقاط}")
+                # تحديث نقاط المستوى المحدد فقط
+                st.session_state.نقاط[مستوى_السنة] += 10
+                st.success(f"🎉 إجابة صحيحة! نقاط المستوى {مستوى_السنة} هي: {st.session_state.نقاط[مستوى_السنة]}")
                 st.balloons()
             else:
                 st.error("❌ إجابة خاطئة. حاول مرة أخرى!")
+
     else:
         st.warning("⚠️ اللعبة لهذا المستوى قيد التطوير.")
 
@@ -67,9 +70,9 @@ def عرض_محتوى_الدرس(اسم_الدرس):
     st.markdown("</div>", unsafe_allow_html=True)
 
 # 5. تهيئة الحالة
-if "الصفحة_الحالية" not in st.session_state: st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
-if "نقاط" not in st.session_state: st.session_state.نقاط = 0
-
+# في بداية الكود، استبدل سطر تهيئة النقاط بهذا:
+if "نقاط" not in st.session_state: 
+    st.session_state.نقاط = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
 # 6. منطق التنقل
 if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
     عرض_الشعار_الكبير()
@@ -82,8 +85,19 @@ if st.session_state.الصفحة_الحالية == "القائمة_الرئيس�
     if c2.button("🏰 حصن الجملة", key="btn_2"): st.session_state.الصفحة_الحالية = "الدرس_الثاني"; st.rerun()
     if c3.button("🏆 لوحة الإنجازات", key="btn_3"): st.session_state.الصفحة_الحالية = "لوحة_الإنجازات"; st.rerun()
 
-elif st.session_state.الصفحة_الحالية == "الدرس_الأول": عرض_محتوى_الدرس("أقسام الكلمة")
-elif st.session_state.الصفحة_الحالية == "الدرس_الثاني": عرض_محتوى_الدرس("الجملة الاسمية والفعلية")
 elif st.session_state.الصفحة_الحالية == "لوحة_الإنجازات":
-    st.markdown(f"<div class='content-card'><h2>مجموع نقاطك: {st.session_state.نقاط} 🏆</h2></div>", unsafe_allow_html=True)
+    st.markdown("<div class='content-card'>", unsafe_allow_html=True)
+    st.markdown("<h2>🏆 لوحة الإنجازات حسب المستوى</h2>", unsafe_allow_html=True)
+    
+    # عرض نقاط كل مستوى
+    for annee, score in st.session_state.نقاط.items():
+        st.write(f"### السنة {annee}: {score} نقطة")
+    
+    # حساب المجموع الكلي
+    total = sum(st.session_state.نقاط.values())
+    st.markdown(f"--- \n ### 🌟 المجموع الكلي: {total} نقطة")
+    
+    if st.button("⬅ العودة للقائمة", key="back_main"): 
+        st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"; st.rerun()
+    st.markdown("</div>", unsafe_allow_html=True)
     if st.button("⬅ العودة للقائمة", key="back_main"): st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"; st.rerun()
