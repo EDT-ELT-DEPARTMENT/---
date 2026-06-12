@@ -32,25 +32,6 @@ def عرض_الشعار_الكبير():
         with col2:
             st.image("logo.jpeg", width=1000)
 
-def عرض_درس_الهمزة():
-    st.markdown("<div class='content-card'>", unsafe_allow_html=True)
-    st.markdown("<h2 style='text-align: center; color: #2c3e50;'>✍️ قواعد الهمزة للسنة الرابعة ابتدائي</h2>", unsafe_allow_html=True)
-    
-    st.write("### 1. الهمزة في أول الكلمة:")
-    st.write("- **همزة الوصل (ا):** تظهر في بداية الكلمة ولا تُنطق في وسط الكلام مثل: (اِسْتَغْفَرَ، اِبْن، اِسْم، القلم).")
-    st.write("- **همزة القطع (أ / إ):** همزة تُكتب وتُنطق بوضوح مثل: (أَحْمَدَ، إِسْلام، أُسْتَاذ).")
-    
-    st.write("### 2. الهمزة المتوسطة:")
-    st.write("تعتمد كتابة الهمزة المتوسطة على **أقوى الحركات**.")
-    
-    st.write("### 3. الهمزة المتطرفة:")
-    st.write("تكتب الهمزة المتطرفة حسب حركة الحرف الذي **قبلها فقط**.")
-    
-    if st.button("⬅ العودة للقائمة", key="back_hamza"):
-        st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
-        st.rerun()
-    st.markdown("</div>", unsafe_allow_html=True)
-
 def تشغيل_لعبة_الدرس(اسم_الدرس, مستوى_السنة):
     data = محتوى_الألعاب.get(اسم_الدرس, {}).get(مستوى_السنة)
     if data:
@@ -76,31 +57,37 @@ def عرض_محتوى_الدرس(اسم_الدرس):
     تشغيل_لعبة_الدرس(اسم_الدرس, annee)
     st.markdown("</div>", unsafe_allow_html=True)
 
-def afficher_fiche_interactive():
+def afficher_page_hamza():
     st.markdown("<div class='content-card'>", unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align: center; color: #2c3e50;'>✍️ قواعد الهمزة للسنة الرابعة ابتدائي</h2>", unsafe_allow_html=True)
     
-    # استخدام التبويبات للدمج بين القصة والهمزة
-    tab1 = st.tabs(["✍️ قواعد الهمزة"])
+    st.write("### 1. الهمزة في أول الكلمة:")
+    st.write("- **همزة الوصل (ا):** تظهر في بداية الكلمة ولا تُنطق في وسط الكلام مثل: (اِسْتَغْفَرَ، اِبْن، اِسْم، القلم).")
+    st.write("- **همزة القطع (أ / إ):** همزة تُكتب وتُنطق بوضوح مثل: (أَحْمَدَ، إِسْلام، أُسْتَاذ).")
     
-    with tab1:
-        st.markdown("<h2 style='text-align: center; color: #2c3e50;'>✍️ قواعد الهمزة للسنة الرابعة</h2>", unsafe_allow_html=True)
-        st.write("""
-        - **الهمزة في أول الكلمة:** همزة وصل (ا) لا تُنطق وسط الكلام، وهمزة قطع (أ/إ) تُنطق دائماً.
-        - **الهمزة المتوسطة:** تعتمد على أقوى الحركات.
-        - **الهمزة المتطرفة:** تعتمد على حركة الحرف الذي قبلها فقط.
-        """)
-        
-
+    st.write("### 2. الهمزة المتوسطة:")
+    st.write("تعتمد كتابة الهمزة المتوسطة على **أقوى الحركات**.")
+    
+    st.write("### 3. الهمزة المتطرفة:")
+    st.write("تكتب الهمزة المتطرفة حسب حركة الحرف الذي **قبلها فقط**.")
+    
     st.markdown("---")
-    # الأزرار في الأسفل
     c1, c2 = st.columns(2)
-    if c1.button("⬅ العودة للقائمة", key="back_fiche"): 
+    if c1.button("⬅ العودة للقائمة", key="back_hamza_btn"):
         st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
         st.rerun()
-    if c2.button("🎬 الانتقال للسينما ➔", key="go_cinema"): 
+    if c2.button("🎬 الانتقال للسينما ➔", key="go_cinema_hamza"):
         st.session_state.الصفحة_الحالية = "Cinema_Grammaire"
         st.rerun()
-        
+    st.markdown("</div>", unsafe_allow_html=True)
+
+def عرض_سينما_القواعد():
+    st.markdown("<div class='content-card'>", unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align: center; color: #FF4B4B;'>🎬 سينما القواعد: حارس غابة الكلمات</h2>", unsafe_allow_html=True)
+    st.video("https://www.youtube.com/watch?v=9_6A_M542u8")
+    if st.button("⬅ العودة", key="back_cinema"):
+        st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
+        st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
 
 # 5. التنسيق
@@ -116,19 +103,17 @@ st.markdown(css_style, unsafe_allow_html=True)
 # 6. منطق التنقل
 if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
     عرض_الشعار_الكبير()
-    c1, c2, c3, c4, c5, c6 = st.columns(6)
+    c1, c2, c3, c4, c5 = st.columns(5)
     if c1.button("🌟 دروس", key="b1"): st.session_state.الصفحة_الحالية = "الدرس_الأول"; st.rerun()
     if c2.button("🏰 حصن", key="b2"): st.session_state.الصفحة_الحالية = "الدرس_الثاني"; st.rerun()
-    if c3.button("✍️ همزة", key="b_hamza"): st.session_state.الصفحة_الحالية = "درس_الهمزة"; st.rerun()
-    if c4.button("📜 قصة", key="b4"): st.session_state.الصفحة_الحالية = "Fiche_Vocabulaire"; st.rerun()
-    if c5.button("🎬 سينما", key="b5"): st.session_state.الصفحة_الحالية = "Cinema_Grammaire"; st.rerun()
-    if c6.button("🏆 لوحة", key="b3"): st.session_state.الصفحة_الحالية = "لوحة_الإنجازات"; st.rerun()
+    if c3.button("✍️ الهمزة", key="b4"): st.session_state.الصفحة_الحالية = "Page_Hamza"; st.rerun()
+    if c4.button("🎬 سينما", key="b5"): st.session_state.الصفحة_الحالية = "Cinema_Grammaire"; st.rerun()
+    if c5.button("🏆 لوحة", key="b3"): st.session_state.الصفحة_الحالية = "لوحة_الإنجازات"; st.rerun()
 
 elif st.session_state.الصفحة_الحالية == "الدرس_الأول": عرض_محتوى_الدرس("أقسام الكلمة")
 elif st.session_state.الصفحة_الحالية == "الدرس_الثاني": عرض_محتوى_الدرس("الجملة الاسمية والفعلية")
-elif st.session_state.الصفحة_الحالية == "درس_الهمزة": عرض_درس_الهمزة()
+elif st.session_state.الصفحة_الحالية == "Page_Hamza": afficher_page_hamza()
 elif st.session_state.الصفحة_الحالية == "Cinema_Grammaire": عرض_سينما_القواعد()
-elif st.session_state.الصفحة_الحالية == "Fiche_Vocabulaire": afficher_fiche_interactive()
 elif st.session_state.الصفحة_الحالية == "لوحة_الإنجازات":
     st.markdown("<div class='content-card'>", unsafe_allow_html=True)
     st.markdown("<h2>🏆 لوحة الإنجازات</h2>", unsafe_allow_html=True)
