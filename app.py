@@ -107,7 +107,7 @@ if st.session_state.الصفحة_الحالية == "القائمة_الرئيس�
     if c1.button("🌟 دروس", key="b1"): st.session_state.الصفحة_الحالية = "الدرس_الأول"; st.rerun()
     if c2.button("🏰 حصن", key="b2"): st.session_state.الصفحة_الحالية = "الدرس_الثاني"; st.rerun()
     # تم تغيير اسم الزر هنا
-    if c3.button("✍️ قواعدي في قصتي", key="b4"): st.session_state.الصفحة_الحالية = "Page_Hamza"; st.rerun()
+    if c3.button("✍️ قواعدي في قصصي", key="b4"): st.session_state.الصفحة_الحالية = "Page_Hamza"; st.rerun()
     if c4.button("🎬 سينما", key="b5"): st.session_state.الصفحة_الحالية = "Cinema_Grammaire"; st.rerun()
     if c5.button("🏆 لوحة", key="b3"): st.session_state.الصفحة_الحالية = "لوحة_الإنجازات"; st.rerun()
 
