@@ -214,22 +214,40 @@ else:
             c.execute('SELECT paye FROM users WHERE email = ?', (st.session_state.email_user,))
             result = c.fetchone()
             conn.close()
-            
             if result and result[0] == 1:
-                # محتوى المنصة للمفعلين (يتم استدعاء الدالة هنا)
-                if st.session_state.الصفحة_الحالية == "Page_Hamza":
-                    afficher_page_hamza()
-                # ... (بقية منطق الصفحات الأخرى)
-            else:
-                # شاشة التفعيل للمستخدم الذي لم يدفع
-                st.warning("⚠️ حسابك غير مفعل.")
-                st.markdown("""
-                ### 💳 يرجى إتمام عملية الدفع للوصول إلى الدروس:
-                * **الاسم:** Abbou Majda
-                * **رقم الحساب (CCP):** 10917874
-                * **للتفعيل:** أرسل صورة إيصال الدفع عبر الواتساب إلى 0657012174
-                """)
-                if st.button("🚪 تسجيل الخروج"):
-                    st.session_state.connecte = False
-                    st.rerun()
-                    st.rerun()    
+                # 1. عرض الترحيب والخروج
+                col_header, col_logout = st.columns([6, 1])
+                with col_header:
+                    st.markdown("<h1 style='text-align: center; color: white;'>🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈</h1>", unsafe_allow_html=True)
+                with col_logout:
+                    if st.button("🚪 تسجيل الخروج"):
+                        st.session_state.connecte = False
+                        st.rerun()
+
+                # 2. نظام التنقل بين الصفحات (هذا هو الجزء المسؤول عن عدم ظهور الصفحة فارغة)
+                if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
+                    st.write(f"### أهلاً بك يا بطل: {st.session_state.nom_eleve}")
+                    عرض_الشعار_الكبير() # تأكد من أن هذه الدالة معرفة في كودك
+                    
+                    # الأزرار التي تنقل العميل للصفحات
+                    c1, c2, c3, c4, c5 = st.columns(5)
+                    if c1.button("🌟 دروس"): st.session_state.الصفحة_الحالية = "الدرس_الأول"; st.rerun()
+                    if c2.button("🏰 حصن"): st.session_state.الصفحة_الحالية = "الدرس_الثاني"; st.rerun()
+                    if c3.button("✍️ قواعدي"): st.session_state.الصفحة_الحالية = "Page_Hamza"; st.rerun()
+                    if c4.button("🎬 سينما"): st.session_state.الصفحة_الحالية = "Cinema_Grammaire"; st.rerun()
+                    if c5.button("🏆 لوحة"): st.session_state.الصفحة_الحالية = "لوحة_الإنجازات"; st.rerun()
+
+                # 3. عرض محتوى الصفحة المختارة
+                elif st.session_state.الصفحة_الحالية == "الدرس_الأول":
+                    st.write("### محتوى الدرس الأول")
+                    # أضف هنا استدعاء دالة الدرس الخاص بك
+                
+                elif st.session_state.الصفحة_الحالية == "Page_Hamza":
+                    afficher_page_hamza() # الدالة التي صححناها سابقاً
+                
+                # إضافة زر عودة في الصفحات الفرعية
+                if st.session_state.الصفحة_الحالية != "القائمة_الرئيسية":
+                    if st.button("⬅ العودة للرئيسية"):
+                        st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
+                        st.rerun()
+            
