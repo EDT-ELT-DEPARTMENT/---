@@ -220,46 +220,72 @@ else:
     if st.session_state.is_admin:
         admin_panel()
     else:
-        # فحص حالة الدفع من قاعدة البيانات
-        c.execute('SELECT paye FROM users WHERE email = ?', (st.session_state.email_user,))
-        result = c.fetchone()
-        
-        # بوابة الدفع: إذا لم يكن قد دفع، يظهر تحذير
-        if result and result[0] == 1:
-            col_header, col_logout = st.columns([6, 1])
-            with col_header:
-                st.markdown("<h1 style='text-align: center; color: white;'>🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈</h1>", unsafe_allow_html=True)
-            with col_logout:
+        # التأكد من وجود البريد الإلكتروني في الجلسة قبل الاستعلام
+        if "email_user" in st.session_state:
+            c.execute('SELECT paye FROM users WHERE email = ?', (st.session_state.email_user,))
+            result = c.fetchone()
+            
+            # بوابة الدفع: التحقق من قيمة paye (يجب أن تكون 1)
+            if result and result[0] == 1:
+                # الجزء الخاص بالمشتركين
+                col_header, col_logout = st.columns([6, 1])
+                with col_header:
+                    st.markdown("<h1 style='text-align: center; color: white;'>🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈</h1>", unsafe_allow_html=True)
+                with col_logout:
+                    if st.button("🚪 تسجيل الخروج"):
+                        st.session_state.connecte = False
+                        st.session_state.nom_eleve = ""
+                        if "email_user" in st.session_state:
+                            del st.session_state.email_user
+                        st.rerun()
+
+                st.write(f"### أهلاً بك يا بطل/بطلة: {st.session_state.nom_eleve}")
+                
+                if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
+                    عرض_الشعار_الكبير()
+                    c1, c2, c3, c4, c5 = st.columns(5)
+                    if c1.button("🌟 دروس", key="b1"): 
+                        st.session_state.الصفحة_الحالية = "الدرس_الأول"; st.rerun()
+                    if c2.button("🏰 حصن", key="b2"): 
+                        st.session_state.الصفحة_الحالية = "الدرس_الثاني"; st.rerun()
+                    if c3.button("✍️ قواعدي في قصتي", key="b4"): 
+                        st.session_state.الصفحة_الحالية = "Page_Hamza"; st.rerun()
+                    if c4.button("🎬 سينما", key="b5"): 
+                        st.session_state.الصفحة_الحالية = "Cinema_Grammaire"; st.rerun()
+                    if c5.button("🏆 لوحة", key="b3"): 
+                        st.session_state.الصفحة_الحالية = "لوحة_الإنجازات"; st.rerun()
+
+                elif st.session_state.الصفحة_الحالية == "الدرس_الأول": 
+                    عرض_محتوى_الدرس("أقسام الكلمة")
+                elif st.session_state.الصفحة_الحالية == "الدرس_الثاني": 
+                    عرض_محتوى_الدرس("الجملة الاسمية والفعلية")
+                elif st.session_state.الصفحة_الحالية == "Page_Hamza": 
+                    afficher_page_hamza()
+                elif st.session_state.الصفحة_الحالية == "Cinema_Grammaire": 
+                    عرض_سينما_القواعد()
+                elif st.session_state.الصفحة_الحالية == "لوحة_الإنجازات":
+                    st.markdown("<div class='content-card'>", unsafe_allow_html=True)
+                    st.markdown("<h2>🏆 لوحة الإنجازات</h2>", unsafe_allow_html=True)
+                    for annee, score in st.session_state.نقاط.items():
+                        badge = "🌟" if score > 0 else "⏳"
+                        st.write(f"### السنة {annee}: {score} نقطة {badge}")
+                    if st.button("⬅ العودة", key="back_final"): 
+                        st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"; st.rerun()
+                    st.markdown("</div>", unsafe_allow_html=True)
+            
+            else:
+                # شاشة التفعيل للمستخدم الذي لم يدفع
+                st.warning("⚠️ حسابك غير مفعل.")
+                st.markdown("""
+                ### 💳 يرجى إتمام عملية الدفع للوصول إلى الدروس:
+                * **الاسم:** [اسم صاحب الحساب]
+                * **رقم الحساب (CCP):** [ضع رقم حسابك هنا]
+                * **للتفعيل:** أرسل صورة إيصال الدفع عبر الواتساب إلى [رقم هاتفك]
+                """)
                 if st.button("🚪 تسجيل الخروج"):
                     st.session_state.connecte = False
-                    st.session_state.nom_eleve = ""
                     st.rerun()
-
-            st.write(f"### أهلاً بك يا بطل/بطلة: {st.session_state.nom_eleve}")
-            
-            if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
-                عرض_الشعار_الكبير()
-                c1, c2, c3, c4, c5 = st.columns(5)
-                if c1.button("🌟 دروس", key="b1"): st.session_state.الصفحة_الحالية = "الدرس_الأول"; st.rerun()
-                if c2.button("🏰 حصن", key="b2"): st.session_state.الصفحة_الحالية = "الدرس_الثاني"; st.rerun()
-                if c3.button("✍️ قواعدي في قصتي", key="b4"): st.session_state.الصفحة_الحالية = "Page_Hamza"; st.rerun()
-                if c4.button("🎬 سينما", key="b5"): st.session_state.الصفحة_الحالية = "Cinema_Grammaire"; st.rerun()
-                if c5.button("🏆 لوحة", key="b3"): st.session_state.الصفحة_الحالية = "لوحة_الإنجازات"; st.rerun()
-
-            elif st.session_state.الصفحة_الحالية == "الدرس_الأول": عرض_محتوى_الدرس("أقسام الكلمة")
-            elif st.session_state.الصفحة_الحالية == "الدرس_الثاني": عرض_محتوى_الدرس("الجملة الاسمية والفعلية")
-            elif st.session_state.الصفحة_الحالية == "Page_Hamza": afficher_page_hamza()
-            elif st.session_state.الصفحة_الحالية == "Cinema_Grammaire": عرض_سينما_القواعد()
-            elif st.session_state.الصفحة_الحالية == "لوحة_الإنجازات":
-                st.markdown("<div class='content-card'>", unsafe_allow_html=True)
-                st.markdown("<h2>🏆 لوحة الإنجازات</h2>", unsafe_allow_html=True)
-                for annee, score in st.session_state.نقاط.items():
-                    badge = "🌟" if score > 0 else "⏳"
-                    st.write(f"### السنة {annee}: {score} نقطة {badge}")
-                if st.button("⬅ العودة", key="back_final"): st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"; st.rerun()
-                st.markdown("</div>", unsafe_allow_html=True)
         else:
-            st.warning("⚠️ حسابك غير مفعل. يرجى إتمام عملية الدفع والتواصل مع الإدارة للوصول إلى الدروس.")
-            if st.button("🚪 تسجيل الخروج"):
-                st.session_state.connecte = False
-                st.rerun()
+            st.error("خطأ في بيانات الجلسة، يرجى تسجيل الدخول مجدداً.")
+            st.session_state.connecte = False
+            st.rerun()
