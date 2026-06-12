@@ -57,6 +57,27 @@ def تشغيل_لعبة_الدرس(اسم_الدرس, مستوى_السنة):
 def عرض_محتوى_الدرس(اسم_الدرس):
     st.markdown("<div class='content-card'>", unsafe_allow_html=True)
     
+    # استخدام مفتاح فريد للزر لمنع تكرار المعرف
+    if st.button("⬅ العودة للقائمة", key=f"btn_retour_{اسم_الدرس}"):
+        st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
+        st.rerun()
+    
+    st.markdown(f"<h2 style='text-align: center;'>{اسم_الدرس}</h2>", unsafe_allow_html=True)
+    
+    # اختيار السنة مع مفتاح فريد
+    annee = st.selectbox("اختر السنة الدراسية:", [1, 2, 3, 4, 5], key=f"sel_{اسم_الدرس}")
+    
+    # تصحيح جذري: البحث في محتوى_الألعاب فقط وليس محتوى_الدروس
+    if اسم_الدرس in محتوى_الألعاب:
+        st.write(f"### 📖 تحديات المستوى {annee}")
+        تشغيل_لعبة_الدرس(اسم_الدرس, annee)
+    else:
+        st.warning("⚠️ لا توجد محتويات لهذا الدرس حالياً.")
+        
+    st.markdown("</div>", unsafe_allow_html=True)
+def عرض_محتوى_الدرس(اسم_الدرس):
+    st.markdown("<div class='content-card'>", unsafe_allow_html=True)
+    
     # إضافة مفتاح فريد (key) للزر لمنع تكرار المعرف
     if st.button("⬅ العودة للقائمة", key=f"btn_retour_{اسم_الدرس}"):
         st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
