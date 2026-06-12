@@ -36,7 +36,7 @@ def afficher_login():
     choice = st.sidebar.selectbox("العمليات", menu)
 
     if choice == "دخول":
-        email = st.text_input("البريد الإلكتروني:")
+        email = st.text_input("إسم المستخدم:")
         password = st.text_input("كلمة المرور:", type="password")
         
         if st.button("دخول"):
