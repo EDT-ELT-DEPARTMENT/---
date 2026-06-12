@@ -160,7 +160,7 @@ css_style = """
 """
 st.markdown(css_style, unsafe_allow_html=True)
 
-# 9. المنطق الرئيسي (بوابة الوصول)
+# --- دالة عرض الصفحة ---
 def afficher_page_hamza():
     st.markdown("<div class='content-card'>", unsafe_allow_html=True)
     head_col1, head_col2 = st.columns([4, 1])
@@ -201,6 +201,25 @@ def afficher_page_hamza():
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
 
+# 9. المنطق الرئيسي (بوابة الوصول)
+if not st.session_state.connecte:
+    afficher_login()
+else:
+    if st.session_state.is_admin:
+        admin_panel()
+    else:
+        if "email_user" in st.session_state:
+            conn = get_db_connection()
+            c = conn.cursor()
+            c.execute('SELECT paye FROM users WHERE email = ?', (st.session_state.email_user,))
+            result = c.fetchone()
+            conn.close()
+            
+            if result and result[0] == 1:
+                # محتوى المنصة للمفعلين (يتم استدعاء الدالة هنا)
+                if st.session_state.الصفحة_الحالية == "Page_Hamza":
+                    afficher_page_hamza()
+                # ... (بقية منطق الصفحات الأخرى)
             else:
                 # شاشة التفعيل للمستخدم الذي لم يدفع
                 st.warning("⚠️ حسابك غير مفعل.")
@@ -212,4 +231,5 @@ def afficher_page_hamza():
                 """)
                 if st.button("🚪 تسجيل الخروج"):
                     st.session_state.connecte = False
+                    st.rerun()
                     st.rerun()    
