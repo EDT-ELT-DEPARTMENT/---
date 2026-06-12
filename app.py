@@ -61,7 +61,7 @@ def afficher_login():
         password = st.text_input("كلمة المرور:", type="password")
         
         if st.button("دخول"):
-            if email == "abboumajda1985@gmail.com" and password == "123456":
+            if email == "abboumajda1985@gmail.com" and password == "iyed2023":
                 st.session_state.connecte = True
                 st.session_state.is_admin = True
                 st.session_state.nom_eleve = "الأدمن (المعلم)"
