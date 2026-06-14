@@ -1,168 +1,157 @@
 import streamlit as st
 import os
-import sqlite3
-import hashlib
-import pandas as pd
-import io
 
-# 1. إعداد قاعدة البيانات
-def get_db_connection():
-    conn = sqlite3.connect('users.db')
-    return conn
-
-# تهيئة الجدول وتحديثه
-conn = get_db_connection()
-c = conn.cursor()
-c.execute('CREATE TABLE IF NOT EXISTS users (email TEXT PRIMARY KEY, password TEXT, nom TEXT, prenom TEXT, paye INTEGER, montant REAL)')
-try:
-    c.execute('ALTER TABLE users ADD COLUMN paye INTEGER DEFAULT 0')
-except:
-    pass
-try:
-    c.execute('ALTER TABLE users ADD COLUMN montant REAL DEFAULT 0')
-except:
-    pass
-conn.commit()
-conn.close()
-
-def make_hashes(password):
-    return hashlib.sha256(str.encode(password)).hexdigest()
-
-# 2. إعداد الصفحة
+# 1. إعداد الصفحة
 st.set_page_config(page_title="المنصة التعليمية قِصَّتِي دِرَاسَتِي", layout="wide")
+st.markdown("<h1 style='text-align: center; color: white;'>🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈</h1>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #FFD700; font-size: 20px; font-weight: bold;'>جميع هذه الدروس مطابقة تماماً للمناهج التعليمية الوطنية الجزائرية</p>", unsafe_allow_html=True)
+st.markdown("<br>", unsafe_allow_html=True)
 
-# 3. تهيئة الحالة
-if "connecte" not in st.session_state:
-    st.session_state.connecte = False
+# 2. تهيئة الحالة (Session State)
 if "الصفحة_الحالية" not in st.session_state:
     st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
-if "is_admin" not in st.session_state:
-    st.session_state.is_admin = False
+if "نقاط" not in st.session_state:
+    st.session_state.نقاط = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
 
-# 4. دوال العرض
-def afficher_login():
-    st.markdown("<h2 style='text-align: center;'>🔐 الدخول للمنصة</h2>", unsafe_allow_html=True)
-    menu = ["دخول", "إنشاء حساب", "استعادة كلمة المرور"]
-    choice = st.sidebar.selectbox("العمليات", menu)
-    if choice == "دخول":
-        email = st.text_input("إسم المستخدم:")
-        password = st.text_input("كلمة المرور:", type="password")
-        if st.button("دخول"):
-            if email == "abboumajda1985@gmail.com" and password == "iyed2023":
-                st.session_state.connecte = True
-                st.session_state.is_admin = True
-                st.session_state.nom_eleve = "الأدمن (المعلم)"
-                st.rerun()
+# 3. قاموس الألعاب
+محتوى_الألعاب = {
+    "أقسام الكلمة": {
+        1: {"سؤال": "ما هو نوع كلمة 'قلم'؟", "خيارات": ["فعل", "اسم", "حرف"], "إجابة": "اسم"},
+        2: {"سؤال": "ما هو نوع كلمة 'يذهب'؟", "خيارات": ["فعل", "اسم", "حرف"], "إجابة": "فعل"}
+    },
+    "الجملة الاسمية والفعلية": {
+        1: {"سؤال": "الجملة الاسمية تبدأ بـ:", "خيارات": ["فعل", "اسم", "حرف"], "إجابة": "اسم"},
+        2: {"سؤال": "الجملة الفعلية تبدأ بـ:", "خيارات": ["اسم", "فعل", "حرف"], "إجابة": "فعل"}
+    }
+}
+
+# 4. الدوال الأساسية
+def عرض_الشعار_الكبير():
+    if os.path.exists("logo.jpeg"):
+        col1, col2, col3 = st.columns([1, 10, 1])
+        with col2:
+            st.image("logo.jpeg", width=1000)
+
+def تشغيل_لعبة_الدرس(اسم_الدرس, مستوى_السنة):
+    data = محتوى_الألعاب.get(اسم_الدرس, {}).get(مستوى_السنة)
+    if data:
+        st.markdown(f"### 🎮 تحدي: {data['سؤال']}")
+        choix = st.radio("اختر الإجابة:", data['خيارات'], key=f"radio_{اسم_الدرس}_{مستوى_السنة}")
+        if st.button("تحقق من إجابتي!", key=f"btn_check_{اسم_الدرس}_{مستوى_السنة}"):
+            if choix == data['إجابة']:
+                st.session_state.نقاط[مستوى_السنة] += 10
+                st.success(f"🎉 إجابة صحيحة!")
+                st.balloons()
             else:
-                conn = get_db_connection()
-                c = conn.cursor()
-                c.execute('SELECT * FROM users WHERE email = ? AND password = ?', (email, make_hashes(password)))
-                user = c.fetchone()
-                conn.close()
-                if user:
-                    st.session_state.connecte = True
-                    st.session_state.is_admin = False
-                    st.session_state.email_user = email
-                    st.session_state.nom_eleve = f"{user[3]} {user[2]}"
-                    st.rerun()
-                else:
-                    st.error("البريد أو كلمة المرور خطأ!")
+                st.error("❌ إجابة خاطئة. حاول مرة أخرى!")
+    else:
+        st.warning("⚠️ اللعبة لهذا المستوى قيد التطوير.")
 
-    elif choice == "إنشاء حساب":
-        nom = st.text_input("الاسم:")
-        prenom = st.text_input("اللقب:")
-        email = st.text_input("البريد الإلكتروني:")
-        password = st.text_input("كلمة المرور:", type="password")
-        if st.button("تسجيل"):
-            try:
-                conn = get_db_connection()
-                c = conn.cursor()
-                c.execute('INSERT INTO users VALUES (?,?,?,?,?,?)', (email, make_hashes(password), prenom, nom, 0, 0.0))
-                conn.commit()
-                conn.close()
-                st.success("تم إنشاء الحساب بنجاح! بانتظار تفعيل الإدارة.")
-            except:
-                st.error("هذا الإيميل موجود مسبقاً!")
+def عرض_محتوى_الدرس(اسم_الدرس):
+    st.markdown("<div class='content-card'>", unsafe_allow_html=True)
+    if st.button("⬅ العودة للقائمة", key=f"back_{اسم_الدرس}"):
+        st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
+        st.rerun()
+    st.markdown(f"<h2 style='text-align: center;'>{اسم_الدرس}</h2>", unsafe_allow_html=True)
+    annee = st.selectbox("اختر السنة الدراسية:", [1, 2, 3, 4, 5], key=f"select_{اسم_الدرس}")
+    تشغيل_لعبة_الدرس(اسم_الدرس, annee)
+    st.markdown("</div>", unsafe_allow_html=True)
 
 def afficher_page_hamza():
     st.markdown("<div class='content-card'>", unsafe_allow_html=True)
-    st.markdown("<h2 style='text-align: center;'>✍️ قواعدي في قصتي (الهمزة)</h2>", unsafe_allow_html=True)
-    st.write("### 📖 قصة: صراع الحركات في مدينة الهمزة")
-    st.write("في مدينةِ الحروف، كانت الهمزةُ المتوسطة تعيشُ في حيرةٍ من أمرها...")
-    if st.button("⬅ العودة للقائمة", key="back_hamza_btn"):
+    
+    # التبويبات للدمج بين القصة والقاعدة
+    tab1, tab2 = st.tabs(["📖 قصة صراع الحركات", "✍️ قواعد الهمزة"])
+    
+    with tab1:
+        st.markdown("<h2 style='text-align: center;'>📖 قصة: صراع الحركات في مدينة الهمزة</h2>", unsafe_allow_html=True)
+        st.write("""
+        في مدينةِ الحروف، كانت **"الهمزةُ المتوسطة"** تعيشُ في حيرةٍ من أمرها، فهي لا تعرفُ أين تجلس! 
+        قررَت الحركاتُ أن تقيمَ مسابقةً لتعرفَ من هي "الأقوى".
+        - **الكسرةُ:** دخلت بقوةٍ لتجلس الهمزة على 'النبرة' (ئـ).
+        - **الضمةُ:** قالت إذا كنتُ موجودةً، سأجعلُ الهمزةَ تجلسُ على 'الواو' (ؤ).
+        - **الفتحةُ:** قالت سأجعلُ الهمزةَ تجلسُ على 'الألف' (أ).
+        **القاعدةُ:** الهمزةُ المتوسطةُ لا تجلسُ إلا في مكانِ الحركةِ الأقوى: (الكسرة تليها الضمة ثم الفتحة).
+        """)
+        
+    with tab2:
+        st.markdown("<h2 style='text-align: center;'>✍️ قواعد الهمزة للسنة الرابعة</h2>", unsafe_allow_html=True)
+        st.write("### 1. الهمزة في أول الكلمة:")
+        st.write("- **همزة الوصل (ا):** تظهر في بداية الكلمة ولا تُنطق في وسط الكلام مثل: (اِسْتَغْفَرَ، اِبْن، اِسْم، القلم).")
+        st.write("- **همزة القطع (أ / إ):** همزة تُكتب وتُنطق بوضوح مثل: (أَحْمَدَ، إِسْلام، أُسْتَاذ).")
+        st.write("### 2. الهمزة المتوسطة:")
+        st.write("تعتمد كتابة الهمزة المتوسطة على **أقوى الحركات**.")
+        st.write("### 3. الهمزة المتطرفة:")
+        st.write("تكتب الهمزة المتطرفة حسب حركة الحرف الذي **قبلها فقط**.")
+    
+    st.markdown("---")
+    c1, c2 = st.columns(2)
+    if c1.button("⬅ العودة للقائمة", key="back_hamza_btn"):
+        st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
+        st.rerun()
+    if c2.button("🎬 الانتقال للسينما ➔", key="go_cinema_hamza"):
+        st.session_state.الصفحة_الحالية = "Cinema_Grammaire"
+        st.rerun()
+    st.markdown("</div>", unsafe_allow_html=True)
+
+def عرض_سينما_القواعد():
+    st.markdown("<div class='content-card'>", unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align: center; color: #FF4B4B;'>🎬 سينما القواعد: حارس غابة الكلمات</h2>", unsafe_allow_html=True)
+    st.video("https://www.youtube.com/watch?v=9_6A_M542u8")
+    if st.button("⬅ العودة", key="back_cinema"):
         st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
 
-def admin_panel():
-    st.markdown("## 🛠 لوحة تحكم الأدمن والمالية")
-    conn = get_db_connection()
-    df = pd.read_sql_query("SELECT * FROM users", conn)
-    conn.close()
-    st.write("### 📋 قائمة المستخدمين:")
-    st.dataframe(df)
+# 5. التنسيق
+# 5. التنسيق
+css_style = """
+<style>
+    /* التأكد من اتجاه الصفحة لليمين */
+    html, body, [data-testid="stAppViewContainer"] { 
+        direction: rtl !important; 
+    }
     
-    csv = df.to_csv(index=False).encode('utf-8')
-    buffer = io.BytesIO()
-    with pd.ExcelWriter(buffer, engine='openpyxl') as writer:
-        df.to_excel(writer, index=False, sheet_name='Clients')
-    excel_data = buffer.getvalue()
-    html_data = df.to_html(index=False)
+    /* تنسيق البطاقة وتبرير النصوص */
+    .content-card { 
+        background-color: rgba(255,255,255,0.95); 
+        padding: 40px; 
+        border-radius: 30px; 
+        color: #333; 
+        text-align: justify !important; /* هذا هو التعديل الأهم لتبرير النص */
+    }
     
-    col1, col2, col3 = st.columns(3)
-    col1.download_button("📄 CSV", csv, 'c.csv', 'text/csv', key="c1")
-    col2.download_button("📊 Excel", excel_data, 'c.xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', key="c2")
-    col3.download_button("🌐 HTML", html_data, 'c.html', 'text/html', key="c3")
+    /* تنسيق عام للعناصر لضمان عدم وجود خلل في المحاذاة */
+    h1, h2, h3, h4, p, li, div, .stButton { 
+        text-align: right !important; 
+    }
     
-    email_to_act = st.text_input("إيميل لتفعيله:")
-    montant_paye = st.number_input("المبلغ:", min_value=0.0)
-    if st.button("✅ تأكيد التفعيل"):
-        conn = get_db_connection()
-        c = conn.cursor()
-        c.execute('UPDATE users SET paye = 1, montant = ? WHERE email = ?', (montant_paye, email_to_act))
-        conn.commit()
-        conn.close()
-        st.rerun()
+    /* تكبير حجم الخط ووضوح النصوص */
+    p, li, .stMarkdown { 
+        font-size: 22px !important; 
+        line-height: 1.6 !important; /* مسافة مريحة بين الأسطر */
+    }
+</style>
+"""
+st.markdown(css_style, unsafe_allow_html=True)
 
-    if st.button("🚪 خروج"):
-        st.session_state.connecte = False
-        st.session_state.is_admin = False
-        st.rerun()
+# 6. منطق التنقل
+if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
+    عرض_الشعار_الكبير()
+    c1, c2, c3, c4, c5 = st.columns(5)
+    if c1.button("🌟 دروس", key="b1"): st.session_state.الصفحة_الحالية = "الدرس_الأول"; st.rerun()
+    if c2.button("🏰 حصن", key="b2"): st.session_state.الصفحة_الحالية = "الدرس_الثاني"; st.rerun()
+    if c3.button("✍️ قواعدي في قصتي", key="b4"): st.session_state.الصفحة_الحالية = "Page_Hamza"; st.rerun()
+    if c4.button("🎬 سينما", key="b5"): st.session_state.الصفحة_الحالية = "Cinema_Grammaire"; st.rerun()
+    if c5.button("🏆 لوحة", key="b3"): st.session_state.الصفحة_الحالية = "لوحة_الإنجازات"; st.rerun()
 
-# 9. المنطق الرئيسي
-# 9. المنطق الرئيسي
-if not st.session_state.connecte:
-    afficher_login()
-else:
-    # --- منطق الأدمن ---
-    if st.session_state.is_admin:
-        admin_panel()
-        
-    # --- منطق الطالب ---
-    else:
-        # تأكد من وجود إيميل الطالب في الجلسة قبل الاستعلام
-        if "email_user" in st.session_state:
-            conn = get_db_connection()
-            c = conn.cursor()
-            c.execute('SELECT paye FROM users WHERE email = ?', (st.session_state.email_user,))
-            result = c.fetchone()
-            conn.close()
-            
-            # التحقق من حالة الدفع
-            if result and result[0] == 1:
-                if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
-                    st.write(f"### أهلاً بك يا بطل: {st.session_state.nom_eleve}")
-                    عرض_الشعار_الكبير()
-                    # أزرار التنقل
-                    col1, col2, col3, col4, col5 = st.columns(5)
-                    if col1.button("✍️ قواعدي"): st.session_state.الصفحة_الحالية = "Page_Hamza"; st.rerun()
-                    # ... (بقية الأزرار)
-                
-                elif st.session_state.الصفحة_الحالية == "Page_Hamza":
-                    afficher_page_hamza()
-            else:
-                st.warning("⚠️ حسابك غير مفعل، يرجى التواصل مع الإدارة.")
-        else:
-            # إذا حدث خطأ في الجلسة نرجع لشاشة الدخول
-            st.session_state.connecte = False
-            st.rerun()
+elif st.session_state.الصفحة_الحالية == "الدرس_الأول": عرض_محتوى_الدرس("أقسام الكلمة")
+elif st.session_state.الصفحة_الحالية == "الدرس_الثاني": عرض_محتوى_الدرس("الجملة الاسمية والفعلية")
+elif st.session_state.الصفحة_الحالية == "Page_Hamza": afficher_page_hamza()
+elif st.session_state.الصفحة_الحالية == "Cinema_Grammaire": عرض_سينما_القواعد()
+elif st.session_state.الصفحة_الحالية == "لوحة_الإنجازات":
+    st.markdown("<div class='content-card'>", unsafe_allow_html=True)
+    st.markdown("<h2>🏆 لوحة الإنجازات</h2>", unsafe_allow_html=True)
+    for annee, score in st.session_state.نقاط.items(): st.write(f"### السنة {annee}: {score} نقطة")
+    if st.button("⬅ العودة", key="back_final"): st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"; st.rerun()
+    st.markdown("</div>", unsafe_allow_html=True)
