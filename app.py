@@ -184,10 +184,20 @@ css_style = """
 st.markdown(css_style, unsafe_allow_html=True)
 
 # 8. المنطق الرئيسي
+# 8. المنطق الرئيسي
 if not st.session_state.connecte:
     afficher_login()
 else:
-    st.markdown("<h1 style='text-align: center; color: blue;'>🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈</h1>", unsafe_allow_html=True)
+    # إضافة زر تسجيل الخروج في الأعلى
+    col_header, col_logout = st.columns([6, 1])
+    with col_header:
+        st.markdown("<h1 style='text-align: center; color: white;'>🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈</h1>", unsafe_allow_html=True)
+    with col_logout:
+        if st.button("🚪 تسجيل الخروج"):
+            st.session_state.connecte = False
+            st.session_state.nom_eleve = ""
+            st.rerun()
+
     st.write(f"### أهلاً بك يا بطل/بطلة: {st.session_state.nom_eleve}")
     
     if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
@@ -196,13 +206,13 @@ else:
         if c1.button("🌟 دروس", key="b1"): st.session_state.الصفحة_الحالية = "الدرس_الأول"; st.rerun()
         if c2.button("🏰 حصن", key="b2"): st.session_state.الصفحة_الحالية = "الدرس_الثاني"; st.rerun()
         if c3.button("✍️ قواعدي في قصتي", key="b4"): st.session_state.الصفحة_الحالية = "Page_Hamza"; st.rerun()
-        if c4.button("🎬 عرض", key="b5"): st.session_state.الصفحة_الحالية = "Cinema_Grammaire"; st.rerun()
+        if c4.button("🎬 سينما", key="b5"): st.session_state.الصفحة_الحالية = "Cinema_Grammaire"; st.rerun()
         if c5.button("🏆 لوحة", key="b3"): st.session_state.الصفحة_الحالية = "لوحة_الإنجازات"; st.rerun()
 
     elif st.session_state.الصفحة_الحالية == "الدرس_الأول": عرض_محتوى_الدرس("أقسام الكلمة")
     elif st.session_state.الصفحة_الحالية == "الدرس_الثاني": عرض_محتوى_الدرس("الجملة الاسمية والفعلية")
     elif st.session_state.الصفحة_الحالية == "Page_Hamza": afficher_page_hamza()
-    elif st.session_state.الصفحة_الحالية == "Cinema_Grammaire": عرض_القواعد()
+    elif st.session_state.الصفحة_الحالية == "Cinema_Grammaire": عرض_سينما_القواعد()
     elif st.session_state.الصفحة_الحالية == "لوحة_الإنجازات":
         st.markdown("<div class='content-card'>", unsafe_allow_html=True)
         st.markdown("<h2>🏆 لوحة الإنجازات</h2>", unsafe_allow_html=True)
