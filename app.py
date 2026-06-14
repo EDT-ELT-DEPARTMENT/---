@@ -2,19 +2,26 @@ import streamlit as st
 import os
 import sqlite3
 import hashlib
+import pandas as pd
 
-# 1. إعداد قاعدة البيانات والأمان
+# 1. إعداد قاعدة البيانات
 def get_db_connection():
     conn = sqlite3.connect('users.db')
     return conn
 
-# تهيئة جدول المستخدمين
+# تهيئة الجدول عند بداية التشغيل
 conn = get_db_connection()
 c = conn.cursor()
-c.execute('CREATE TABLE IF NOT EXISTS users (email TEXT PRIMARY KEY, password TEXT, nom TEXT)')
-conn.commit()
+c.execute('CREATE TABLE IF NOT EXISTS users (email TEXT PRIMARY KEY, password TEXT, nom TEXT, prenom TEXT, paye INTEGER, montant REAL)')
+try:
+    c.execute('ALTER TABLE users ADD COLUMN paye INTEGER DEFAULT 0')
+    c.execute('ALTER TABLE users ADD COLUMN montant REAL DEFAULT 0')
+    conn.commit()
+except sqlite3.OperationalError:
+    pass
 conn.close()
 
+# وظائف تشفير كلمة المرور
 def make_hashes(password):
     return hashlib.sha256(str.encode(password)).hexdigest()
 
@@ -23,7 +30,7 @@ def check_hashes(password, hashed_text):
         return True
     return False
 
-# 2. إعداد الصفحة
+# 2. إعداد الصفحة الأساسي
 st.set_page_config(page_title="المنصة التعليمية قِصَّتِي دِرَاسَتِي", layout="wide")
 
 # 3. تهيئة الحالة (Session State)
@@ -33,103 +40,109 @@ if "الصفحة_الحالية" not in st.session_state:
     st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
 if "نقاط" not in st.session_state:
     st.session_state.نقاط = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
+if "is_admin" not in st.session_state:
+    st.session_state.is_admin = False
 
-# 4. دالة تسجيل الدخول
+# 4. وظيفة تسجيل الدخول أو إنشاء حساب
 def afficher_login():
     st.markdown("<h2 style='text-align: center;'>🔐 الدخول للمنصة</h2>", unsafe_allow_html=True)
-    menu = ["دخول", "إنشاء حساب"]
+    menu = ["دخول", "إنشاء حساب", "استعادة كلمة المرور"]
     choice = st.sidebar.selectbox("العمليات", menu)
 
     if choice == "دخول":
-        email = st.text_input("البريد الإلكتروني:")
+        email = st.text_input("إسم المستخدم:")
         password = st.text_input("كلمة المرور:", type="password")
+        
         if st.button("دخول"):
-            conn = get_db_connection()
-            c = conn.cursor()
-            c.execute('SELECT * FROM users WHERE email = ?', (email,))
-            user = c.fetchone()
-            conn.close()
-            if user and check_hashes(password, user[1]):
+            if email == "chef.department.elt.fge@gmail.com" and password == "123456":
                 st.session_state.connecte = True
-                st.success("تم الدخول بنجاح!")
+                st.session_state.is_admin = True
+                st.session_state.nom_eleve = "الأدمن (المعلم)"
                 st.rerun()
             else:
-                st.error("البريد أو كلمة المرور غير صحيحة")
+                conn = get_db_connection()
+                c = conn.cursor()
+                c.execute('SELECT * FROM users WHERE email = ? AND password = ?', (email, make_hashes(password)))
+                user = c.fetchone()
+                conn.close()
+                if user:
+                    st.session_state.connecte = True
+                    st.session_state.is_admin = False
+                    st.session_state.email_user = email
+                    st.session_state.nom_eleve = f"{user[3]} {user[2]}"
+                    st.rerun()
+                else:
+                    st.error("البريد أو كلمة المرور خطأ!")
 
     elif choice == "إنشاء حساب":
-        nom = st.text_input("الاسم الكامل:")
+        nom = st.text_input("الاسم:")
+        prenom = st.text_input("اللقب:")
         email = st.text_input("البريد الإلكتروني:")
         password = st.text_input("كلمة المرور:", type="password")
         if st.button("تسجيل"):
             try:
                 conn = get_db_connection()
                 c = conn.cursor()
-                c.execute('INSERT INTO users VALUES (?,?,?)', (email, make_hashes(password), nom))
+                c.execute('INSERT INTO users VALUES (?,?,?,?,?,?)', (email, make_hashes(password), prenom, nom, 0, 0.0))
                 conn.commit()
                 conn.close()
-                st.success("تم إنشاء الحساب! يمكنك الدخول الآن.")
+                st.success("تم إنشاء الحساب بنجاح! بانتظار تفعيل الإدارة.")
             except:
-                st.error("هذا البريد موجود مسبقاً!")
+                st.error("هذا الإيميل موجود مسبقاً!")
 
-# 5. الدوال الأساسية للمنصة
+    elif choice == "استعادة كلمة المرور":
+        email = st.text_input("أدخل بريدك لاستعادة كلمة المرور:")
+        if st.button("استعادة"):
+            conn = get_db_connection()
+            c = conn.cursor()
+            c.execute('SELECT * FROM users WHERE email = ?', (email,))
+            user = c.fetchone()
+            conn.close()
+            if user:
+                st.info(f"كلمة المرور المسجلة مرتبطة بحسابك. تواصل مع الإدارة.")
+            else:
+                st.error("الإيميل غير مسجل.")
+
+# 5. دوال العرض والمنطق
 def عرض_الشعار_الكبير():
     if os.path.exists("logo.jpeg"):
         col1, col2, col3 = st.columns([1, 10, 1])
         with col2:
             st.image("logo.jpeg", width=1000)
 
-def تشغيل_لعبة_الدرس(اسم_الدرس, مستوى_السنة):
-    # محتوى الألعاب (تم وضعه هنا لتقليل التكرار)
-    محتوى_الألعاب = {
-        "أقسام الكلمة": {1: {"سؤال": "ما هو نوع كلمة 'قلم'؟", "خيارات": ["فعل", "اسم", "حرف"], "إجابة": "اسم"}},
-        "الجملة الاسمية والفعلية": {1: {"سؤال": "الجملة الاسمية تبدأ بـ:", "خيارات": ["فعل", "اسم", "حرف"], "إجابة": "اسم"}}
-    }
-    data = محتوى_الألعاب.get(اسم_الدرس, {}).get(مستوى_السنة)
-    if data:
-        st.markdown(f"### 🎮 تحدي: {data['سؤال']}")
-        choix = st.radio("اختر الإجابة:", data['خيارات'], key=f"radio_{اسم_الدرس}_{مستوى_السنة}")
-        if st.button("تحقق من إجابتي!", key=f"btn_check_{اسم_الدرس}_{مستوى_السنة}"):
-            if choix == data['إجابة']:
-                st.session_state.نقاط[مستوى_السنة] += 10
-                st.success("🎉 إجابة صحيحة!")
-            else:
-                st.error("❌ إجابة خاطئة!")
-
-def عرض_محتوى_الدرس(اسم_الدرس):
-    st.markdown("<div class='content-card'>", unsafe_allow_html=True)
-    if st.button("⬅ العودة للقائمة", key=f"back_{اسم_الدرس}"):
-        st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
-        st.rerun()
-    st.markdown(f"<h2 style='text-align: center;'>{اسم_الدرس}</h2>", unsafe_allow_html=True)
-    annee = st.selectbox("اختر السنة الدراسية:", [1, 2, 3, 4, 5], key=f"select_{اسم_الدرس}")
-    تشغيل_لعبة_الدرس(اسم_الدرس, annee)
-    st.markdown("</div>", unsafe_allow_html=True)
-
-def afficher_page_hamza():
-    st.markdown("<div class='content-card'>", unsafe_allow_html=True)
-    tab1, tab2 = st.tabs(["📖 قصة صراع الحركات", "✍️ قواعد الهمزة"])
-    with tab1:
-        st.markdown("<h2 style='text-align: center;'>📖 قصة: صراع الحركات في مدينة الهمزة</h2>", unsafe_allow_html=True)
-        st.write("قصة الهمزة المتوسطة تعتمد على قوة الحركات: الكسرة ثم الضمة ثم الفتحة.")
-    with tab2:
-        st.markdown("<h2 style='text-align: center;'>✍️ قواعد الهمزة للسنة الرابعة</h2>", unsafe_allow_html=True)
-        st.write("قواعد الهمزة في أول ووسط وآخر الكلمة.")
+def admin_panel():
+    st.markdown("## 🛠 لوحة تحكم الأدمن والمالية")
     
-    if st.button("⬅ العودة للقائمة", key="back_hamza_btn"):
-        st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
+    conn = get_db_connection()
+    df = pd.read_sql_query("SELECT * FROM users", conn)
+    conn.close()
+    
+    st.write("### 📋 قائمة المستخدمين المسجلين:")
+    st.dataframe(df)
+    
+    csv = df.to_csv(index=False).encode('utf-8')
+    st.download_button(label="📥 تحميل قائمة العملاء (CSV)", data=csv, file_name='clients_data.csv', mime='text/csv')
+    
+    st.markdown("---")
+    st.write("### ⚙️ تفعيل حساب وتحديث المبلغ:")
+    email_to_act = st.text_input("إيميل التلميذ لتفعيله:")
+    montant_paye = st.number_input("المبلغ المدفوع (DA):", min_value=0.0)
+    
+    if st.button("تأكيد التفعيل والمبلغ"):
+        conn = get_db_connection()
+        c = conn.cursor()
+        c.execute('UPDATE users SET paye = 1, montant = ? WHERE email = ?', (montant_paye, email_to_act))
+        conn.commit()
+        conn.close()
+        st.success(f"تم تفعيل الحساب وتحديث المبلغ لـ: {email_to_act}")
         st.rerun()
-    st.markdown("</div>", unsafe_allow_html=True)
-
-def عرض_سينما_القواعد():
-    st.markdown("<div class='content-card'>", unsafe_allow_html=True)
-    st.markdown("<h2 style='text-align: center; color: #FF4B4B;'>🎬 سينما القواعد</h2>", unsafe_allow_html=True)
-    st.video("https://www.youtube.com/watch?v=9_6A_M542u8")
-    if st.button("⬅ العودة", key="back_cinema"):
-        st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
+        
+    if st.button("خروج من لوحة التحكم"):
+        st.session_state.connecte = False
+        st.session_state.is_admin = False
         st.rerun()
-    st.markdown("</div>", unsafe_allow_html=True)
 
-# 6. التنسيق
+# 8. تنسيق CSS
 css_style = """
 <style>
     html, body, [data-testid="stAppViewContainer"] { direction: rtl !important; }
@@ -140,24 +153,33 @@ css_style = """
 """
 st.markdown(css_style, unsafe_allow_html=True)
 
-# 7. المنطق الرئيسي (حماية المحتوى)
+# 9. المنطق الرئيسي (بوابة الوصول)
 if not st.session_state.connecte:
     afficher_login()
 else:
-    st.markdown("<h1 style='text-align: center; color: white;'>🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈</h1>", unsafe_allow_html=True)
-    if st.sidebar.button("تسجيل الخروج"):
-        st.session_state.connecte = False
-        st.rerun()
-        
-    if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
-        عرض_الشعار_الكبير()
-        c1, c2, c3, c4, c5 = st.columns(5)
-        if c1.button("🌟 دروس"): st.session_state.الصفحة_الحالية = "الدرس_الأول"; st.rerun()
-        if c2.button("🏰 حصن"): st.session_state.الصفحة_الحالية = "الدرس_الثاني"; st.rerun()
-        if c3.button("✍️ قواعدي"): st.session_state.الصفحة_الحالية = "Page_Hamza"; st.rerun()
-        if c4.button("🎬 سينما"): st.session_state.الصفحة_الحالية = "Cinema_Grammaire"; st.rerun()
-        if c5.button("🏆 لوحة"): st.session_state.الصفحة_الحالية = "لوحة_الإنجازات"; st.rerun()
-    elif st.session_state.الصفحة_الحالية == "الدرس_الأول": عرض_محتوى_الدرس("أقسام الكلمة")
-    elif st.session_state.الصفحة_الحالية == "الدرس_الثاني": عرض_محتوى_الدرس("الجملة الاسمية والفعلية")
-    elif st.session_state.الصفحة_الحالية == "Page_Hamza": afficher_page_hamza()
-    elif st.session_state.الصفحة_الحالية == "Cinema_Grammaire": عرض_سينما_القواعد()
+    if st.session_state.is_admin:
+        admin_panel()
+    else:
+        if "email_user" in st.session_state:
+            conn = get_db_connection()
+            c = conn.cursor()
+            c.execute('SELECT paye FROM users WHERE email = ?', (st.session_state.email_user,))
+            result = c.fetchone()
+            conn.close()
+            
+            if result and result[0] == 1:
+                st.markdown("<h1 style='text-align: center; color: white;'>🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈</h1>", unsafe_allow_html=True)
+                if st.button("🚪 تسجيل الخروج"):
+                    st.session_state.connecte = False
+                    st.rerun()
+            else:
+                st.warning("⚠️ حسابك غير مفعل.")
+                st.markdown("""
+                ### 💳 يرجى إتمام عملية الدفع للوصول إلى الدروس:
+                * **الاسم:** Abbou Majda
+                * **رقم الحساب (CCP):** 10917874
+                * **للتفعيل:** أرسل صورة إيصال الدفع عبر الواتساب إلى 0657012174
+                """)
+                if st.button("🚪 تسجيل الخروج"):
+                    st.session_state.connecte = False
+                    st.rerun()
