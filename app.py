@@ -44,7 +44,7 @@ def afficher_login():
         
         if st.button("دخول"):
             # منطق دخول الأدمن المباشر
-            if email == "chef.department.elt.fge@gmail.com" and password == "123456":
+            if email == "abboumajda1985" and password == "iyed2023":
                 st.session_state.connecte = True
                 st.session_state.is_admin = True
                 st.session_state.nom_eleve = "الأدمن (المعلم)"
