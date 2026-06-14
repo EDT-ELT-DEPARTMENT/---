@@ -206,13 +206,13 @@ else:
         if c1.button("🌟 دروس", key="b1"): st.session_state.الصفحة_الحالية = "الدرس_الأول"; st.rerun()
         if c2.button("🏰 حصن", key="b2"): st.session_state.الصفحة_الحالية = "الدرس_الثاني"; st.rerun()
         if c3.button("✍️ قواعدي في قصتي", key="b4"): st.session_state.الصفحة_الحالية = "Page_Hamza"; st.rerun()
-        if c4.button("🎬 سينما", key="b5"): st.session_state.الصفحة_الحالية = "Cinema_Grammaire"; st.rerun()
+        if c4.button("🎬 عرض", key="b5"): st.session_state.الصفحة_الحالية = "Cinema_Grammaire"; st.rerun()
         if c5.button("🏆 لوحة", key="b3"): st.session_state.الصفحة_الحالية = "لوحة_الإنجازات"; st.rerun()
 
     elif st.session_state.الصفحة_الحالية == "الدرس_الأول": عرض_محتوى_الدرس("أقسام الكلمة")
     elif st.session_state.الصفحة_الحالية == "الدرس_الثاني": عرض_محتوى_الدرس("الجملة الاسمية والفعلية")
     elif st.session_state.الصفحة_الحالية == "Page_Hamza": afficher_page_hamza()
-    elif st.session_state.الصفحة_الحالية == "Cinema_Grammaire": عرض_سينما_القواعد()
+    elif st.session_state.الصفحة_الحالية == "Cinema_Grammaire": عرض_القواعد()
     elif st.session_state.الصفحة_الحالية == "لوحة_الإنجازات":
         st.markdown("<div class='content-card'>", unsafe_allow_html=True)
         st.markdown("<h2>🏆 لوحة الإنجازات</h2>", unsafe_allow_html=True)
