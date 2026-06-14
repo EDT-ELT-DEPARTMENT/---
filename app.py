@@ -187,7 +187,7 @@ st.markdown(css_style, unsafe_allow_html=True)
 if not st.session_state.connecte:
     afficher_login()
 else:
-    st.markdown("<h1 style='text-align: center; color: white;'>🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center; color: blue;'>🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈</h1>", unsafe_allow_html=True)
     st.write(f"### أهلاً بك يا بطل/بطلة: {st.session_state.nom_eleve}")
     
     if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
