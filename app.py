@@ -130,24 +130,39 @@ def admin_panel():
         st.rerun()
 
 # 9. المنطق الرئيسي
+# 9. المنطق الرئيسي
 if not st.session_state.connecte:
     afficher_login()
 else:
-    # التحقق من الدفع (إلا للأدمن)
-    conn = get_db_connection()
-    c = conn.cursor()
-    c.execute('SELECT paye FROM users WHERE email = ?', (st.session_state.email_user if not st.session_state.is_admin else "admin",))
-    # هذا مجرد تبسيط للمنطق، تأكد من تعديله ليناسب حالة الأدمن
-    is_paid = st.session_state.is_admin or (c.fetchone() and c.fetchone() == 1)
-    conn.close()
-
+    # --- منطق الأدمن ---
     if st.session_state.is_admin:
         admin_panel()
-    elif is_paid:
-        if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
-            st.write(f"### أهلاً بك يا بطل: {st.session_state.nom_eleve}")
-            if st.button("✍️ قواعدي"): st.session_state.الصفحة_الحالية = "Page_Hamza"; st.rerun()
-        elif st.session_state.الصفحة_الحالية == "Page_Hamza":
-            afficher_page_hamza()
+        
+    # --- منطق الطالب ---
     else:
-        st.warning("⚠️ حسابك غير مفعل.")
+        # تأكد من وجود إيميل الطالب في الجلسة قبل الاستعلام
+        if "email_user" in st.session_state:
+            conn = get_db_connection()
+            c = conn.cursor()
+            c.execute('SELECT paye FROM users WHERE email = ?', (st.session_state.email_user,))
+            result = c.fetchone()
+            conn.close()
+            
+            # التحقق من حالة الدفع
+            if result and result[0] == 1:
+                if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
+                    st.write(f"### أهلاً بك يا بطل: {st.session_state.nom_eleve}")
+                    عرض_الشعار_الكبير()
+                    # أزرار التنقل
+                    col1, col2, col3, col4, col5 = st.columns(5)
+                    if col1.button("✍️ قواعدي"): st.session_state.الصفحة_الحالية = "Page_Hamza"; st.rerun()
+                    # ... (بقية الأزرار)
+                
+                elif st.session_state.الصفحة_الحالية == "Page_Hamza":
+                    afficher_page_hamza()
+            else:
+                st.warning("⚠️ حسابك غير مفعل، يرجى التواصل مع الإدارة.")
+        else:
+            # إذا حدث خطأ في الجلسة نرجع لشاشة الدخول
+            st.session_state.connecte = False
+            st.rerun()
