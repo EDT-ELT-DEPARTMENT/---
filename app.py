@@ -119,7 +119,10 @@ def عرض_الشعار_الكبير():
 
 def admin_panel():
     st.markdown("## 🛠 لوحة تحكم الأدمن والمالية")
-    
+    # --- إضافة زر للوصول للمنصة ---
+    if st.button("⬅ العودة للمنصة التعليمية"):
+        st.session_state.is_admin = False # نجعله يتصرف كطالب مؤقتاً
+        st.rerun()
     conn = get_db_connection()
     df = pd.read_sql_query("SELECT * FROM users", conn)
     conn.close()
