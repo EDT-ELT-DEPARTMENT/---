@@ -145,18 +145,18 @@ def admin_panel():
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        st.download_button(label="📄 تحميل (CSV)", data=csv, file_name='clients.csv', mime='text/csv', key="csv_btn")
+        st.download_button(label="📄 تحميل (CSV)", data=csv, file_name='clients.csv', mime='text/csv', key="csv_btn_admin")
     with col2:
-        st.download_button(label="📊 تحميل (Excel)", data=excel_data, file_name="clients.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", key="xlsx_btn")
+        st.download_button(label="📊 تحميل (Excel)", data=excel_data, file_name="clients.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", key="xlsx_btn_admin")
     with col3:
-        st.download_button(label="🌐 تحميل (HTML)", data=html_data, file_name="clients.html", mime="text/html", key="html_btn")
+        st.download_button(label="🌐 تحميل (HTML)", data=html_data, file_name="clients.html", mime="text/html", key="html_btn_admin")
     
     st.markdown("---")
     st.write("### ⚙️ تفعيل حساب وتحديث المبلغ:")
-    email_to_act = st.text_input("إيميل التلميذ لتفعيله:", key="email_admin")
-    montant_paye = st.number_input("المبلغ المدفوع (DA):", min_value=0.0, key="amount_admin")
+    email_to_act = st.text_input("إيميل التلميذ لتفعيله:", key="email_admin_input")
+    montant_paye = st.number_input("المبلغ المدفوع (DA):", min_value=0.0, key="amount_admin_input")
     
-    if st.button("✅ تأكيد التفعيل والمبلغ", key="confirm_admin"):
+    if st.button("✅ تأكيد التفعيل والمبلغ", key="confirm_admin_btn"):
         conn = get_db_connection()
         c = conn.cursor()
         c.execute('UPDATE users SET paye = 1, montant = ? WHERE email = ?', (montant_paye, email_to_act))
@@ -165,7 +165,7 @@ def admin_panel():
         st.success(f"تم تحديث بيانات التلميذ: {email_to_act}")
         st.rerun()
         
-    if st.button("🚪 خروج", key="logout_admin"):
+    if st.button("🚪 خروج", key="logout_admin_btn"):
         st.session_state.connecte = False
         st.session_state.is_admin = False
         st.rerun()
