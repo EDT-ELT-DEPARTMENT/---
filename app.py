@@ -191,7 +191,7 @@ else:
     # إضافة زر تسجيل الخروج في الأعلى
     col_header, col_logout = st.columns([6, 1])
     with col_header:
-        st.markdown("<h1 style='text-align: center; color: white;'>🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈</h1>", unsafe_allow_html=True)
+        st.markdown("<h1 style='text-align: center; color: blue;'>🎈 المَنْصَةُ التَّعْلِيمِيَّةُ قِصَّتِي دِرَاسَتِي 🎈</h1>", unsafe_allow_html=True)
     with col_logout:
         if st.button("🚪 تسجيل الخروج"):
             st.session_state.connecte = False
