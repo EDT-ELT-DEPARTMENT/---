@@ -104,7 +104,7 @@ def afficher_login():
     
     # تذكير دائم بعنوان المنصة الإدارية الداعمة خلف الكواليس أسفل شاشة التسجيل
     st.markdown("<div style='text-align: center; color: #7F8C8D; font-size: 14px; margin-top: 30px; font-weight: bold;'>"
-                "Propulsé par : Plateforme de gestion des EDTs-S2-2026-Département d'Électrotechnique-Facultة de génie électrique-UDL-SBA"
+                ""
                 "</div>", unsafe_allow_html=True)
 
 # 5. قاموس الألعاب والأسئلة لجميع المستويات الدراسية
