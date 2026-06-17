@@ -3,7 +3,7 @@ import os
 import sqlite3
 import hashlib
 
-# 1. إعداد قاعدة البيانات (مع إضافة تفادي مشاكل الخيوط المتعددة في Streamlit)
+# 1. إعداد قاعدة البيانات (تفادي مشاكل الخيوط المتعددة)
 conn = sqlite3.connect('users.db', check_same_thread=False)
 c = conn.cursor()
 c.execute('CREATE TABLE IF NOT EXISTS users (email TEXT PRIMARY KEY, password TEXT, nom TEXT, prenom TEXT)')
@@ -18,7 +18,7 @@ def check_hashes(password, hashed_text):
         return True
     return False
 
-# 2. إعداد الصفحة الأساسي بتصميم مريح
+# 2. إعداد الصفحة الأساسي بتصميم مريح للأطفال
 st.set_page_config(page_title="المنصة التعليمية قِصَّتِي دِرَاسَتِي", layout="wide")
 
 # 3. تهيئة الحالة (Session State)
@@ -45,13 +45,11 @@ def afficher_login():
         password = st.text_input("🔒 كلمة المرور:", type="password")
         
         if st.button("🚀 انطلق الآن"):
-            # منطق دخول الأدمن المباشر
             if email == "abboumajda" and password == "iyed2023":
                 st.session_state.connecte = True
                 st.session_state.nom_eleve = "الأدمن (المعلم)"
                 st.rerun()
             else:
-                # التحقق من قاعدة البيانات للتلاميذ
                 c.execute('SELECT * FROM users WHERE email = ? AND password = ?', (email, make_hashes(password)))
                 user = c.fetchone()
                 if user:
@@ -109,7 +107,7 @@ def afficher_login():
     }
 }
 
-# 6. الدوال الوظيفية وعرض الدروس المدعومة بالفيديو والأنيميشن
+# 6. الدوال الوظيفية وعرض الدروس المدعومة بالرسوم المتحركة التفاعلية
 def عرض_الشعار_الكبير():
     if os.path.exists("logo.jpeg"):
         col1, col2, col3 = st.columns([1, 10, 1])
@@ -146,12 +144,45 @@ def عرض_محتوى_الدرس(اسم_الدرس):
             
     st.markdown(f"<h1 style='text-align: center; color: #4A90E2; background-color: #F0F4F8; padding: 15px; border-radius: 20px;'>📖 درس: {اسم_الدرس}</h1>", unsafe_allow_html=True)
     
-    # إضافة الفيديوهات الكرتونية والأنيميشن التعليمية التفاعلية حسب نوع الدرس المطروح
-    st.markdown("<h3 style='color: #D32F2F;'>🎬 شاهد الفيديو التعليمي والأنيميشن لتفهم درسك بذكاء:</h3>", unsafe_allow_html=True)
+    # رسوم متحركة تفاعلية بديلة للفيديوهات الكلاسيكية
+    st.markdown("<h3 style='color: #D32F2F;'>✨ تفاعل مع الكرتون المتحرك أدناه واكتشف السر:</h3>", unsafe_allow_html=True)
+    
     if اسم_الدرس == "أقسام الكلمة":
-        st.video("https://www.youtube.com/watch?v=CvTvx1TRYw4")
+        # تصميم رسم كرتوني متحرك لأقسام الكلمة يتفاعل عند مرور الفأرة
+        cartoon_html = """
+        <div style="display: flex; justify-content: space-around; align-items: center; background: #FFF9E6; padding: 30px; border-radius: 20px; border: 3px dashed #FFB300; margin-bottom: 20px;">
+            <div class="cartoon-char character-noun">
+                <div style="font-size: 50px;">🏷️</div>
+                <div style="font-weight: bold; color: #E67E22; font-size: 24px;">أنا الاسْمُ</div>
+                <div style="font-size: 14px; color: #555;">أدل على إنسان، حيوان أو شيء!</div>
+            </div>
+            <div class="cartoon-char character-verb">
+                <div style="font-size: 50px;">🏃</div>
+                <div style="font-weight: bold; color: #2ECC71; font-size: 24px;">أنا الفِعْلُ</div>
+                <div style="font-size: 14px; color: #555;">أتحرك دائماً وأدل على عمل!</div>
+            </div>
+            <div class="cartoon-char character-particle">
+                <div style="font-size: 50px;">🔗</div>
+                <div style="font-weight: bold; color: #9B59B6; font-size: 24px;">أنا الحَرْفُ</div>
+                <div style="font-size: 14px; color: #555;">أربط بين الإخوة الكلمات!</div>
+            </div>
+        </div>
+        """
+        st.markdown(cartoon_html, unsafe_allow_html=True)
+        
     elif اسم_الدرس == "الجملة الاسمية والفعلية":
-        st.video("https://www.youtube.com/watch?v=IZ9Zq8CLdLU")
+        # تصميم قطار كرتوني متحرك لتركيب الجمل
+        cartoon_html = """
+        <div style="background: #E0F7FA; padding: 30px; border-radius: 20px; border: 3px dashed #00ACC1; text-align: center; margin-bottom: 20px;">
+            <div style="font-size: 28px; font-weight: bold; color: #006064; margin-bottom: 15px;">🚂 قطار الجمل السحري متحرك!</div>
+            <div style="display: flex; justify-content: center; gap: 10px;">
+                <div class="train-wagon wagon-blue">🏠 المبتدأ + 🌸 الخبر = 📜 جملة اسمية</div>
+                <div style="font-size: 30px; linear-height: 50px;">↔️</div>
+                <div class="train-wagon wagon-green">⚔️ الفعل + 🧑 الفاعل = 🎬 جملة فعلية</div>
+            </div>
+        </div>
+        """
+        st.markdown(cartoon_html, unsafe_allow_html=True)
         
     st.markdown("<hr style='border: 1px dashed #4A90E2;'>", unsafe_allow_html=True)
     
@@ -168,26 +199,30 @@ def afficher_page_hamza():
     with head_col2:
         st.markdown("<div style='font-size: 80px; text-align: center;'>📝</div>", unsafe_allow_html=True)
     
-    # إضافة أنيميشن لدرس الهمزة المتوسطة لتوضيح قوة الحركات للأطفال
-    st.markdown("<h3 style='color: #D32F2F;'>🎬 أنيميشن كرتوني لدرس الهمزة وقوة الحركات:</h3>", unsafe_allow_html=True)
-    st.video("https://www.youtube.com/watch?v=8bebUGwsYvw")
+    # لوحة كرتونية متحركة تفاعلية لقوة الحركات (بدل الفيديو)
+    st.markdown("<h3 style='color: #D32F2F;'>👑 حلبة صراع الحركات الكرتونية - مرر الفأرة لترى البطل المكتسح:</h3>", unsafe_allow_html=True)
+    
+    hamza_cartoon = """
+    <div style="display: flex; flex-direction: column; gap: 10px; background: #FFF3E0; padding: 25px; border-radius: 20px; border: 3px dashed #E67E22; margin-bottom: 20px;">
+        <div class="rank-card rank-1">🥇 الحركة الأقوى: الكسرة ──> تجلس على النبرة (ئـ) 🔥</div>
+        <div class="rank-card rank-2">🥈 المرتبة الثانية: الضمة ──> تجلس على الواو (ؤ) 💪</div>
+        <div class="rank-card rank-3">🥉 المرتبة الثالثة: الفتحة ──> تجلس على الألف (أ) ✨</div>
+        <div class="rank-card rank-4">🏅 المرتبة الأخيرة: السكون ──> يجلس المسكين على السطر (ء) 💤</div>
+    </div>
+    """
+    st.markdown(hamza_cartoon, unsafe_allow_html=True)
     
     tab1, tab2 = st.tabs(["📖 قصة صراع الحركات المشوقة", "✍️ ملخص قواعد الهمزة"])
     with tab1:
         st.markdown("<h3 style='text-align: center; color: #E67E22;'>📖 قصة: صراع الحركات في مدينة الهمزة السحرية</h3>", unsafe_allow_html=True)
         st.write("في مدينةِ الحروف والكلمات الجميلة، كانت الهمزةُ المتوسطة تعيشُ في حيرةٍ شديدة من أمرها، فهي لا تعرفُ فوق أي كرسي تجلس لترتاح! قررَت الحركات الأربع أن تقيمَ مسابقةً حماسية كبرى لتعرفَ من هي الحركة الأقوى والأجدر لتفوز بكرسي الهمزة وتحدد شكل جلوسها.")
-        st.markdown("<div style='background-color: #FFF3E0; padding: 20px; border-radius: 15px; border-left: 5px solid #FF9800;'> "
-                    "<h3>💡 سلم قوة الحركات الذهبي ونوع الكرسي المخصص:</h3>"
-                    "<p>🥇 <b>الكسرة القوية جداً:</b> تجلس وتأمر بالجلوس على النبرة (ئـ)</p>"
-                    "<p>🥈 <b>الضمة الشجاعة:</b> تجلس وتأمر بالجلوس على الواو (ؤ)</p>"
-                    "<p>🥉 <b>الفتحة اللطيفة:</b> تجلس وتأمر بالجلوس على الألف (أ)</p>"
-                    "<p>🏅 <b>السكون الهادئ والضعيف:</b> يجلس على السطر بكل هدوء (ء)</p></div>", unsafe_allow_html=True)
+        
         st.markdown("<br>", unsafe_allow_html=True)
-        st.write("### 🥊 جرب وبدأ التحدي والصراع بنفسك لترى القوة والانتصار:")
+        st.write("### 🥊 اضغط على الأزرار لتبدأ الصراع الكرتوني التفاعلي مباشرة أمامك:")
         col_a, col_b = st.columns(2)
         with col_a:
             if st.button("💥 الكسرة ضد الضمة"):
-                st.success("👑 الكسرة القوية الماهرة (ئـ) تهزم وتكسر الضمة وتجلس على النبرة!")
+                st.success("👑 الكسرة القوية الماهرة (ئـ) تهزم وتكسر الضمة وتجلس شموخاً على النبرة!")
                 st.balloons()
         with col_b:
             if st.button("💥 الفتحة ضد السكون"):
@@ -209,15 +244,29 @@ def afficher_page_hamza():
 
 def عرض_القواعد():
     st.markdown("<div class='content-card'>", unsafe_allow_html=True)
-    st.markdown("<h2 style='text-align: center; color: #E74C3C;'>🎬 سينما القواعد: مغامرة حارس غابة الكلمات</h2>", unsafe_allow_html=True)
-    st.write("استمتع بمشاهدة العرض الكرتوني الشيق لتتعلم كيف تحمي الكلمات من الأخطاء اللغوية الإملائية والنحوية بكل سهولة:")
-    st.video("https://www.youtube.com/watch?v=9_6A_M542u8")
+    st.markdown("<h2 style='text-align: center; color: #E74C3C;'>🎬 مسرح الكرتون التفاعلي: حارس غابة الكلمات</h2>", unsafe_allow_html=True)
+    
+    # تحويل السينما التقليدية لرسوم متحركة إبداعية كرتونية بالـ CSS
+    cinema_html = """
+    <div style="background: radial-gradient(circle, #34495e, #2c3e50); padding: 40px; border-radius: 25px; text-align: center; color: white; border: 4px solid #F1C40F;">
+        <div style="font-size: 60px; animation: pulse 1s infinite alternate;">🕵️‍♂️🌳📜</div>
+        <h3 style='color: #F1C40F; text-align: center !important;'>مرحباً بك في غابة الكلمات التفاعلية!</h3>
+        <p style="color: #ECF0F1; text-align: center !important;">قوانين الحارس ذكي لحماية الحروف من الضياع:</p>
+        <div style="display: inline-block; text-align: right; background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px; margin-top: 10px;">
+            ⭐ الحفاظ على الضوابط الإعرابية <br>
+            ⭐ مراقبة الحركات الإملائية السليمة <br>
+            ⭐ مساعدة التلميذ البطل في تجميع النقاط والbadges
+        </div>
+    </div>
+    """
+    st.markdown(cinema_html, unsafe_allow_html=True)
+    
     if st.button("⬅️ العودة للقائمة السابقة", key="back_cinema"):
         st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
 
-# 7. تنسيق CSS المطور والمعدل بالألوان الزاهية لجذب اهتمام الأطفال والطلاب
+# 7. تنسيق CSS المطور لتشغيل رسوم كرتونية متحركة (Animations CSS)
 css_style = """
 <style>
     html, body, [data-testid="stAppViewContainer"] { 
@@ -273,6 +322,57 @@ css_style = """
         color: white;
         transform: scale(1.05);
     }
+
+    /* تأثيرات الرسوم المتحركة والرسومات الكرتونية التفاعلية */
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-12px); }
+    }
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        100% { transform: scale(1.03); }
+    }
+    
+    .cartoon-char {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        text-align: center !important;
+        box-shadow: 0 6px 12px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        animation: bounce 3s infinite ease-in-out;
+    }
+    .cartoon-char:hover {
+        transform: scale(1.1) rotate(2deg);
+        box-shadow: 0 12px 20px rgba(0,0,0,0.15);
+    }
+    
+    .train-wagon {
+        background: white;
+        padding: 15px 30px;
+        border-radius: 12px;
+        font-weight: bold;
+        font-size: 20px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        animation: pulse 1.5s infinite alternate;
+    }
+    .wagon-blue { border-bottom: 5px solid #2196F3; color: #1565C0; }
+    .wagon-green { border-bottom: 5px solid #4CAF50; color: #2E7D32; }
+
+    .rank-card {
+        padding: 15px;
+        border-radius: 10px;
+        color: white;
+        font-weight: bold;
+        font-size: 20px;
+        transition: transform 0.2s;
+    }
+    .rank-card:hover { transform: translateX(-10px); }
+    .rank-1 { background: #E74C3C; }
+    .rank-2 { background: #E67E22; }
+    .rank-3 { background: #F1C40F; color: #333; }
+    .rank-4 { background: #95A5A6; }
 </style>
 """
 st.markdown(css_style, unsafe_allow_html=True)
@@ -281,7 +381,7 @@ st.markdown(css_style, unsafe_allow_html=True)
 if not st.session_state.connecte:
     afficher_login()
 else:
-    # إضافة زر تسجيل الخروج والترهيب في الأعلى بتصميم أنيق ومميز
+    # إضافة زر تسجيل الخروج بتصميم أنيق ومميز
     col_header, col_logout = st.columns([6, 1.5])
     with col_header:
         st.markdown("<div class='main-title'>🎈 المَنْصَةُ التَّعْلِيمِيَّةُ الرَّائِعَةُ: قِصَّتِي دِرَاسَتِي 🎈</div>", unsafe_allow_html=True)
@@ -294,9 +394,6 @@ else:
 
     st.markdown(f"<div style='background-color: #E3F2FD; padding: 15px; border-radius: 12px; border-right: 5px solid #2196F3; margin-bottom: 20px;'>"
                 f"<h3 style='margin: 0; color: #0D47A1;'>🌟 أهلاً بك يا بطل/بطلة المستقبل العبقري: {st.session_state.nom_eleve}</h3></div>", unsafe_allow_html=True)
-    
-    if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
-        st.session_state.الصفحة_الحالية = "القائمة_الرئيسية" # لتفادي أي تعارض في الحالات
 
     if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
         عرض_الشعار_الكبير()
