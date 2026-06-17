@@ -31,20 +31,27 @@ if "نقاط" not in st.session_state:
 if "nom_eleve" not in st.session_state:
     st.session_state.nom_eleve = ""
 
-# 4. وظيفة تسجيل الدخول أو إنشاء حساب بتصميم ملون مبهج
+# 4. وظيفة تسجيل الدخول أو إنشاء حساب بتصميم ملون فائق البهجة والألوان
 def afficher_login():
-    st.markdown("<div class='login-header'>🔐 الدخول للمنصة التعليمية مدرسة الأبطال</div>", unsafe_allow_html=True)
+    # عنوان ملون بألوان قوس قزح الكرتونية المتدرجة المضيئة
+    st.markdown("<div class='login-header'>✨ 🔐 بَوَّابَةُ الأَبْطَالِ: الدُّخُولُ إِلَى المَنَصَّةِ التَّعْلِيمِيَّةِ 🔐 ✨</div>", unsafe_allow_html=True)
     
-    menu = ["💥 تسجيل الدخول", "✨ إنشاء حساب جديد", "🔑 استعادة كلمة المرور"]
-    choice = st.sidebar.selectbox("📋 العمليات المتاحة", menu)
+    # خيارات القائمة الجانبية بتنسيق ملون
+    menu = ["💥 تسجيل الدخول للمغامرة", "✨ إنشاء حساب بطل جديد", "🔑 استعادة كلمة المرور المفقودة"]
+    choice = st.sidebar.selectbox("📋 اختر وجهتك السحرية اليوم:", menu)
 
-    st.markdown("<div class='content-card'>", unsafe_allow_html=True)
-    if choice == "💥 تسجيل الدخول":
-        st.markdown("<h3 style='color: #2E4057;'>👋 مرحباً بك مجدداً! سجل دخولك وابدأ المغامرة</h3>", unsafe_allow_html=True)
-        email = st.text_input("👤 اسم المستخدم (الإيميل):")
-        password = st.text_input("🔒 كلمة المرور:", type="password")
+    # كرت استقبال ملون للغاية وخلفية مبهجة للأطفال
+    st.markdown("<div class='login-card-colorful'>", unsafe_allow_html=True)
+    
+    if choice == "💥 تسجيل الدخول للمغامرة":
+        st.markdown("<h2 class='colorful-text-blue'>👋 مَرْحَباً بِكَ يَا بَطَلُ مُجَدَّداً!</h2>", unsafe_allow_html=True)
+        st.markdown("<p style='color: #4A5568; font-weight: bold;'>سجّل دخولك الآن وافتح صندوق المفاجآت والدروس المتحركة:</p>", unsafe_allow_html=True)
         
-        if st.button("🚀 انطلق الآن"):
+        email = st.text_input("👤 اسم المستخدم الخاص بك (الإيميل):", placeholder="أدخل اسمك هنا يا بطل...")
+        password = st.text_input("🔒 كلمة المرور السرية العجيبة:", type="password", placeholder="أدخل رمزك السري هنا...")
+        
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("🚀 انْطَلِقْ فِي المَغَامَرَةِ الآنَ"):
             if email == "abboumajda" and password == "iyed2023":
                 st.session_state.connecte = True
                 st.session_state.nom_eleve = "الأدمن (المعلم)"
@@ -57,37 +64,48 @@ def afficher_login():
                     st.session_state.nom_eleve = f"{user[3]} {user[2]}"
                     st.rerun()
                 else:
-                    st.error("❌ البريد أو كلمة المرور غير صحيحة، حاول مجدداً يا بطل!")
+                    st.error("❌ أوه! البريد أو كلمة المرور غير صحيحة، حاول مجدداً وستنجح بالتأكيد يا بطل!")
 
-    elif choice == "✨ إنشاء حساب جديد":
-        st.markdown("<h3 style='color: #2E4057;'>📝 انضم إلينا وأنشئ حسابك الخاص</h3>", unsafe_allow_html=True)
-        nom = st.text_input("✍️ الاسم:")
-        prenom = st.text_input("✍️ اللقب:")
-        email = st.text_input("👤 اسم المستخدم المفضل:")
-        password = st.text_input("🔒 اختر كلمة مرور قوية:", type="password")
+    elif choice == "✨ إنشاء حساب بطل جديد":
+        st.markdown("<h2 class='colorful-text-pink'>📝 صَنَاعَةُ حِسَابِ بَطَلٍ جَدِيدٍ</h2>", unsafe_allow_html=True)
+        st.markdown("<p style='color: #4A5568; font-weight: bold;'>انضم إلى أصدقائك الرائعين في غابة الكلمات التفاعلية:</p>", unsafe_allow_html=True)
         
-        if st.button("🎉 تسجيل الحساب الجديد"):
+        nom = st.text_input("✍️ اسمك الجميل:")
+        prenom = st.text_input("✍️ لقبتك العائلي المتميز:")
+        email = st.text_input("👤 اختر اسم مستخدم فريد (إيميل):")
+        password = st.text_input("🔒 اختر كلمة مرور قوية وسهلة الحفظ بالنسبة لك:", type="password")
+        
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("🎉 تَسْجِيلُ الحِسَابِ الجَدِيدِ وَالِانْضِمَامُ"):
             if nom and prenom and email and password:
                 try:
                     c.execute('INSERT INTO users VALUES (?,?,?,?)', (email, make_hashes(password), prenom, nom))
                     conn.commit()
-                    st.success("🎯 ممتاز! تم إنشاء حسابك بنجاح. يمكنك الآن الانتقال لخيار تسجيل الدخول.")
+                    st.success("🎯 مذهل! تم إنشاء حسابك بنجاح تام. يمكنك الآن الذهاب إلى خيار تسجيل الدخول لتبدأ اللعب!")
                 except:
-                    st.error("⚠️ اسم المستخدم هذا مسجل مسبقاً! اختر اسماً آخر.")
+                    st.error("⚠️ اسم المستخدم هذا مأخوذ ومسجل مسبقاً! جرب إضافة رقم أو تغيير الاسم قليلاً.")
             else:
-                st.warning("❗ يرجى ملء جميع الحقول أولاً.")
+                st.warning("❗ يرجى ملء جميع الحقول والبيانات أولاً لتكتمل لوحة تسجيلك.")
 
-    elif choice == "🔑 استعادة كلمة المرور":
-        st.markdown("<h3 style='color: #2E4057;'>🔍 استعادة الحساب</h3>", unsafe_allow_html=True)
-        email = st.text_input("📧 أدخل بريدك الإلكتروني المسجل:")
-        if st.button("🔍 تحقق من الحساب"):
+    elif choice == "🔑 استعادة كلمة المرور المفقودة":
+        st.markdown("<h2 class='colorful-text-orange'>🔍 المُحَقِّقُ الذَّكِيُّ: اِسْتِعَادَةُ الحِسَابِ</h2>", unsafe_allow_html=True)
+        email = st.text_input("📧 أدخل بريدك الإلكتروني الذي سجلت به سابقاً:")
+        
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("🔍 بَدْءُ التَّحَقُّقِ السِّحْرِيِّ"):
             c.execute('SELECT * FROM users WHERE email = ?', (email,))
             user = c.fetchone()
             if user:
-                st.info(f"ℹ️ تم العثور على حسابك بنجاح! يرجى التواصل مع إدارة المدرسة أو المعلم لاستلام كلمة المرور الخاصة بك.")
+                st.info(f"ℹ️ وجدنا حسابك يا بطل! يرجى إخبار المعلم أو إدارة المدرسة لتزويدك بكلمة المرور الخاصة بك مباشرة.")
             else:
-                st.error("❌ هذا الإيميل غير مسجل في المنصة.")
+                st.error("❌ لم نجد هذا الإيميل مسجلاً لدينا في المنصة التعليمية الكرتونية.")
+                
     st.markdown("</div>", unsafe_allow_html=True)
+    
+    # تذكير دائم بعنوان المنصة الإدارية الداعمة خلف الكواليس أسفل شاشة التسجيل
+    st.markdown("<div style='text-align: center; color: #7F8C8D; font-size: 14px; margin-top: 30px; font-weight: bold;'>"
+                "Propulsé par : Plateforme de gestion des EDTs-S2-2026-Département d'Électrotechnique-Facultة de génie électrique-UDL-SBA"
+                "</div>", unsafe_allow_html=True)
 
 # 5. قاموس الألعاب والأسئلة لجميع المستويات الدراسية
 محتوى_الألعاب = {
@@ -146,7 +164,6 @@ def عرض_محتوى_الدرس(اسم_الدرس):
     
     if اسم_الدرس == "أقسام الكلمة":
         st.markdown("<h3 style='color: #D32F2F;'>✨ كرتون متحرك تفاعلي (مرر الفأرة فوق الحروف لرؤية الدوران والاهتزاز!):</h3>", unsafe_allow_html=True)
-        # تصميم كرتوني متحرك مع تأثير دوران واهتزاز جذاب للغاية عند تمرير الماوس
         cartoon_html = """
         <div style="display: flex; justify-content: space-around; align-items: center; background: linear-gradient(135deg, #FFF9E6, #FFF0C2); padding: 30px; border-radius: 20px; border: 3px dashed #FFB300; margin-bottom: 25px; overflow: hidden;">
             <div class="cartoon-char character-noun animated-rotation">
@@ -170,7 +187,6 @@ def عرض_محتوى_الدرس(اسم_الدرس):
         
     elif اسم_الدرس == "الجملة الاسمية والفعلية":
         st.markdown("<h3 style='color: #00ACC1;'>🚂 أنيميشن كرتوني سحري: شاهد قطار الجمل السريع وهو يسير!</h3>", unsafe_allow_html=True)
-        # قطار حقيقي متحرك بالكامل يسير أفقياً من اليمين إلى اليسار بشكل تكراري ممتع للغاية
         cartoon_html = """
         <div class="train-track-container">
             <div class="moving-train-simulation">
@@ -186,7 +202,6 @@ def عرض_محتوى_الدرس(اسم_الدرس):
         
     st.markdown("<hr style='border: 1px dashed #4A90E2;'>", unsafe_allow_html=True)
     
-    # اختيار المستوى وتجربة اللعبة التفاعلية
     annee = st.selectbox("🎯 اختر سنتك الدراسية الحالية لتجربة التحدي المثير:", [1, 2, 3, 4, 5], key=f"select_{اسم_الدرس}")
     تشغيل_لعبة_الدرس(اسم_الدرس, annee)
     st.markdown("</div>", unsafe_allow_html=True)
@@ -201,7 +216,6 @@ def afficher_page_hamza():
     
     st.markdown("<h3 style='color: #D32F2F;'>👑 حلبة صراع الحركات الكرتونية - انزلاق الحركات عند مرور الفأرة واهتزاز الأبطال:</h3>", unsafe_allow_html=True)
     
-    # لوحة كرتونية تفاعلية بحركات انزلاقية واهتزازية فريدة للأطفال
     hamza_cartoon = """
     <div style="display: flex; flex-direction: column; gap: 12px; background: #FFF3E0; padding: 25px; border-radius: 20px; border: 3px dashed #E67E22; margin-bottom: 25px; overflow: hidden;">
         <div class="rank-card rank-1 sliding-card">🥇 الحركة المكتسحة والأقوى: الكسرة ──> تجلس بقوة على النبرة (ئـ) 🔥</div>
@@ -245,9 +259,8 @@ def afficher_page_hamza():
 def عرض_القواعد():
     st.markdown("<div class='content-card'>", unsafe_allow_html=True)
     st.markdown("<h2 style='text-align: center; color: #E74C3C;'>🎬 مسرح الكرتون والسيارات السريعة: حارس غابة الكلمات</h2>", unsafe_allow_html=True)
-    st.write("راقب الطريق غابة الكلمات التفاعلية السحرية وشاهد سيارة الحارس الذكي وهي تمر مسرعة لحماية القواعد لغوياً:")
+    st.write("راقب طريق غابة الكلمات التفاعلية السحرية وشاهد سيارة الحارس الذكي وهي تمر مسرعة لحماية القواعد لغوياً:")
     
-    # سيارة كرتونية متحركة بالكامل تسير بشكل لامتناهي عبر الشاشة لتجسيد طلب المستخدم
     cinema_html = """
     <div style="background: radial-gradient(circle, #2c3e50, #1a252f); padding: 40px; border-radius: 25px; text-align: center; color: white; border: 4px solid #F1C40F; overflow: hidden; position: relative;">
         <div class="road-simulation-container">
@@ -269,7 +282,7 @@ def عرض_القواعد():
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
 
-# 7. التنسيق البرمجي الشامل لأقوى محرك رسوم متحركة (CSS Animation Engine) مخصص للطفل
+# 7. التنسيق البرمجي الشامل لأقوى محرك رسوم متحركة (CSS Animation Engine) مع تلوين فائق لصفحة التسجيل
 css_style = """
 <style>
     html, body, [data-testid="stAppViewContainer"] { 
@@ -286,16 +299,58 @@ css_style = """
         margin-bottom: 25px;
         animation: pulse 2s infinite alternate;
     }
+    
+    /* تصميم رأس صفحة الدخول والتسجيل بألوان قوس قزح الكرتونية المتدرجة والمتحركة */
     .login-header {
         text-align: center; 
         color: #FFFFFF; 
-        background: linear-gradient(45deg, #2E4057, #1A252F); 
-        padding: 15px; 
-        border-radius: 15px;
-        font-size: 26px;
+        background: linear-gradient(45deg, #FF1493, #FF4500, #FFD700, #32CD32, #00BFFF, #9370DB);
+        background-size: 400% 400%;
+        animation: rainbowGradient 8s ease infinite;
+        padding: 20px; 
+        border-radius: 25px;
+        font-size: 28px;
         font-weight: bold;
-        margin-bottom: 20px;
+        margin-bottom: 25px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     }
+    
+    /* تصميم كرت التسجيل والاستقبال بألوان مبهجة وخلفية كرتونية جذابة للغاية */
+    .login-card-colorful {
+        background: linear-gradient(135deg, #FFF0F5 0%, #E6F2FF 100%);
+        padding: 45px; 
+        border-radius: 35px; 
+        color: #333333; 
+        text-align: right !important; 
+        box-shadow: 0 15px 35px rgba(255, 105, 180, 0.15);
+        border: 4px solid #FFB6C1;
+        animation: cardFloat 4s ease-in-out infinite alternate;
+    }
+    
+    /* نصوص ملونة وعناوين جذابة داخل صفحة التسجيل */
+    .colorful-text-blue {
+        color: #0080FF !important;
+        background: linear-gradient(to left, #0052D4, #4364F7, #6FB1FC);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 900;
+    }
+    .colorful-text-pink {
+        color: #FF007F !important;
+        background: linear-gradient(to left, #FF007F, #FF4500);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 900;
+    }
+    .colorful-text-orange {
+        color: #FF7F00 !important;
+        background: linear-gradient(to left, #F857A6, #FF5858);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 900;
+    }
+    
     .content-card { 
         background-color: #FFFFFF; 
         padding: 40px; 
@@ -340,7 +395,16 @@ css_style = """
         animation: vibrate 0.2s infinite;
     }
 
-    /* كود ومحركات الـ Keyframes للحركات والاهتزاز والقطار والسيارات */
+    /* كود ومحركات الـ Keyframes للحركات والاهتزاز والقطار والسيارات وقوس قزح */
+    @keyframes rainbowGradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    @keyframes cardFloat {
+        0% { transform: translateY(0px); }
+        100% { transform: translateY(-10px); }
+    }
     @keyframes bounce {
         0%, 100% { transform: translateY(0); }
         50% { transform: translateY(-15px); }
@@ -356,10 +420,6 @@ css_style = """
         60% { transform: translate(2px, 2px); }
         80% { transform: translate(2px, -2px); }
         100% { transform: translate(0); }
-    }
-    @keyframes continuousRotation {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
     }
     @keyframes trainMove {
         0% { transform: translateX(100%); }
@@ -484,7 +544,6 @@ else:
     st.markdown(f"<div style='background-color: #E3F2FD; padding: 15px; border-radius: 12px; border-right: 5px solid #2196F3; margin-bottom: 20px;'>"
                 f"<h3 style='margin: 0; color: #0D47A1;'>🌟 أهلاً بك يا بطل/بطلة المستقبل العبقري: {st.session_state.nom_eleve}</h3></div>", unsafe_allow_html=True)
 
-    # تصحيح السطر المطلوب وضمان ثبات الحالة
     if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
         عرض_الشعار_الكبير()
         st.markdown("<h3 style='text-align: center; color: #7F8C8D;'>👇 اختر محطتك التعليمية التفاعلية وابدأ باللعب والتعلم:</h3>", unsafe_allow_html=True)
