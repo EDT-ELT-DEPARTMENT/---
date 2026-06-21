@@ -2,7 +2,17 @@ import streamlit as st
 import os
 import sqlite3
 import hashlib
-
+# Masquer les éléments du menu supérieur (Share, Star, Edit, etc.)
+hide_st_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            header {visibility: hidden;}
+            footer {visibility: hidden;}
+            .stAppDeployButton {display:none;}
+            #stDecoration {display:none;}
+            </style>
+            """
+st.markdown(hide_st_style, unsafe_allow_html=True)
 # 1. إعداد قاعدة البيانات (تفادي مشاكل الخيوط المتعددة)
 conn = sqlite3.connect('users.db', check_same_thread=False)
 c = conn.cursor()
