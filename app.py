@@ -564,7 +564,7 @@ else:
             st.session_state.nom_eleve = ""
             st.rerun()
 
-    st.markdown(f"<div style='background-color: #E3F2FD; padding: 15px; border-radius: 12px; border-right: 5px solid #2196F3; margin-bottom: 20px;'>"
+    st.markdown(f"<div style='background-color: #E3F2FD; padding: 20px; border-radius: 12px; border-right: 5px solid #2196F3; margin-bottom: 20px;'>"
                 f"<h3 style='margin: 0; color: #0D47A1;'>🌟 أهلاً بك يا بطل/بطلة المستقبل العبقري: {st.session_state.nom_eleve}</h3></div>", unsafe_allow_html=True)
 
     if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
