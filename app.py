@@ -2,6 +2,7 @@ import streamlit as st
 import os
 import sqlite3
 import hashlib
+
 # Masquer les éléments du menu supérieur (Share, Star, Edit, etc.)
 hide_st_style = """
             <style>
@@ -13,10 +14,17 @@ hide_st_style = """
             </style>
             """
 st.markdown(hide_st_style, unsafe_allow_html=True)
-# 1. إعداد قاعدة البيانات (تفادي مشاكل الخيوط المتعددة)
+
+# 1. إعداد قاعدة البيانات (تفادي مشاكل الخيوط المتعددة) مع إضافة التفعيل
 conn = sqlite3.connect('users.db', check_same_thread=False)
 c = conn.cursor()
-c.execute('CREATE TABLE IF NOT EXISTS users (email TEXT PRIMARY KEY, password TEXT, nom TEXT, prenom TEXT)')
+c.execute('CREATE TABLE IF NOT EXISTS users (email TEXT PRIMARY KEY, password TEXT, nom TEXT, prenom TEXT, active INTEGER DEFAULT 0)')
+# محاولة إضافة عمود التفعيل إذا كانت قاعدة البيانات القديمة موجودة
+try:
+    c.execute('ALTER TABLE users ADD COLUMN active INTEGER DEFAULT 0')
+    conn.commit()
+except:
+    pass # العمود موجود مسبقاً
 conn.commit()
 
 # وظائف تشفير كلمة المرور
@@ -62,7 +70,7 @@ def afficher_login():
         
         st.markdown("<br>", unsafe_allow_html=True)
         if st.button("🚀 انْطَلِقْ فِي المَغَامَرَةِ الآنَ"):
-            if email == "abboumajda" and password == "iyed2023":
+            if email == "عبو" and password == "00":
                 st.session_state.connecte = True
                 st.session_state.nom_eleve = "الأدمن (المعلم)"
                 st.rerun()
@@ -70,9 +78,13 @@ def afficher_login():
                 c.execute('SELECT * FROM users WHERE email = ? AND password = ?', (email, make_hashes(password)))
                 user = c.fetchone()
                 if user:
-                    st.session_state.connecte = True
-                    st.session_state.nom_eleve = f"{user[3]} {user[2]}"
-                    st.rerun()
+                    is_active = user[4]
+                    if is_active == 1:
+                        st.session_state.connecte = True
+                        st.session_state.nom_eleve = f"{user[3]} {user[2]}"
+                        st.rerun()
+                    else:
+                        st.warning("⚠️ حسابك مسجل ولكنه **غير مفعل بعد**! \n\nيرجى دفع رسوم التفعيل في حساب الـ CCP الخاص بالمعلم، ثم إرسال وصل الدفع عبر واتساب أو SMS إلى الرقم **0657011874** ليتم تفعيل حسابك فوراً.")
                 else:
                     st.error("❌ أوه! البريد أو كلمة المرور غير صحيحة، حاول مجدداً وستنجح بالتأكيد يا بطل!")
 
@@ -89,9 +101,10 @@ def afficher_login():
         if st.button("🎉 تَسْجِيلُ الحِسَابِ الجَدِيدِ وَالِانْضِمَامُ"):
             if nom and prenom and email and password:
                 try:
-                    c.execute('INSERT INTO users VALUES (?,?,?,?)', (email, make_hashes(password), prenom, nom))
+                    # إضافة الحساب مع حالة active = 0 (غير مفعل)
+                    c.execute('INSERT INTO users VALUES (?,?,?,?,?)', (email, make_hashes(password), prenom, nom, 0))
                     conn.commit()
-                    st.success("🎯 مذهل! تم إنشاء حسابك بنجاح تام. يمكنك الآن الذهاب إلى خيار تسجيل الدخول لتبدأ اللعب!")
+                    st.success("🎯 مذهل! تم إنشاء حسابك بنجاح، لكنه **يحتاج إلى تفعيل**.\n\n📱 يرجى دفع رسوم التفعيل (CCP)، ثم إرسال وصل الدفع عبر رسالة واتساب أو SMS إلى الرقم: **0657011874**.\n\nبمجرد التحقق، سيقوم المعلم بفتح أبواب المنصة لك!")
                 except:
                     st.error("⚠️ اسم المستخدم هذا مأخوذ ومسجل مسبقاً! جرب إضافة رقم أو تغيير الاسم قليلاً.")
             else:
@@ -551,50 +564,4 @@ else:
             st.session_state.nom_eleve = ""
             st.rerun()
 
-    st.markdown(f"<div style='background-color: #E3F2FD; padding: 15px; border-radius: 12px; border-right: 5px solid #2196F3; margin-bottom: 20px;'>"
-                f"<h3 style='margin: 0; color: #0D47A1;'>🌟 أهلاً بك يا بطل/بطلة المستقبل العبقري: {st.session_state.nom_eleve}</h3></div>", unsafe_allow_html=True)
-
-    if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
-        عرض_الشعار_الكبير()
-        st.markdown("<h3 style='text-align: center; color: #7F8C8D;'>👇 اختر محطتك التعليمية التفاعلية وابدأ باللعب والتعلم:</h3>", unsafe_allow_html=True)
-        
-        c1, c2, c3, c4, c5 = st.columns(5)
-        if c1.button("📚 درس أقسام الكلمة", key="b1"): 
-            st.session_state.الصفحة_الحالية = "الدرس_الأول"
-            st.rerun()
-        if c2.button("🏰 الجملة الاسمية والفعلية", key="b2"): 
-            st.session_state.الصفحة_الحالية = "الدرس_الثاني"
-            st.rerun()
-        if c3.button("✍️ قواعد الهمزة العجيبة", key="b4"): 
-            st.session_state.الصفحة_الحالية = "Page_Hamza"
-            st.rerun()
-        if c4.button("🎬 حارس غابة الكلمات", key="b5"): 
-            st.session_state.الصفحة_الحالية = "Cinema_Grammaire"
-            st.rerun()
-        if c5.button("🏆 لوحة أوسمة الإنجازات", key="b3"): 
-            st.session_state.الصفحة_الحالية = "لوحة_الإنجازات"
-            st.rerun()
-
-    elif st.session_state.الصفحة_الحالية == "الدرس_الأول": 
-        عرض_محتوى_الدرس("أقسام الكلمة")
-    elif st.session_state.الصفحة_الحالية == "الدرس_الثاني": 
-        عرض_محتوى_الدرس("الجملة الاسمية والفعلية")
-    elif st.session_state.الصفحة_الحالية == "Page_Hamza": 
-        afficher_page_hamza()
-    elif st.session_state.الصفحة_الحالية == "Cinema_Grammaire": 
-        عرض_القواعد()
-    elif st.session_state.الصفحة_الحالية == "لوحة_الإنجازات":
-        st.markdown("<div class='content-card'>", unsafe_allow_html=True)
-        st.markdown("<h2 style='color: #8E44AD;'>🏆 لوحة الأبطال وأوسمة الإنجازات المحققة</h2>", unsafe_allow_html=True)
-        st.write("تابع عدد النقاط والنجاحات التي جمعتها في كل مستوى دراسي بفضل ذكائك وجدارتك:")
-        
-        for annee, score in st.session_state.نقاط.items():
-            badge = "🌟 متميز ومتفوق للغاية!" if score > 0 else "⏳ بانتظار التحدي الأول"
-            st.markdown(f"<div style='background-color: #F9F1FC; padding: 10px; margin: 5px 0; border-radius: 8px; border-right: 4px solid #9B59B6;'>"
-                        f"<b>السنة الدراسية {annee}:</b> {score} نقطة مجتمعة {badge}</div>", unsafe_allow_html=True)
-                        
-        st.markdown("<br>", unsafe_allow_html=True)
-        if st.button("⬅️ عودة إلى الشاشة الرئيسية", key="back_final"): 
-            st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
-            st.rerun()
-        st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown(f"<div style='background-color: #E3F2FD; padding: 15px; border-radius: 12px; border-right: 5px solid #21
