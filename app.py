@@ -564,4 +564,102 @@ else:
             st.session_state.nom_eleve = ""
             st.rerun()
 
-    st.markdown(f"<div style='background-color: #E3F2FD; padding: 15px; border-radius: 12px; border-right: 5px solid #21
+    st.markdown(f"<div style='background-color: #E3F2FD; padding: 15px; border-radius: 12px; border-right: 5px solid #2196F3; margin-bottom: 20px;'>"
+                f"<h3 style='margin: 0; color: #0D47A1;'>🌟 أهلاً بك يا بطل/بطلة المستقبل العبقري: {st.session_state.nom_eleve}</h3></div>", unsafe_allow_html=True)
+
+    if st.session_state.الصفحة_الحالية == "القائمة_الرئيسية":
+        عرض_الشعار_الكبير()
+        
+        # إضافة خيار للإدارة في حال كان المستخدم هو الأدمن
+        if st.session_state.nom_eleve == "الأدمن (المعلم)":
+            st.markdown("<div style='background-color: #FFF3E0; padding: 15px; border-radius: 15px; margin-bottom: 20px; text-align: center; border: 2px dashed #E67E22;'>", unsafe_allow_html=True)
+            st.markdown("<h3 style='color: #D35400;'>⚙️ لوحة تحكم المعلم (الأدمن)</h3>", unsafe_allow_html=True)
+            if st.button("🛠️ إدارة المشتركين وتفعيل الحسابات", use_container_width=True):
+                st.session_state.الصفحة_الحالية = "لوحة_الإدارة"
+                st.rerun()
+            st.markdown("</div>", unsafe_allow_html=True)
+
+        st.markdown("<h3 style='text-align: center; color: #7F8C8D;'>👇 اختر محطتك التعليمية التفاعلية وابدأ باللعب والتعلم:</h3>", unsafe_allow_html=True)
+        
+        c1, c2, c3, c4, c5 = st.columns(5)
+        if c1.button("📚 درس أقسام الكلمة", key="b1"): 
+            st.session_state.الصفحة_الحالية = "الدرس_الأول"
+            st.rerun()
+        if c2.button("🏰 الجملة الاسمية والفعلية", key="b2"): 
+            st.session_state.الصفحة_الحالية = "الدرس_الثاني"
+            st.rerun()
+        if c3.button("✍️ قواعد الهمزة العجيبة", key="b4"): 
+            st.session_state.الصفحة_الحالية = "Page_Hamza"
+            st.rerun()
+        if c4.button("🎬 حارس غابة الكلمات", key="b5"): 
+            st.session_state.الصفحة_الحالية = "Cinema_Grammaire"
+            st.rerun()
+        if c5.button("🏆 لوحة أوسمة الإنجازات", key="b3"): 
+            st.session_state.الصفحة_الحالية = "لوحة_الإنجازات"
+            st.rerun()
+
+    # --- صفحة إدارة تفعيل الحسابات الخاصة بالأدمن ---
+    elif st.session_state.الصفحة_الحالية == "لوحة_الإدارة":
+        st.markdown("<div class='content-card'>", unsafe_allow_html=True)
+        st.markdown("<h2 style='color: #E74C3C; text-align: center;'>⚙️ لوحة الإدارة: تفعيل حسابات الأبطال</h2>", unsafe_allow_html=True)
+        st.info("قم بتفعيل الحسابات بعد التحقق من استلام وصل الدفع عبر الواتساب أو الـ SMS على الرقم (0657011874).")
+        
+        users_list = c.execute('SELECT email, nom, prenom, active FROM users').fetchall()
+        
+        for u in users_list:
+            u_email, u_nom, u_prenom, u_active = u
+            if u_email == "عبو":  # تخطي حساب الأدمن من القائمة
+                continue
+                
+            col_info, col_btn = st.columns([4, 1])
+            with col_info:
+                status_text = "✅ مفعل (يمكنه الدخول)" if u_active == 1 else "❌ غير مفعل (بانتظار الدفع)"
+                color = "#2E7D32" if u_active == 1 else "#C62828"
+                st.markdown(f"<div style='background-color: #F5F5F5; padding: 10px; border-radius: 8px; margin-bottom: 5px;'>"
+                            f"<strong style='font-size: 18px;'>🧑‍🎓 {u_nom} {u_prenom}</strong> <br>"
+                            f"📧 البريد: {u_email} <br>"
+                            f"حالة الحساب: <span style='color: {color}; font-weight: bold;'>{status_text}</span>"
+                            f"</div>", unsafe_allow_html=True)
+            with col_btn:
+                st.markdown("<br>", unsafe_allow_html=True)
+                if u_active == 0:
+                    if st.button("تفعيل الحساب", key=f"activate_{u_email}"):
+                        c.execute("UPDATE users SET active = 1 WHERE email = ?", (u_email,))
+                        conn.commit()
+                        st.rerun()
+                else:
+                    if st.button("إلغاء التفعيل", key=f"deactivate_{u_email}"):
+                        c.execute("UPDATE users SET active = 0 WHERE email = ?", (u_email,))
+                        conn.commit()
+                        st.rerun()
+                        
+        st.markdown("<hr style='border: 1px dashed #E74C3C;'>", unsafe_allow_html=True)
+        if st.button("⬅️ عودة إلى الشاشة الرئيسية", key="back_from_admin"): 
+            st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
+            st.rerun()
+        st.markdown("</div>", unsafe_allow_html=True)
+    # ---------------------------------------------------
+
+    elif st.session_state.الصفحة_الحالية == "الدرس_الأول": 
+        عرض_محتوى_الدرس("أقسام الكلمة")
+    elif st.session_state.الصفحة_الحالية == "الدرس_الثاني": 
+        عرض_محتوى_الدرس("الجملة الاسمية والفعلية")
+    elif st.session_state.الصفحة_الحالية == "Page_Hamza": 
+        afficher_page_hamza()
+    elif st.session_state.الصفحة_الحالية == "Cinema_Grammaire": 
+        عرض_القواعد()
+    elif st.session_state.الصفحة_الحالية == "لوحة_الإنجازات":
+        st.markdown("<div class='content-card'>", unsafe_allow_html=True)
+        st.markdown("<h2 style='color: #8E44AD;'>🏆 لوحة الأبطال وأوسمة الإنجازات المحققة</h2>", unsafe_allow_html=True)
+        st.write("تابع عدد النقاط والنجاحات التي جمعتها في كل مستوى دراسي بفضل ذكائك وجدارتك:")
+        
+        for annee, score in st.session_state.نقاط.items():
+            badge = "🌟 متميز ومتفوق للغاية!" if score > 0 else "⏳ بانتظار التحدي الأول"
+            st.markdown(f"<div style='background-color: #F9F1FC; padding: 10px; margin: 5px 0; border-radius: 8px; border-right: 4px solid #9B59B6;'>"
+                        f"<b>السنة الدراسية {annee}:</b> {score} نقطة مجتمعة {badge}</div>", unsafe_allow_html=True)
+                        
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("⬅️ عودة إلى الشاشة الرئيسية", key="back_final"): 
+            st.session_state.الصفحة_الحالية = "القائمة_الرئيسية"
+            st.rerun()
+        st.markdown("</div>", unsafe_allow_html=True)
